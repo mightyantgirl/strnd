@@ -1,0 +1,16 @@
+@use "tokens" as *;
+@use "mixins" as *;
+
+.text-24 { @include text-24; }
+.text-18 { @include text-18; }
+.text-16 { @include text-16; }
+.text-14 { @include text-14; }
+.text-13 { @include text-13; }
+.text-12 { @include text-12; }
+.text-label { @include text-label; }
+
+.text-primary   { color: $header; }
+.text-secondary { color: $secondary; }
+.text-disabled  { color: $placeholder; }
+.text-inverse   { color: $white; }
+.text-brand     { color: $brand; }

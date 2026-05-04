@@ -1,0 +1,16 @@
+@use "tokens" as *;
+@use "mixins" as *;
+
+// Display
+.flex         { display: flex; }
+.flex-col     { @include column-flexbox; }
+.flex-center  { @include flexbox(center, center); }
+.flex-between { @include flexbox(between, center); }
+.inline-flex  { @include inline-flexbox; }
+
+// Visibility
+.visually-hidden { @include visually-hidden; }
+
+// Text truncation
+.truncate   { @include truncate(1); }
+.truncate-2 { @include truncate(2); }

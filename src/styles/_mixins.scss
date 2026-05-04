@@ -1,0 +1,206 @@
+@use "tokens" as *;
+@use "sass:map";
+
+// ============================================================
+// RESPONSIVE
+// ============================================================
+
+$md-breakpoint: 768px;
+$lg-breakpoint: 1200px;
+
+@mixin responsive($screen) {
+  @if ($screen == "T") {
+    @media screen and (min-width: $md-breakpoint) {
+      @content;
+    }
+  }
+
+  @if ($screen == "D") {
+    @media screen and (min-width: $lg-breakpoint) {
+      @content;
+    }
+  }
+}
+
+// ============================================================
+// TYPOGRAPHY
+// ============================================================
+
+@mixin text-24 {
+  font-size: 24px;
+  line-height: 1.2;
+  @include responsive(T) {
+    font-size: 32px;
+  }
+}
+
+@mixin text-18 {
+  font-size: 18px;
+  line-height: 1.3;
+  @include responsive(T) {
+    font-size: 24px;
+  }
+}
+
+@mixin text-16 {
+  font-size: 16px;
+  line-height: 1.6;
+  @include responsive(T) {
+    font-size: 18px;
+  }
+}
+
+@mixin text-14 {
+  font-size: 14px;
+  line-height: 1.6;
+  @include responsive(T) {
+    font-size: 16px;
+  }
+}
+
+@mixin text-13 {
+  font-size: 13px;
+  line-height: 1.5;
+  @include responsive(T) {
+    font-size: 14px;
+  }
+}
+
+@mixin text-12 {
+  font-size: 12px;
+  line-height: 1.5;
+  @include responsive(T) {
+    font-size: 13px;
+  }
+}
+
+@mixin text-label {
+  font-size: 12px;
+  line-height: 1;
+  @include responsive(T) {
+    font-size: 13px;
+  }
+}
+
+@mixin text-style($size, $color: false) {
+  @if ($size == 12) {
+    @include text-12;
+  }
+
+  @if ($size == 13) {
+    @include text-13;
+  }
+
+  @if ($size == 14) {
+    @include text-14;
+  }
+
+  @if ($size == 16) {
+    @include text-16;
+  }
+
+  @if ($size == 18) {
+    @include text-18;
+  }
+
+  @if ($size == 24) {
+    @include text-24;
+  }
+
+  @if (type-of($color) == color) {
+    color: $color;
+  }
+}
+
+// ============================================================
+// LAYOUT
+// ============================================================
+
+$flex-map: (
+  start: flex-start,
+  end: flex-end,
+  center: center,
+  between: space-between,
+  around: space-around,
+  stretch: stretch,
+);
+
+@function flex-value($key) {
+  @return map.get($flex-map, $key);
+}
+
+@mixin flexbox($js: center, $ai: center) {
+  display: flex;
+  justify-content: flex-value($js);
+  align-items: flex-value($ai);
+}
+
+@mixin inline-flexbox($js: center, $ai: center) {
+  display: inline-flex;
+  justify-content: flex-value($js);
+  align-items: flex-value($ai);
+}
+
+@mixin column-flexbox($js: center, $ai: center) {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-value($js);
+  align-items: flex-value($ai);
+}
+
+@mixin pos-center-x($type: absolute) {
+  @if ($type == fixd or $type == absolute) {
+    position: $type;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+}
+// ============================================================
+// POSITION
+// ============================================================
+
+@mixin pos-center-y($type: absolute) {
+  @if ($type == fixd or $type == absolute) {
+    position: $type;
+    top: 50%;
+    transform: translateY(-50%);
+  }
+}
+
+@mixin pos-center($type: absolute) {
+  @if ($type == fixd or $type == absolute) {
+    position: $type;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+}
+
+// ============================================================
+// UTILITIES
+// ============================================================
+
+@mixin truncate($lines: 1) {
+  @if $lines == 1 {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  } @else {
+    display: -webkit-box;
+    -webkit-line-clamp: $lines;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+}
+
+@mixin visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}

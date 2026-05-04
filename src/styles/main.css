@@ -1,0 +1,333 @@
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  -webkit-tap-highlight-color: transparent;
+}
+
+body {
+  background-color: #f9f8f6;
+  color: #141410;
+  font-family: "Pretendard", "Apple SD Gothic Neo", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  font-size: 16px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+img, video, svg {
+  display: block;
+  max-width: 100%;
+}
+
+input, button, textarea, select {
+  font: inherit;
+}
+
+button {
+  cursor: pointer;
+  border: none;
+  background: none;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+ul, ol {
+  list-style: none;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-weight: inherit;
+  font-size: inherit;
+}
+
+.text-24 {
+  font-size: 24px;
+  line-height: 1.2;
+}
+@media screen and (min-width: 768px) {
+  .text-24 {
+    font-size: 32px;
+  }
+}
+
+.text-18 {
+  font-size: 18px;
+  line-height: 1.3;
+}
+@media screen and (min-width: 768px) {
+  .text-18 {
+    font-size: 24px;
+  }
+}
+
+.text-16 {
+  font-size: 16px;
+  line-height: 1.6;
+}
+@media screen and (min-width: 768px) {
+  .text-16 {
+    font-size: 18px;
+  }
+}
+
+.text-14 {
+  font-size: 14px;
+  line-height: 1.6;
+}
+@media screen and (min-width: 768px) {
+  .text-14 {
+    font-size: 16px;
+  }
+}
+
+.text-13 {
+  font-size: 13px;
+  line-height: 1.5;
+}
+@media screen and (min-width: 768px) {
+  .text-13 {
+    font-size: 14px;
+  }
+}
+
+.text-12 {
+  font-size: 12px;
+  line-height: 1.5;
+}
+@media screen and (min-width: 768px) {
+  .text-12 {
+    font-size: 13px;
+  }
+}
+
+.text-label {
+  font-size: 12px;
+  line-height: 1;
+}
+@media screen and (min-width: 768px) {
+  .text-label {
+    font-size: 13px;
+  }
+}
+
+.text-primary {
+  color: #141410;
+}
+
+.text-secondary {
+  color: #6b6a62;
+}
+
+.text-disabled {
+  color: #a8a79f;
+}
+
+.text-inverse {
+  color: #ffffff;
+}
+
+.text-brand {
+  color: #6b8f5e;
+}
+
+.container {
+  width: 100%;
+  padding: 0 16px;
+  margin: 0 auto;
+}
+@media (min-width: 768px) {
+  .container {
+    max-width: 1024px;
+    padding: 0 42px;
+  }
+}
+@media (min-width: 1200px) {
+  .container {
+    max-width: 1200px;
+    padding: 0 48px;
+  }
+}
+
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  margin: 0 -10px;
+}
+
+[class^=col-] {
+  padding: 0 10px;
+}
+
+.col-sm-1 {
+  width: 25%;
+}
+
+.col-sm-2 {
+  width: 50%;
+}
+
+.col-sm-3 {
+  width: 75%;
+}
+
+.col-sm-4 {
+  width: 100%;
+}
+
+.col-md-1 {
+  width: 8.3333333333%;
+}
+
+.col-md-2 {
+  width: 16.6666666667%;
+}
+
+.col-md-3 {
+  width: 25%;
+}
+
+.col-md-4 {
+  width: 33.3333333333%;
+}
+
+.col-md-5 {
+  width: 41.6666666667%;
+}
+
+.col-md-6 {
+  width: 50%;
+}
+
+.col-md-7 {
+  width: 58.3333333333%;
+}
+
+.col-md-8 {
+  width: 66.6666666667%;
+}
+
+.col-md-9 {
+  width: 75%;
+}
+
+.col-md-10 {
+  width: 83.3333333333%;
+}
+
+.col-md-11 {
+  width: 91.6666666667%;
+}
+
+.col-md-12 {
+  width: 100%;
+}
+
+.col-lg-1 {
+  width: 92px;
+}
+
+.col-lg-2 {
+  width: 184px;
+}
+
+.col-lg-3 {
+  width: 276px;
+}
+
+.col-lg-4 {
+  width: 368px;
+}
+
+.col-lg-5 {
+  width: 460px;
+}
+
+.col-lg-6 {
+  width: 552px;
+}
+
+.col-lg-7 {
+  width: 644px;
+}
+
+.col-lg-8 {
+  width: 736px;
+}
+
+.col-lg-9 {
+  width: 828px;
+}
+
+.col-lg-10 {
+  width: 920px;
+}
+
+.col-lg-11 {
+  width: 1012px;
+}
+
+.col-lg-12 {
+  width: 1104px;
+}
+
+.flex {
+  display: flex;
+}
+
+.flex-col {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.flex-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.flex-between {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.inline-flex {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.truncate {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.truncate-2 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}

@@ -1,0 +1,46 @@
+@use "tokens" as *;
+@use "sass:math";
+
+.container {
+  width: 100%;
+  padding: 0 $sm-margin;
+  margin: 0 auto;
+
+  @media (min-width: 768px) {
+    max-width: $md-max;
+    padding: 0 $md-margin;
+  }
+
+  @media (min-width: 1200px) {
+    max-width: $lg-max;
+    padding: 0 $lg-margin;
+  }
+}
+
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  margin: 0 math.div(-$gutter, 2);
+}
+
+[class^="col-"] {
+  padding: 0 math.div($gutter, 2);
+}
+
+@for $i from 1 through $sm-columns {
+  .col-sm-#{$i} {
+    width: math.percentage(math.div($i, $sm-columns));
+  }
+}
+
+@for $i from 1 through $md-columns {
+  .col-md-#{$i} {
+    width: math.percentage(math.div($i, $md-columns));
+  }
+}
+
+@for $i from 1 through $lg-columns {
+  .col-lg-#{$i} {
+    width: ($lg-unit + $gutter) * $i;
+  }
+}
