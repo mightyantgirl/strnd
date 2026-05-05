@@ -3,137 +3,64 @@
 // ============================================================
 
 // Neutral
-$white:            #ffffff;
-$card-background:  #f9f8f6;
-$background:       #f1f0ec;
-$border:           #e4e3dc;
-$disabled:         #c8c7bf;
-$placeholder:      #a8a79f;
-$secondary:        #6b6a62;
-$primary:          #2c2b27;
-$header:           #141410;
+$white: #ffffff;
+$card-background: #f9f8f6;
+$background: #f1f0ec;
+$border: #e4e3dc;
+$disabled: #c8c7bf;
+$placeholder: #a8a79f;
+$secondary: #6b6a62;
+$primary: #2c2b27;
+$header: #141410;
 
 // Brand
-$tint:   #e0e8db;
-$brand:  #6b8f5e;
-$shade:  #3d5435;
+$tint: #eaf2e5;
+$brand: #6b8f5e;
+$shade: #3d5435;
 
 // Status
-$success:  #3b6d11;
-$warning:  #ba7517;
-$danger:   #a32d2d;
-
+$success: #3b6d11;
+$warning: #ba7517;
+$danger: #a32d2d;
 
 // ============================================================
 // SHADOW
 // ============================================================
 
-$shadow-none:  none;
-$shadow-sm:    0 1px 3px rgba(20, 20, 16, 0.08);
-$shadow-md:    0 4px 12px rgba(20, 20, 16, 0.1);
-$shadow-lg:    0 8px 24px rgba(20, 20, 16, 0.12);
-
+$shadow-none: none;
+$shadow-sm: 0 1px 3px rgba(20, 20, 16, 0.08);
+$shadow-md: 0 4px 12px rgba(20, 20, 16, 0.1);
+$shadow-lg: 0 8px 24px rgba(20, 20, 16, 0.12);
 
 // ============================================================
 // TYPOGRAPHY
 // ============================================================
 
 $font-primary:
-  "Pretendard",
-  "Apple SD Gothic Neo",
+  'Pretendard',
+  'Apple SD Gothic Neo',
   -apple-system,
   BlinkMacSystemFont,
-  "Segoe UI",
+  'Segoe UI',
   Roboto,
   Helvetica,
   Arial,
   sans-serif;
 
-
-// ============================================================
-// COMPONENT — Button
-// ============================================================
-
-$comp-btn-primary-bg:         $brand;
-$comp-btn-primary-bg-hover:   #527047;
-$comp-btn-primary-bg-pressed: $shade;
-$comp-btn-primary-text:       $white;
-$comp-btn-primary-radius:     12px;
-
-$comp-btn-secondary-bg:       $background;
-$comp-btn-secondary-bg-hover: $border;
-$comp-btn-secondary-text:     $header;
-$comp-btn-secondary-radius:   12px;
-
-$comp-btn-ghost-bg:           transparent;
-$comp-btn-ghost-bg-hover:     $background;
-$comp-btn-ghost-text:         $primary;
-
-$comp-btn-danger-bg:          $danger;
-$comp-btn-danger-text:        $white;
-
-$comp-btn-sm-padding:         6px 16px;
-$comp-btn-md-padding:         10px 24px;
-$comp-btn-lg-padding:         14px 32px;
-
-$comp-btn-disabled-opacity:   0.4;
-$comp-btn-focus-ring:         0 0 0 3px rgba(#435ee5, 0.2);
-
-
-// ============================================================
-// COMPONENT — Badge / Chip
-// ============================================================
-
-$comp-badge-bg:              $background;
-$comp-badge-bg-brand:        $tint;
-$comp-badge-text:            $primary;
-$comp-badge-text-brand:      $shade;
-$comp-badge-radius:          999px;
-$comp-badge-padding:         4px 8px;
-$comp-badge-selected-bg:     $brand;
-$comp-badge-selected-text:   $white;
-$comp-badge-selected-border: 2px solid $brand;
-
-
-// ============================================================
-// COMPONENT — Service Specific
-// ============================================================
-
-$comp-stylecard-border:          2px solid $border;
-$comp-stylecard-border-selected: 2px solid $brand;
-$comp-stylecard-radius:          16px;
-$comp-stylecard-shadow-selected: 0 0 0 3px rgba($brand, 0.2);
-
-$comp-colorchip-size:            44px;
-$comp-colorchip-ring-selected:
-  0 0 0 2px $white,
-  0 0 0 4px $brand;
-
-$comp-slider-track-bg:    $border;
-$comp-slider-track-fill:  $brand;
-$comp-slider-thumb-size:  28px;
-$comp-slider-height:      6px;
-
-$comp-progress-bg:        $border;
-$comp-progress-fill:      $brand;
-$comp-progress-height:    4px;
-$comp-progress-radius:    999px;
-
-
 // ============================================================
 // GRID
 // ============================================================
 
-$gutter:      20px;
+$gutter: 20px;
 
-$sm-columns:  4;
-$sm-margin:   16px;
+$sm-columns: 4;
+$sm-margin: 18px;
 
-$md-columns:  12;
-$md-margin:   42px;
-$md-max:      1024px;
+$md-columns: 12;
+$md-margin: 42px;
+$md-max: 1024px;
 
-$lg-columns:  12;
-$lg-margin:   48px;
-$lg-max:      1200px;
-$lg-unit:     72px;
+$lg-columns: 12;
+$lg-margin: 48px;
+$lg-max: 1200px;
+$lg-unit: 72px;

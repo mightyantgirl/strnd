@@ -1,39 +1,48 @@
-@use "tokens" as *;
+@use 'tokens' as *;
 
-*, *::before, *::after {
+*,
+*::before,
+*::after {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 html {
+  background-color: $background;
+
   -webkit-text-size-adjust: 100%;
   -webkit-tap-highlight-color: transparent;
 }
 
 body {
-  background-color: $card-background;
-  color: $header;
-  font-family: $font-primary;
+  color: $primary;
+  font-family: 'Pretendard', 'Apple SD Gothic Neo', 'Segoe UI';
   font-size: 16px;
   line-height: 1.6;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
 }
 
-img, video, svg {
+img,
+video,
+svg {
   display: block;
   max-width: 100%;
 }
 
-input, button, textarea, select {
-  font: inherit;
-}
+button,
+input,
+select,
+textarea {
+  border: 0;
+  background-color: transparent; //아무색 없음
 
-button {
-  cursor: pointer;
-  border: none;
-  background: none;
+  &:focus {
+    //위의 요소들을 포함해서
+    outline: none;
+    box-shadow: none;
+  }
 }
 
 a {
@@ -41,11 +50,22 @@ a {
   text-decoration: none;
 }
 
-ul, ol {
+a,
+button {
+  cursor: pointer;
+}
+
+button {
+  padding: 0;
+}
+
+ul,
+ol {
+  padding-left: 0;
   list-style: none;
 }
 
-h1, h2, h3, h4, h5, h6 {
-  font-weight: inherit;
-  font-size: inherit;
+button {
+  border: none;
+  background: none;
 }

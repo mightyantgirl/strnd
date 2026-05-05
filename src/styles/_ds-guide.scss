@@ -1,0 +1,236 @@
+@use "tokens" as *;
+@use "mixins" as *;
+
+// ============================================================
+// DESIGN SYSTEM GUIDE — 가이드 전용 스타일
+// ============================================================
+
+body {
+  background-color: $background;
+  font-family: $font-primary;
+  color: $primary;
+}
+
+// ============================================================
+// HEADER
+// ============================================================
+
+.ds-header {
+  padding: 64px 0 56px;
+  border-bottom: 1px solid $border;
+
+  &-eyebrow {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: $brand;
+    margin-bottom: 14px;
+  }
+
+  &-title {
+    font-size: 40px;
+    font-weight: 700;
+    line-height: 1.1;
+    color: $header;
+    margin-bottom: 10px;
+
+    @include responsive(T) {
+      font-size: 56px;
+    }
+  }
+
+  &-desc {
+    @include text-14;
+    color: $secondary;
+  }
+}
+
+// ============================================================
+// SECTION
+// ============================================================
+
+.ds-section {
+  padding: 52px 0;
+  border-bottom: 1px solid $border;
+
+  &:last-child {
+    border-bottom: none;
+    padding-bottom: 80px;
+  }
+}
+
+.ds-section-title {
+  @include text-18;
+  font-weight: 700;
+  color: $header;
+  margin-bottom: 32px;
+}
+
+.ds-section-sub {
+  @include text-label;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: $placeholder;
+  margin: 36px 0 16px;
+
+  &:first-child {
+    margin-top: 0;
+  }
+}
+
+// ============================================================
+// COLOR SWATCHES
+// ============================================================
+
+.ds-swatches {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.ds-swatch {
+  width: 88px;
+
+  &-chip {
+    width: 100%;
+    height: 56px;
+    border-radius: 10px;
+    margin-bottom: 8px;
+  }
+
+  &-name {
+    display: block;
+    font-size: 11px;
+    font-weight: 600;
+    color: $primary;
+    margin-bottom: 2px;
+  }
+
+  &-hex {
+    display: block;
+    font-size: 11px;
+    color: $placeholder;
+  }
+
+  &--white        .ds-swatch-chip { background: $white; border: 1px solid $border; }
+  &--card-bg      .ds-swatch-chip { background: $card-background; }
+  &--background   .ds-swatch-chip { background: $background; border: 1px solid $border; }
+  &--border       .ds-swatch-chip { background: $border; }
+  &--disabled     .ds-swatch-chip { background: $disabled; }
+  &--placeholder  .ds-swatch-chip { background: $placeholder; }
+  &--secondary    .ds-swatch-chip { background: $secondary; }
+  &--primary      .ds-swatch-chip { background: $primary; }
+  &--header       .ds-swatch-chip { background: $header; }
+  &--tint         .ds-swatch-chip { background: $tint; }
+  &--brand        .ds-swatch-chip { background: $brand; }
+  &--shade        .ds-swatch-chip { background: $shade; }
+  &--success      .ds-swatch-chip { background: $success; }
+  &--warning      .ds-swatch-chip { background: $warning; }
+  &--danger       .ds-swatch-chip { background: $danger; }
+}
+
+// ============================================================
+// TYPOGRAPHY SCALE
+// ============================================================
+
+.ds-type-scale {
+  border-top: 1px solid $border;
+}
+
+.ds-type-row {
+  display: flex;
+  align-items: baseline;
+  gap: 20px;
+  padding: 20px 0;
+  border-bottom: 1px solid $border;
+
+  @include responsive(T) {
+    gap: 40px;
+  }
+}
+
+.ds-type-meta {
+  flex-shrink: 0;
+  width: 130px;
+
+  @include responsive(T) {
+    width: 160px;
+  }
+}
+
+.ds-type-name {
+  display: block;
+  font-size: 11px;
+  font-weight: 600;
+  color: $brand;
+  margin-bottom: 3px;
+}
+
+.ds-type-spec {
+  display: block;
+  font-size: 11px;
+  color: $placeholder;
+}
+
+.ds-type-sample {
+  color: $header;
+  flex: 1;
+  min-width: 0;
+}
+
+// ============================================================
+// COMPONENT SHOWCASE
+// ============================================================
+
+.ds-component-group {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: 20px;
+}
+
+.ds-component-item {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+.ds-component-label {
+  font-size: 11px;
+  font-weight: 500;
+  color: $secondary;
+  background: $card-background;
+  border: 1px solid $border;
+  padding: 3px 8px;
+  border-radius: 4px;
+}
+
+// Primary 버튼 데모 고정 너비
+.ds-btn-primary-wrap {
+  width: 220px;
+}
+
+// Textfield 데모 너비
+.ds-textfield-item {
+  width: 100%;
+
+  @include responsive(T) {
+    width: 330px;
+  }
+}
+
+// StyleCard 이미지 대체 그라디언트
+.style-card-bg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+
+  &--a { background: linear-gradient(160deg, #c8ddc4 0%, $brand 100%); }
+  &--b { background: linear-gradient(160deg, #cec5b8 0%, #8a7060 100%); }
+  &--c { background: linear-gradient(160deg, #b4c8d4 0%, #5e7a8f 100%); }
+  &--d { background: linear-gradient(160deg, #d4c4b8 0%, #8f6b5e 100%); }
+}

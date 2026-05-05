@@ -1,0 +1,105 @@
+@use "../tokens" as *;
+@use "../mixins" as *;
+
+// ============================================================
+// PRIMARY BUTTON
+// variant  : .btn-primary
+// props    : disabled (attribute), .is-disabled (class)
+// ============================================================
+
+.btn-primary {
+  @include flexbox;
+  width: 100%;
+  height: 57px;
+  padding: 0 24px;
+  background-color: $brand;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  font-family: $font-primary;
+  font-weight: 600;
+  font-size: 16px;
+  color: $white;
+  line-height: normal;
+  white-space: nowrap;
+
+  &:disabled,
+  &.is-disabled {
+    background-color: $disabled;
+    cursor: not-allowed;
+    pointer-events: none;
+  }
+}
+
+// ============================================================
+// CHIP BUTTON
+// variant  : .btn-chip
+// props    : .is-active
+// ============================================================
+
+.btn-chip {
+  @include inline-flexbox;
+  height: 39px;
+  padding: 10px 17px;
+  background-color: $card-background;
+  border: 1px solid transparent;
+  border-radius: 20px;
+  cursor: pointer;
+  font-family: $font-primary;
+  font-weight: 500;
+  font-size: 14px;
+  color: $header;
+  line-height: normal;
+  white-space: nowrap;
+
+  &.is-active {
+    background-color: $tint;
+    border-color: $brand;
+  }
+
+  @include responsive(T) {
+    padding: 20px 28px;
+    border-radius: 25px;
+    font-size: 18px;
+  }
+}
+
+// ============================================================
+// CHECK BUTTON
+// variant  : .btn-check
+// props    : label (text content), icon (img[src]), .is-active
+// ============================================================
+
+.btn-check {
+  @include flexbox;
+  position: relative;
+  width: 155px;
+  height: 100px;
+  background-color: $card-background;
+  border: 1px solid transparent;
+  border-radius: 12px;
+  cursor: pointer;
+  font-family: $font-primary;
+  font-weight: 600;
+  font-size: 18px;
+  color: $header;
+  line-height: normal;
+
+  &-icon {
+    position: absolute;
+    top: 5px;
+    left: 5px;
+    width: 24px;
+    height: 24px;
+    display: none;
+  }
+
+  &.is-active {
+    background-color: $tint;
+    border-color: $brand;
+
+    .btn-check-icon {
+      display: block;
+    }
+  }
+}

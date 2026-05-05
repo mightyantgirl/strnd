@@ -28,7 +28,7 @@ $lg-breakpoint: 1200px;
 
 @mixin text-24 {
   font-size: 24px;
-  line-height: 1.2;
+  line-height: 1.33;
   @include responsive(T) {
     font-size: 32px;
   }
@@ -52,7 +52,7 @@ $lg-breakpoint: 1200px;
 
 @mixin text-14 {
   font-size: 14px;
-  line-height: 1.6;
+  line-height: 1.43;
   @include responsive(T) {
     font-size: 16px;
   }

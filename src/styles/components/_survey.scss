@@ -1,0 +1,49 @@
+@use '../tokens' as *;
+@use '../mixins' as *;
+
+// ============================================================
+// SCREEN: main-재방문
+// ============================================================
+
+.main-revisit {
+  min-height: 100vh;
+  background-color: $background;
+  position: relative;
+
+  &-content {
+    // 상태바(44px) 제거 기준 → 피그마 top 140px - 44px = 96px
+    padding: 96px 0 100px;
+  }
+
+  // 인사 텍스트 (text-24 + Bold)
+  &-greeting {
+    margin-bottom: 18px;
+  }
+
+  &-greeting-line {
+    @include text-24;
+    font-weight: 700;
+    color: $header;
+  }
+
+  // 서브텍스트 (text-14 + SemiBold)
+  &-history {
+    @include text-14;
+    font-weight: 600;
+    color: $placeholder;
+
+    u {
+      text-decoration-skip-ink: none;
+    }
+  }
+
+  // 하단 고정 CTA
+  &-cta {
+    position: fixed;
+    bottom: 24px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: calc(100% - 32px);
+    max-width: 328px;
+  }
+}
