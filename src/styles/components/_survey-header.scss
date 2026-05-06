@@ -7,7 +7,6 @@
 // ============================================================
 
 .site-header {
-  height: 90px;
   background-color: $background;
   margin-bottom: 30px;
 
@@ -20,8 +19,7 @@
 .gnb {
   @include flexbox(start);
 
-  height: 50px;
-  padding: 24px $sm-margin 0 $sm-margin;
+  padding: 14px $sm-margin 0 $sm-margin;
 
   @include responsive(T) {
     padding: 0;
@@ -51,8 +49,7 @@
   @include flexbox(center);
 
   gap: 16px;
-  padding: 0 $sm-margin;
-  height: 40px;
+  padding: 10px $sm-margin;
 
   @include responsive(T) {
     padding: 0;
