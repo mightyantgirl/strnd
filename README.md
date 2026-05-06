@@ -33,14 +33,15 @@
 
 ## 화면 구성
 
-### `index.html` — 재방문 인사 화면
-방문 이력과 인사 메시지를 보여주는 시작 화면입니다.
+| 화면 | 설명 | 링크 |
+|------|------|------|
+| 재방문 인사 | 방문 이력과 인사 메시지를 보여주는 시작 화면 | [index.html](https://mightyantgirl.github.io/strnd/) |
+| Step 1 — 시술 선택 | 원하는 시술(컷, 펌, 컬러, 클리닉 등)을 선택하는 화면 | [step1.html](https://mightyantgirl.github.io/strnd/step1.html) |
+| Step 2 — 스타일 선택 | 헤어 스타일 이미지 카드에서 원하는 스타일을 선택하는 화면 | [step2.html](https://mightyantgirl.github.io/strnd/step2.html) |
 
-### `step1.html` — 시술 선택
-원하는 시술(컷, 펌, 컬러, 클리닉 등)을 선택하는 화면입니다.
+> GitHub Pages 미활성화 시: Settings → Pages → Branch `main` / `/ (root)` 로 설정
 
-### `step2.html` — 스타일 이미지 선택
-헤어 스타일 이미지 카드(2열 그리드)에서 원하는 스타일을 선택하는 화면입니다.
+### Step 2 상세
 - 모바일: 2열 / 태블릿(768px~): 3열
 - 스텝 헤더 sticky 고정, 카드 영역 독립 스크롤
 
