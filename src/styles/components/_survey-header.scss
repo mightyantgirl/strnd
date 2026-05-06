@@ -1,0 +1,76 @@
+@use '../tokens' as *;
+@use '../mixins' as *;
+
+// ============================================================
+// COMPONENT: site-header
+// 구조: .gnb (앱 상단 영역) + .lnb (프로그래스)
+// ============================================================
+
+.site-header {
+  height: 90px;
+  background-color: $background;
+  margin-bottom: 30px;
+
+  @include responsive(T) {
+    padding: 0 42px;
+  }
+}
+
+// GNB — 앱 레벨 상단 내비게이션 영역
+.gnb {
+  @include flexbox(start);
+
+  height: 50px;
+  padding: 24px $sm-margin 0 $sm-margin;
+
+  @include responsive(T) {
+    padding: 0;
+
+    padding-top: 30px;
+  }
+
+  button {
+    flex-shrink: 0;
+    width: 24px;
+    height: 24px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    color: $header;
+    margin-left: -6px; // SVG 내부 좌측 여백 광학 보정
+  }
+}
+
+// ============================================================
+// COMPONENT: lnb
+// props    : --progress (CSS custom property, 0~100%)
+// ============================================================
+
+.lnb {
+  @include flexbox(center);
+
+  gap: 16px;
+  padding: 0 $sm-margin;
+  height: 40px;
+
+  @include responsive(T) {
+    padding: 0;
+  }
+
+  &-progress {
+    flex: 1;
+    height: 5px;
+    background: $border;
+    border-radius: 5px;
+    overflow: hidden;
+  }
+
+  &-fill {
+    height: 100%;
+    width: var(--progress, 0%);
+    background: $brand;
+    border-radius: 5px;
+    transition: width 0.3s ease;
+  }
+}

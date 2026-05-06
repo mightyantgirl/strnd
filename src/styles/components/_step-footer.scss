@@ -1,0 +1,32 @@
+@use '../tokens' as *;
+@use '../mixins' as *;
+
+// ============================================================
+// COMPONENT: step-footer
+// 구조: .step-cta > button (버튼 내용은 화면마다 변경)
+// 용도: 각 설문 step의 하단 고정 CTA 영역
+// ============================================================
+
+.step-footer {
+  background-color: $background;
+  height: 100px;
+}
+
+.step-cta {
+  position: fixed;
+  bottom: 48px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: calc(100% - 32px); // 100%에서 양마진
+
+  p {
+    @include text-12;
+    color: $placeholder;
+    text-align: center;
+    margin-bottom: 20px;
+  }
+
+  @include responsive(T) {
+    width: calc(100% - 84px); // 100%에서 양마진
+  }
+}

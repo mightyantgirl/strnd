@@ -5,48 +5,52 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Strnd</title>
     <link rel="preconnect" href="https://cdn.jsdelivr.net" />
-    <link
-      rel="stylesheet"
-      as="style"
-      crossorigin
-      href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css"
-    />
+    <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
     <link rel="stylesheet" href="src/styles/main.css" />
   </head>
   <body>
-    <div class="main-revisit">
+    <div class="main">
+      <!-- 헤더 (GNB + 서베이 헤더) -->
 
-      <main class="main-revisit-content">
+      <header class="site-header">
+        <div class="gnb"></div>
+      </header>
+      <!-- 본문 -->
+      <main class="main-content">
         <div class="container">
           <div class="row">
             <div class="col-sm-4">
-
               <!-- 인사 텍스트 -->
               <div class="main-revisit-greeting">
                 <p class="main-revisit-greeting-line">
-                  안녕하세요, <span class="text-brand">희진</span> 님!
+                  안녕하세요,
+                  <span class="text-brand">희진</span>
+                  님!
                 </p>
                 <p class="main-revisit-greeting-line">
-                  <span class="text-brand">42일</span> 만에 방문해주셨네요
+                  <span class="text-brand">42일</span>
+                  만에 방문해주셨네요
                 </p>
               </div>
 
               <!-- 서브텍스트 -->
               <p class="main-revisit-history">
-                마지막으로 받은 시술은 <u>프리미엄 크리닉,</u><br />
-                아트룸 헤어에 총 <u>12번</u> 방문해주셨어요!
+                마지막으로 받은 시술은
+                <u>프리미엄 크리닉,</u>
+                <br />
+                아트룸 헤어에 총
+                <u>12번</u>
+                방문해주셨어요!
               </p>
-
             </div>
           </div>
         </div>
       </main>
 
       <!-- 하단 CTA -->
-      <footer class="main-revisit-cta">
+      <footer class="step-cta">
         <button class="btn-primary" type="button">작성하기</button>
       </footer>
-
     </div>
   </body>
 </html>

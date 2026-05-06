@@ -1,0 +1,31 @@
+@use '../tokens' as *;
+@use '../mixins' as *;
+
+// ============================================================
+// COMPONENT: step-header
+// 구조: .step-header > .step-label + .step-heading
+// 용도: 각 설문 step의 질문 헤더 영역
+// ============================================================
+
+.step-header {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  background-color: $background;
+  padding-bottom: 40px;
+}
+
+.step-label {
+  @include text-14;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: $primary;
+  margin-bottom: 8px;
+}
+
+.step-heading {
+  @include text-24;
+  font-weight: 700;
+  color: $header;
+}

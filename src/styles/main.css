@@ -452,7 +452,8 @@ button {
   inset: 0;
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  -o-object-fit: cover;
+     object-fit: cover;
 }
 .style-card-overlay {
   position: absolute;
@@ -538,6 +539,9 @@ button {
   line-height: 1.43;
   resize: none;
 }
+.textfield-input::-moz-placeholder {
+  color: #a8a79f;
+}
 .textfield-input::placeholder {
   color: #a8a79f;
 }
@@ -550,13 +554,148 @@ button {
   display: block;
 }
 
+.site-header {
+  height: 90px;
+  background-color: #f1f0ec;
+  margin-bottom: 30px;
+}
+@media screen and (min-width: 768px) {
+  .site-header {
+    padding: 0 42px;
+  }
+}
+
+.gnb {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  height: 50px;
+  padding: 24px 18px 0 18px;
+}
+@media screen and (min-width: 768px) {
+  .gnb {
+    padding: 0;
+    padding-top: 30px;
+  }
+}
+.gnb button {
+  flex-shrink: 0;
+  width: 24px;
+  height: 24px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  color: #141410;
+  margin-left: -6px;
+}
+
+.lnb {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 16px;
+  padding: 0 18px;
+  height: 40px;
+}
+@media screen and (min-width: 768px) {
+  .lnb {
+    padding: 0;
+  }
+}
+.lnb-progress {
+  flex: 1;
+  height: 5px;
+  background: #e4e3dc;
+  border-radius: 5px;
+  overflow: hidden;
+}
+.lnb-fill {
+  height: 100%;
+  width: var(--progress, 0%);
+  background: #6b8f5e;
+  border-radius: 5px;
+  transition: width 0.3s ease;
+}
+
+.step-header {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  background-color: #f1f0ec;
+  padding-bottom: 40px;
+}
+
+.step-label {
+  font-size: 14px;
+  line-height: 1.43;
+}
+@media screen and (min-width: 768px) {
+  .step-label {
+    font-size: 16px;
+  }
+}
+.step-label {
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #2c2b27;
+  margin-bottom: 8px;
+}
+
+.step-heading {
+  font-size: 24px;
+  line-height: 1.33;
+}
+@media screen and (min-width: 768px) {
+  .step-heading {
+    font-size: 32px;
+  }
+}
+.step-heading {
+  font-weight: 700;
+  color: #141410;
+}
+
+.step-footer {
+  background-color: #f1f0ec;
+  height: 100px;
+}
+
+.step-cta {
+  position: fixed;
+  bottom: 48px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: calc(100% - 32px);
+}
+.step-cta p {
+  font-size: 12px;
+  line-height: 1.5;
+}
+@media screen and (min-width: 768px) {
+  .step-cta p {
+    font-size: 13px;
+  }
+}
+.step-cta p {
+  color: #a8a79f;
+  text-align: center;
+  margin-bottom: 20px;
+}
+@media screen and (min-width: 768px) {
+  .step-cta {
+    width: calc(100% - 84px);
+  }
+}
+
 .main-revisit {
   min-height: 100vh;
   background-color: #f1f0ec;
   position: relative;
 }
 .main-revisit-content {
-  padding: 96px 0 100px;
+  padding: 10px 0 100px;
 }
 .main-revisit-greeting {
   margin-bottom: 18px;
@@ -588,15 +727,58 @@ button {
   color: #a8a79f;
 }
 .main-revisit-history u {
-  text-decoration-skip-ink: none;
+  -webkit-text-decoration-skip-ink: none;
+          text-decoration-skip-ink: none;
 }
-.main-revisit-cta {
-  position: fixed;
-  bottom: 24px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: calc(100% - 32px);
-  max-width: 328px;
+
+.step {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background-color: #f1f0ec;
+  overflow: hidden;
+}
+.step-content {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding-bottom: 120px;
+}
+.step-content::-webkit-scrollbar {
+  display: none;
+}
+.step-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 14px;
+  margin-bottom: 20px;
+  list-style: none;
+}
+.step-grid .btn-check,
+.step-grid .style-card,
+.step-grid li {
+  flex: 1 1 calc(50% - 7px);
+}
+.step-grid li .style-card {
+  width: 100%;
+  height: 180px;
+}
+@media screen and (min-width: 768px) {
+  .step-grid {
+    gap: 22px 18px;
+  }
+  .step-grid .btn-check,
+  .step-grid .style-card,
+  .step-grid li {
+    flex: 1 1 calc(33.333% - 22px);
+  }
+  .step-grid li .style-card {
+    height: 340px;
+  }
+}
+.step-wide {
+  width: 100%;
+  margin-bottom: 0;
 }
 
 body {
@@ -862,6 +1044,4 @@ body {
 }
 .style-card-bg--d {
   background: linear-gradient(160deg, #d4c4b8 0%, #8f6b5e 100%);
-}
-
-/*# sourceMappingURL=main.css.map */
+}/*# sourceMappingURL=main.css.map */

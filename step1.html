@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Strnd — Step 1</title>
+    <link rel="preconnect" href="https://cdn.jsdelivr.net" />
+    <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
+    <link rel="stylesheet" href="src/styles/main.css" />
+  </head>
+  <body>
+    <div class="step">
+      <!-- 헤더 (GNB + 서베이 헤더) -->
+      <header class="site-header">
+        <!-- GNB + 뒤로가기 -->
+        <div class="gnb">
+          <div class="gnb-left">
+            <button class="back" type="button" aria-label="뒤로가기">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M15 19L8 12L15 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+              </svg>
+            </button>
+          </div>
+        </div>
+
+        <!-- 서베이 헤더 (프로그래스) -->
+        <div class="lnb">
+          <div class="lnb-progress">
+            <div class="lnb-fill" style="--progress: 33.33%"></div>
+          </div>
+        </div>
+      </header>
+
+      <!-- 본문 -->
+      <main class="step-content">
+        <div class="container">
+          <div class="row">
+            <div class="col-sm-4">
+              <div class="step-header">
+                <p class="step-label">Step 1</p>
+                <h1 class="step-heading">
+                  오늘 원하는 시술을
+                  <br />
+                  선택해주세요.
+                </h1>
+              </div>
+
+              <!-- 2×2 시술 선택 -->
+              <div class="step-grid">
+                <button class="btn-check" type="button">
+                  <svg class="btn-check-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="12" cy="12" r="11" stroke="#6b8f5e" stroke-width="2" />
+                    <path d="M8 12.5L10.5 15L16 9.5" stroke="#6b8f5e" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                  </svg>
+                  컷
+                </button>
+                <button class="btn-check" type="button">
+                  <svg class="btn-check-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="12" cy="12" r="11" stroke="#6b8f5e" stroke-width="2" />
+                    <path d="M8 12.5L10.5 15L16 9.5" stroke="#6b8f5e" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                  </svg>
+                  펌
+                </button>
+                <button class="btn-check" type="button">
+                  <svg class="btn-check-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="12" cy="12" r="11" stroke="#6b8f5e" stroke-width="2" />
+                    <path d="M8 12.5L10.5 15L16 9.5" stroke="#6b8f5e" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                  </svg>
+                  컬러 시술
+                </button>
+                <button class="btn-check is-active" type="button">
+                  <svg class="btn-check-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="12" cy="12" r="11" stroke="#6b8f5e" stroke-width="2" />
+                    <path d="M8 12.5L10.5 15L16 9.5" stroke="#6b8f5e" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                  </svg>
+                  클리닉
+                </button>
+              </div>
+
+              <!-- 전체 너비 버튼 -->
+              <button class="btn-check step-wide" type="button">
+                <svg class="btn-check-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <circle cx="12" cy="12" r="11" stroke="#6b8f5e" stroke-width="2" />
+                  <path d="M8 12.5L10.5 15L16 9.5" stroke="#6b8f5e" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                </svg>
+                🔎 정확한 상담이 필요해요
+              </button>
+            </div>
+          </div>
+        </div>
+      </main>
+
+      <!-- 하단 CTA -->
+      <footer class="step-cta">
+        <p>원하는 스타일을 위한 대략적인 정보입니다.</p>
+        <button class="btn-primary" type="button">다음</button>
+      </footer>
+    </div>
+  </body>
+</html>
