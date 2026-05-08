@@ -2,17 +2,18 @@
 @use '../mixins' as *;
 
 // ============================================================
-// COMPONENT: step-footer
-// 구조: .step-cta > button (버튼 내용은 화면마다 변경)
+// COMPONENT: cta
+// 구조: .cta-wrap > .cta > [.cta-snackbar] + button
 // 용도: 각 설문 step의 하단 고정 CTA 영역
 // ============================================================
 
-.step-footer {
+.cta-wrap {
   background-color: $background;
-  height: 100px;
+  height: 90px;
+  border: 1px solid $border;
 }
 
-.step-cta {
+.cta {
   position: fixed;
   bottom: 24px;
   left: 50%;
@@ -24,6 +25,12 @@
     color: $placeholder;
     text-align: center;
     margin-bottom: 20px;
+  }
+
+  &-snackbar {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 12px;
   }
 
   @include responsive(T) {

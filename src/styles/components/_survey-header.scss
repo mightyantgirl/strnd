@@ -2,50 +2,57 @@
 @use '../mixins' as *;
 
 // ============================================================
-// COMPONENT: site-header
-// 구조: .gnb (앱 상단 영역) + .lnb (프로그래스)
+// COMPONENT: header
+// 구조: .header > .header-nav + .header-progress
 // ============================================================
 
-.site-header {
+.header {
   background-color: $background;
   margin-bottom: 30px;
+
+  &-body {
+    height: 70px;
+  }
 
   @include responsive(T) {
     padding: 0 42px;
   }
 }
 
-// GNB — 앱 레벨 상단 내비게이션 영역
-.gnb {
+// 뒤로가기 버튼 영역
+.header-nav {
   @include flexbox(start);
 
   padding: 14px $sm-margin 0 $sm-margin;
 
   @include responsive(T) {
     padding: 0;
-
     padding-top: 30px;
   }
 
-  button {
-    flex-shrink: 0;
-    width: 24px;
-    height: 24px;
-    background: none;
-    border: none;
-    cursor: pointer;
-    padding: 0;
-    color: $header;
-    margin-left: -6px; // SVG 내부 좌측 여백 광학 보정
+  &-left {
+    display: contents;
   }
 }
 
+.header-back {
+  flex-shrink: 0;
+  width: 24px;
+  height: 24px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  color: $header;
+  margin-left: -6px; // SVG 내부 좌측 여백 광학 보정
+}
+
 // ============================================================
-// COMPONENT: lnb
+// COMPONENT: header-progress
 // props    : --progress (CSS custom property, 0~100%)
 // ============================================================
 
-.lnb {
+.header-progress {
   @include flexbox(center);
 
   gap: 16px;
@@ -55,7 +62,7 @@
     padding: 0;
   }
 
-  &-progress {
+  &-track {
     flex: 1;
     height: 5px;
     background: $border;

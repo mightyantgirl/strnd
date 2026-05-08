@@ -2,12 +2,12 @@
 @use "../mixins" as *;
 
 // ============================================================
-// STYLE CARD
-// variant  : .style-card
+// HAIR CARD
+// variant  : .hair-card
 // props    : image (img[src]), label (text content), .is-active
 // ============================================================
 
-.style-card {
+.hair-card {
   position: relative;
   width: 155px;
   height: 180px;
@@ -46,13 +46,13 @@
   &.is-active {
     border-color: $brand;
 
-    .style-card-overlay {
+    .hair-card-overlay {
       background:
         linear-gradient(180deg, rgba($brand, 0) 50%, $brand 100%),
         linear-gradient(90deg, rgba(0, 0, 0, 0.1) 0%, rgba(0, 0, 0, 0.1) 100%);
     }
 
-    .style-card-label {
+    .hair-card-label {
       text-shadow: none;
     }
   }

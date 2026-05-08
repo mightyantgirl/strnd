@@ -54,4 +54,11 @@
       display: block;
     }
   }
+
+  // 자유 입력 전용 높이 variant
+  &--tall {
+    .textfield-input {
+      min-height: 160px;
+    }
+  }
 }

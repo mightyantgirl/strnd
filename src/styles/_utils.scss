@@ -14,3 +14,6 @@
 // Text truncation
 .truncate   { @include truncate(1); }
 .truncate-2 { @include truncate(2); }
+
+// Brand color highlight
+.u-brand { color: $brand; }

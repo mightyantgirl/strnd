@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Strnd — Step 5</title>
+    <link rel="preconnect" href="https://cdn.jsdelivr.net" />
+    <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
+    <link rel="stylesheet" href="src/styles/main.css" />
+  </head>
+  <body>
+    <div class="survey-wrap">
+      <!-- 헤더 (뒤로가기 + 프로그래스) -->
+      <header class="header">
+        <div class="header-nav">
+          <div class="header-nav-left">
+            <button class="header-back" type="button" aria-label="뒤로가기">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M15 19L8 12L15 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+              </svg>
+            </button>
+          </div>
+        </div>
+
+        <div class="header-progress">
+          <div class="header-progress-track">
+            <div class="header-progress-fill" style="--progress: 90%"></div>
+          </div>
+        </div>
+      </header>
+
+      <!-- 본문 -->
+      <main class="survey-content">
+        <div class="container">
+          <div class="row">
+            <div class="col-sm-4">
+              <div class="survey-question">
+                <p class="survey-question-label">Step 5</p>
+                <h1 class="survey-question-title">
+                  추가적으로 디자이너에게
+                  <br />
+                  전달하고 싶은 사항이 있나요?
+                </h1>
+              </div>
+
+              <!-- 자유 입력 텍스트필드 -->
+              <div class="textfield textfield--tall">
+                <textarea
+                  class="textfield-input"
+                  placeholder="스타일에 대한 구체적인 내용, 시술 받는 동안 이루어졌으면 하는 점 등 디자이너가 참고할만한 내용을 적어주세요!"></textarea>
+              </div>
+            </div>
+          </div>
+        </div>
+      </main>
+
+      <!-- 하단 CTA -->
+      <footer class="cta">
+        <p>원하는 스타일을 위한 대략적인 정보입니다.</p>
+        <button class="btn-primary" type="button">다음</button>
+      </footer>
+    </div>
+  </body>
+</html>

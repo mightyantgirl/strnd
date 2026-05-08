@@ -1,5 +1,5 @@
-@use "../tokens" as *;
-@use "../mixins" as *;
+@use '../tokens' as *;
+@use '../mixins' as *;
 
 // ============================================================
 // SNACKBAR
@@ -8,12 +8,13 @@
 // ============================================================
 
 .snackbar {
-  @include inline-flexbox($js: start);
+  @include flexbox;
   gap: 15px;
   height: 40px;
   padding: 10px 20px 10px 10px;
   background-color: $secondary;
   border-radius: 30px;
+  display: none;
 
   &-icon {
     flex-shrink: 0;
@@ -28,5 +29,9 @@
     color: $white;
     line-height: normal;
     white-space: nowrap;
+  }
+
+  &.is-active {
+    display: flex;
   }
 }

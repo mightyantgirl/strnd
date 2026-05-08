@@ -2,104 +2,121 @@
 @use '../mixins' as *;
 
 // ============================================================
-// SCREEN: main-재방문
+// SCREEN: home (재방문 메인)
 // ============================================================
 
-.main-revisit {
+.home-wrap {
   min-height: 100vh;
   background-color: $background;
   position: relative;
+}
 
-  &-content {
-    padding: 10px 0 100px;
-  }
+.home-content {
+  padding: 10px 0 100px;
+}
 
-  // 인사 텍스트 (text-24 + Bold)
-  &-greeting {
-    margin-bottom: 18px;
-  }
+// 인사 텍스트 (text-24 + Bold)
+.home-greeting {
+  margin-bottom: 18px;
+}
 
-  &-greeting-line {
-    @include text-24;
-    font-weight: 700;
-    color: $header;
-  }
+.home-greeting-line {
+  @include text-24;
+  font-weight: 700;
+  color: $header;
+}
 
-  // 서브텍스트 (text-14 + SemiBold)
-  &-history {
-    @include text-14;
-    font-weight: 600;
-    color: $placeholder;
+// 서브텍스트 (text-14 + SemiBold)
+.home-history {
+  @include text-14;
+  font-weight: 600;
+  color: $placeholder;
 
-    u {
-      text-decoration-skip-ink: none;
-    }
+  u {
+    text-decoration-skip-ink: none;
   }
 }
 
 // ============================================================
-// SCREEN: step1 — 시술 선택
+// SCREEN: survey (설문 step1~)
 // ============================================================
 
-.step {
+.survey-wrap {
   height: 100vh;
   display: flex;
   flex-direction: column;
   background-color: $background;
   overflow: hidden;
+}
 
-  &-content {
-    flex: 1;
-    overflow-y: auto;
-    overflow-x: hidden;
-    padding-bottom: 120px;
+.survey-content {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding-bottom: 120px;
 
-    &::-webkit-scrollbar {
-      display: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+
+  // 스낵바가 포함된 CTA 영역 높이 보정
+  &--snackbar {
+    padding-bottom: 160px;
+  }
+}
+
+// 2열 그리드 (btn-check 또는 survey-grid-item > hair-card)
+.survey-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 14px;
+  margin-bottom: 20px;
+  list-style: none;
+  padding: 0;
+
+  .btn-check,
+  &-item {
+    flex: 1 1 calc(50% - 7px);
+  }
+
+  &-item {
+    .hair-card {
+      width: 100%;
+      height: 180px;
     }
   }
 
-  // 2열 그리드 (btn-check 직접 자식 또는 ol > li > style-card)
-  &-grid {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px 14px;
-    margin-bottom: 20px;
-    list-style: none;
+  @include responsive(T) {
+    gap: 22px 18px;
 
     .btn-check,
-    .style-card,
-    li {
-      flex: 1 1 calc(50% - 7px);
+    &-item {
+      flex: 1 1 calc(33.333% - 22px);
     }
 
-    li {
-      .style-card {
-        width: 100%;
-        height: 180px;
-      }
-    }
-
-    @include responsive(T) {
-      gap: 22px 18px;
-
-      .btn-check,
-      .style-card,
-      li {
-        flex: 1 1 calc(33.333% - 22px);
-      }
-
-      li {
-        .style-card {
-          height: 340px;
-        }
+    &-item {
+      .hair-card {
+        height: 340px;
       }
     }
   }
+}
 
-  // 전체 너비 btn-check
-  &-wide {
-    width: 100%;
-    margin-bottom: 0;
+// 전체 너비 btn-check
+.survey-wide {
+  width: 100%;
+  margin-bottom: 0;
+}
+
+// 칩 버튼 목록 (다중 선택 chip 레이아웃)
+.survey-chip-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  list-style: none;
+  padding: 0;
+
+  &-item {
+    display: contents;
   }
 }

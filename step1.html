@@ -9,13 +9,12 @@
     <link rel="stylesheet" href="src/styles/main.css" />
   </head>
   <body>
-    <div class="step">
-      <!-- 헤더 (GNB + 서베이 헤더) -->
-      <header class="site-header">
-        <!-- GNB + 뒤로가기 -->
-        <div class="gnb">
-          <div class="gnb-left">
-            <button class="back" type="button" aria-label="뒤로가기">
+    <div class="survey-wrap">
+      <!-- 헤더 (뒤로가기 + 프로그래스) -->
+      <header class="header">
+        <div class="header-nav">
+          <div class="header-nav-left">
+            <button class="header-back" type="button" aria-label="뒤로가기">
               <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path d="M15 19L8 12L15 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
               </svg>
@@ -23,22 +22,21 @@
           </div>
         </div>
 
-        <!-- 서베이 헤더 (프로그래스) -->
-        <div class="lnb">
-          <div class="lnb-progress">
-            <div class="lnb-fill" style="--progress: 33.33%"></div>
+        <div class="header-progress">
+          <div class="header-progress-track">
+            <div class="header-progress-fill" style="--progress: 33.33%"></div>
           </div>
         </div>
       </header>
 
       <!-- 본문 -->
-      <main class="step-content">
+      <main class="survey-content">
         <div class="container">
           <div class="row">
             <div class="col-sm-4">
-              <div class="step-header">
-                <p class="step-label">Step 1</p>
-                <h1 class="step-heading">
+              <div class="survey-question">
+                <p class="survey-question-label">Step 1</p>
+                <h1 class="survey-question-title">
                   오늘 원하는 시술을
                   <br />
                   선택해주세요.
@@ -46,7 +44,7 @@
               </div>
 
               <!-- 2×2 시술 선택 -->
-              <div class="step-grid">
+              <div class="survey-grid">
                 <button class="btn-check" type="button">
                   <svg class="btn-check-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <circle cx="12" cy="12" r="11" stroke="#6b8f5e" stroke-width="2" />
@@ -78,7 +76,7 @@
               </div>
 
               <!-- 전체 너비 버튼 -->
-              <button class="btn-check step-wide" type="button">
+              <button class="btn-check survey-wide" type="button">
                 <svg class="btn-check-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                   <circle cx="12" cy="12" r="11" stroke="#6b8f5e" stroke-width="2" />
                   <path d="M8 12.5L10.5 15L16 9.5" stroke="#6b8f5e" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
@@ -91,7 +89,7 @@
       </main>
 
       <!-- 하단 CTA -->
-      <footer class="step-cta">
+      <footer class="cta">
         <p>원하는 스타일을 위한 대략적인 정보입니다.</p>
         <button class="btn-primary" type="button">다음</button>
       </footer>

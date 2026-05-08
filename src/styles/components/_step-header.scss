@@ -2,12 +2,12 @@
 @use '../mixins' as *;
 
 // ============================================================
-// COMPONENT: step-header
-// 구조: .step-header > .step-label + .step-heading
+// COMPONENT: survey-question
+// 구조: .survey-question > .survey-question-label + .survey-question-title
 // 용도: 각 설문 step의 질문 헤더 영역
 // ============================================================
 
-.step-header {
+.survey-question {
   position: sticky;
   top: 0;
   z-index: 1;
@@ -15,7 +15,7 @@
   padding-bottom: 40px;
 }
 
-.step-label {
+.survey-question-label {
   @include text-14;
   font-weight: 600;
   letter-spacing: 0.08em;
@@ -24,7 +24,7 @@
   margin-bottom: 8px;
 }
 
-.step-heading {
+.survey-question-title {
   @include text-24;
   font-weight: 700;
   color: $header;
