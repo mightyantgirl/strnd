@@ -49,9 +49,7 @@
 | Step 4 — 고민 선택 | 현재 고민을 칩 버튼으로 다중 선택하는 화면 | [step4.html](https://mightyantgirl.github.io/strnd/step4.html) |
 | Step 5 — 메모 입력 | 추가 요청사항을 자유롭게 입력하는 화면 | [step5.html](https://mightyantgirl.github.io/strnd/step5.html) |
 | 작성 완료 | 설문 제출 후 완료 메시지를 보여주는 화면 | [complete.html](https://mightyantgirl.github.io/strnd/complete.html) |
-| 디자인 시스템 가이드 | 컴포넌트 및 토큰 레퍼런스 페이지 | [design-system.html](https://mightyantgirl.github.io/strnd/design-system.html) |
 
-> GitHub Pages 미활성화 시: Settings → Pages → Branch `main` / `/ (root)` 로 설정
 
 ### Step 2 상세
 - 모바일: 2열 / 태블릿(768px~): 3열
