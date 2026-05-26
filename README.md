@@ -18,7 +18,6 @@
 | Frontend | React 19 + Vite |
 | Styling | Tailwind CSS v4 (`@theme` 토큰 시스템) |
 | Routing | React Router v6 (예정) |
-| Database | Supabase (예정) |
 | Hosting | Vercel (예정) |
 | 폰트 | Pretendard (CDN) |
 
