@@ -1,7 +1,7 @@
 # Strnd — 개발 로드맵
 
 > 최종 기획서(strnd-final-prompt.md) 기준으로 정리.
-> 기존 REACT_ROADMAP.md의 데이터베이스 설계·Export 등 유효한 내용 통합.
+> 마지막 업데이트: 2026-05-27
 
 ---
 
@@ -19,23 +19,20 @@
 ## 기술 스택 (확정)
 
 ```
-Frontend     React 19 + JavaScript (TypeScript는 추후 단계적 전환)
+Frontend     React 18 + JavaScript (TypeScript는 추후 단계적 전환)
 Routing      React Router v6
 Styling      Tailwind CSS v4 + @theme 토큰 시스템
-Database     Supabase (PostgreSQL)
+Backend      Spring Boot (Java) — REST API 방식 연동
+Database     MySQL (JPA)
 Auth         커스텀 PIN 인증 4자리
-Storage      Supabase Storage (스타일 이미지)
-Hosting      Vercel
 빌드툴       Vite
 ```
 
-> ⚠️ 최종 기획서에는 Firebase로 기재되어 있으나 **Supabase로 확정**.
-
 ---
 
-## 화면 구성 (총 14개)
+## 화면 구성 (총 16개)
 
-### 디자이너 영역 — 모바일 전용 (6개)
+### 디자이너 영역 — 모바일 전용 (8개)
 
 | # | 화면 | 경로 |
 |---|------|------|
@@ -44,7 +41,9 @@ Hosting      Vercel
 | 3 | 신규 고객 등록 | `/register` |
 | 4 | 고객 상세 — 방문 히스토리 탭 | `/customer/:id` |
 | 5 | 고객 상세 — 오늘 설문 결과 탭 | `/customer/:id?tab=survey` |
-| 6 | 고객 상세 — 시술 메모 탭 | `/customer/:id?tab=memo` |
+| 6 | 고객 상세 — 메모 탭 | `/customer/:id?tab=memo` |
+| 4-1 | 설문 없이 바로 기록 | `/customer/:id/record` |
+| 4-2 | 시술 결과 기록 | `/visit/:visitId/result` |
 
 ### 고객 설문 영역 — 모바일 + 태블릿 (8개)
 
@@ -61,66 +60,79 @@ Hosting      Vercel
 
 ---
 
-## 데이터 모델 (Supabase PostgreSQL)
+## STATUS 흐름
+
+```
+일반 흐름    PENDING → SUBMITTED → COMPLETED
+바로 기록    (PENDING 생략) → COMPLETED
+
+COMPLETED 시 customers.LAST_VISIT_DT 업데이트 (백엔드 trigger)
+```
+
+---
+
+## 데이터 모델 (MySQL / JPA)
 
 ### customers 테이블
 
 ```sql
-id              UUID        PK, auto-generated
-name            TEXT        NOT NULL
-phone           TEXT        NOT NULL
+id              BIGINT      PK, AUTO_INCREMENT
+name            VARCHAR     NOT NULL
+phone           VARCHAR     NOT NULL
 designer_memo   TEXT
-created_at      TIMESTAMP   DEFAULT now()
-last_visit_at   TIMESTAMP
-visit_count     INTEGER     DEFAULT 0
+created_at      DATETIME    DEFAULT now()
+last_visit_dt   DATETIME
+visit_count     INT         DEFAULT 0
 ```
 
 ### visits 테이블
 
 ```sql
-id              UUID        PK
-customer_id     UUID        FK → customers.id
-date            TIMESTAMP   DEFAULT now()
-status          TEXT        'draft' | 'submitted' | 'completed'
+id              BIGINT      PK, AUTO_INCREMENT
+customer_id     BIGINT      FK → customers.id
+date            DATETIME    DEFAULT now()
+status          ENUM        'PENDING' | 'SUBMITTED' | 'COMPLETED'
 
--- survey (JSONB 또는 컬럼 분리)
-gender              TEXT
-visit_channel       TEXT[]
+-- survey
+gender              VARCHAR
+visit_channel       JSON        (배열)
 referrer            TEXT
-requested_service   TEXT[]
-preferred_style     TEXT[]
-requested_images    TEXT[]
+requested_service   JSON        (배열)
+preferred_style     JSON        (배열)
+requested_images    JSON        (배열)
 needs_consultation  BOOLEAN     DEFAULT false
-concerns            TEXT[]
+concerns            JSON        (배열)
 additional_request  TEXT
-submitted_at        TIMESTAMP
+submitted_at        DATETIME
 
 -- treatment
+service_category    VARCHAR
+service_menu        VARCHAR     NOT NULL (바로기록/시술결과기록 공통 필수)
+service_note        TEXT        NOT NULL (바로기록/시술결과기록 공통 필수)
 product_used        TEXT
-service_note        TEXT
 special_note        TEXT
-completed_at        TIMESTAMP
+completed_at        DATETIME
 ```
 
 ### style_images 테이블
 
 ```sql
-id          UUID        PK
-name        TEXT
-image_url   TEXT        -- Supabase Storage URL
-category    TEXT        -- '컷' | '펌' | '컬러'
-order       INTEGER
+id          BIGINT      PK, AUTO_INCREMENT
+name        VARCHAR
+image_url   TEXT
+category    VARCHAR     -- '컷' | '펌' | '컬러'
+sort_order  INT
 is_active   BOOLEAN     DEFAULT true
-created_at  TIMESTAMP   DEFAULT now()
+created_at  DATETIME    DEFAULT now()
 ```
 
 ### settings 테이블 (단일 row)
 
 ```sql
-id              TEXT        PK DEFAULT 'designer'
-designer_name   TEXT
-pin_hash        TEXT
-last_login_at   TIMESTAMP
+id              VARCHAR     PK DEFAULT 'designer'
+designer_name   VARCHAR
+pin_hash        VARCHAR
+last_login_at   DATETIME
 ```
 
 ---
@@ -128,14 +140,24 @@ last_login_at   TIMESTAMP
 ## 폴더 구조
 
 ```
-react/src/
+src/
 ├── components/
 │   ├── Button.jsx
 │   ├── Input.jsx
-│   ├── Card.jsx
 │   ├── Chip.jsx
+│   ├── StyleCard.jsx
+│   ├── Toast.jsx
+│   ├── Dropdown.jsx
+│   ├── Badge.jsx
+│   ├── CustomerCard.jsx
+│   ├── VisitCard.jsx
+│   ├── SurveyCard.jsx
+│   ├── Modal.jsx
 │   ├── ProgressBar.jsx
-│   └── Modal.jsx
+│   ├── Tabs.jsx
+│   ├── BottomSheet.jsx
+│   ├── SurveyHeader.jsx
+│   └── SurveyFooter.jsx
 ├── pages/
 │   ├── Login.jsx
 │   ├── Home.jsx
@@ -144,7 +166,10 @@ react/src/
 │   │   ├── index.jsx
 │   │   ├── History.jsx
 │   │   ├── TodaySurvey.jsx
-│   │   └── TreatmentMemo.jsx
+│   │   └── Memo.jsx
+│   ├── Record.jsx          ← 4-1 설문 없이 바로 기록
+│   ├── TreatmentResult.jsx ← 4-2 시술 결과 기록
+│   ├── Settings.jsx
 │   └── Survey/
 │       ├── Main.jsx
 │       ├── Step0.jsx
@@ -158,15 +183,16 @@ react/src/
 │   ├── useAuth.js
 │   ├── useCustomer.js
 │   └── useVisit.js
-├── lib/
-│   ├── supabase.js
-│   └── queries.js
+├── api/                    ← Spring Boot REST API 호출
+│   ├── customers.js
+│   ├── visits.js
+│   └── settings.js
 ├── utils/
 │   ├── dateUtils.js
 │   ├── clipboard.js
 │   └── csvExport.js
 ├── styles/
-│   └── main.css       ← Tailwind v4 + @theme 토큰
+│   └── main.css            ← Tailwind v4 + @theme 토큰
 └── App.jsx
 ```
 
@@ -182,11 +208,19 @@ react/src/
 | `@theme` 토큰 정의 (컬러/폰트/간격/radius) | ✅ 완료 |
 | `@utility` 반응형 타이포 7종 | ✅ 완료 |
 | 글로벌 리셋 + body 기본 스타일 | ✅ 완료 |
-| Button 컴포넌트 (Primary / Secondary / Ghost) | ⬜ 대기 |
-| Input 컴포넌트 (Default / Focus / Error) | ⬜ 대기 |
-| Card 컴포넌트 (CustomerCard / VisitCard / StyleCard) | ⬜ 대기 |
-| Chip 컴포넌트 (Service / Status) | ⬜ 대기 |
+| Button 컴포넌트 (Primary / Secondary / Ghost) | ✅ 완료 |
+| Input 컴포넌트 (Default / Focus / Error) | ✅ 완료 |
+| Chip 컴포넌트 (Service / Status) | ✅ 완료 |
+| StyleCard 컴포넌트 | ✅ 완료 |
+| Toast 컴포넌트 | ⬜ 대기 |
+| Dropdown 컴포넌트 | ⬜ 대기 |
+| Badge 컴포넌트 | ⬜ 대기 |
+| CustomerCard 컴포넌트 | ⬜ 대기 |
+| VisitCard 컴포넌트 | ⬜ 대기 |
+| SurveyCard 컴포넌트 | ⬜ 대기 |
 | Modal 컴포넌트 | ⬜ 대기 |
+
+> 오늘 작업 순서: Toast → Dropdown → Badge → CustomerCard → VisitCard → SurveyCard → Modal
 
 ### 2단계 — 레이아웃 컴포넌트
 
@@ -195,6 +229,8 @@ react/src/
 | SurveyHeader (뒤로가기 + 프로그레스바 영역) |
 | SurveyFooter (안내문 + 다음 버튼) |
 | ProgressBar |
+| Tabs |
+| BottomSheet |
 
 ### 3단계 — 고객 설문 화면 (8개)
 
@@ -209,7 +245,7 @@ react/src/
 | Step 5 — 추가 요청 |
 | 제출 완료 |
 
-### 4단계 — 디자이너 영역 (6개)
+### 4단계 — 디자이너 영역 (8개)
 
 | 작업 |
 |------|
@@ -217,54 +253,41 @@ react/src/
 | 홈 (검색 + 최근 방문) |
 | 신규 고객 등록 |
 | 고객 상세 — 히스토리 탭 |
-| 고객 상세 — 오늘 설문 탭 |
-| 고객 상세 — 시술 메모 탭 |
+| 고객 상세 — 오늘 설문 탭 (상태별 UI) |
+| 고객 상세 — 메모 탭 |
+| 4-1 설문 없이 바로 기록 |
+| 4-2 시술 결과 기록 |
 
-### 5단계 — Supabase 연동 + 라우팅
+### 5단계 — Spring Boot REST API 연동 + 라우팅
 
 | 작업 |
 |------|
-| Supabase 프로젝트 생성 + 환경변수 .env 설정 |
-| 테이블 생성 (customers / visits / style_images / settings) |
 | React Router v6 기본 라우팅 설정 |
 | 미인증 접근 시 로그인 리다이렉트 |
 | PIN 인증 로직 (hash 검증 + localStorage 토큰) |
-| customers CRUD |
-| visits CRUD |
+| customers CRUD API 연동 |
+| visits CRUD API 연동 |
+| CORS 설정 (Spring Boot) |
 
-### 6단계 — 실시간 + 공통 UX
+### 6단계 — 공통 UX
 
 | 작업 |
 |------|
-| Supabase Realtime — 설문 제출 시 디자이너 폰 알림 |
 | 토스트 메시지 (저장/복사 완료, 3초) |
 | 확인 모달 (삭제/취소) |
 | 로딩 상태 (스켈레톤 or 스피너) |
 | 빈 상태 처리 |
-| 네트워크/Supabase 에러 처리 |
-| CSV 클립보드 복사 (시술 메모 탭) |
+| 네트워크/API 에러 처리 |
+| 네이버 복사 (히스토리 카드 내부) |
 
 ### 7단계 — 반응형 마무리 + 배포
 
 | 작업 |
 |------|
 | 태블릿 반응형 (설문 화면 1024px 기준) |
-| 엑셀 Import (SheetJS → Supabase batch insert) ← ⭐⭐ 보통 |
-| Vercel 배포 + 환경변수 등록 |
-| Supabase Row Level Security 설정 |
-
----
-
-## 공통 기능 명세
-
-```
-토스트         저장 / 복사 완료 (3초 자동)
-모달           삭제 / 취소 확인
-빈 상태        검색 없음 / 기록 없음
-반응형         모바일 360px / 태블릿 1024px / 데스크탑 1200px
-CSV 복사       시술 메모 → 클립보드 포맷 복사
-엑셀 Import    SheetJS로 고객 명단 일괄 등록
-```
+| CSV 내보내기 (설정 페이지) |
+| 엑셀 Import (SheetJS → batch insert) ← ⭐⭐ 보통 |
+| 배포 환경 설정 |
 
 ---
 
@@ -273,17 +296,7 @@ CSV 복사       시술 메모 → 클립보드 포맷 복사
 ```
 - 컴포넌트는 함수형으로만
 - 변수명 camelCase, 컴포넌트명 PascalCase
-- Supabase 환경변수는 반드시 .env에 분리 (.gitignore 포함)
-- 모든 Supabase 호출은 try/catch로 에러 핸들링
 - 색상·폰트·간격 직접 하드코딩 금지 — 반드시 Tailwind 토큰 사용
+- API 호출은 try/catch로 에러 핸들링
 - TypeScript strict 적용은 추후 단계적 전환 시 적용
 ```
-
----
-
-## 기존 REACT_ROADMAP.md에서 유지한 항목
-
-- 데이터베이스 테이블 설계 (users→customers, consultations→visits로 리네이밍)
-- CSV Export 기능 (7단계 포함)
-- 엑셀 Import 기능 (SheetJS, ⭐⭐ 보통 난이도)
-- Vercel 배포 방식

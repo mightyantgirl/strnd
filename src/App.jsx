@@ -4,7 +4,9 @@ import Button from './components/Button'
 import Chip from './components/Chip'
 import MoodChip from './components/moodchip'
 import Input from './components/input'
+import Toast from './components/toast'
 import { StyleCard } from './components/stylecard'
+import Dropdown from './components/dropdown'
 
 const CHIPS = [
   { id: 1, label: '➰ 자주 엉켜요' },
@@ -20,10 +22,19 @@ const MOODCHIPS = [
   { id: 5, emoji: '🌙', label: '세련되고 고급스러운' },
 ]
 
+const OPTIONS = [
+  { value: 'cut', label: '컷' },
+  { value: 'perm', label: '펌' },
+  { value: 'color', label: '컬러' },
+  { value: 'clinic', label: '클리닉' },
+]
+
 const STYLECARDS = [{ id: 1, imageUrl: '', name: '' }]
 
 export default function App() {
   const [selected, setSelected] = useState([])
+  const [visible, setVisible] = useState(false)
+  const [dropdownValue, setDropdownValue] = useState('')
 
   const toggle = (id) => {
     setSelected(
@@ -32,6 +43,11 @@ export default function App() {
           ? prev.filter((item) => item !== id) // 있으면 제거
           : [...prev, id], // 없으면 추가
     )
+  }
+
+  const showToast = () => {
+    setVisible(true)
+    setTimeout(() => setVisible(false), 3000)
   }
 
   return (
@@ -54,10 +70,24 @@ export default function App() {
         ))}
       </div>
 
+      {/* 드랍다운 */}
+      <div className="w-full">
+        <Dropdown options={OPTIONS} value={dropdownValue} onChange={(val) => setDropdownValue(val)} placeholder="해당하는 항목을 선택해주세요" />
+      </div>
+
+      {/* 인풋 */}
+      <div className="w-full">
+        <Input placeholder="1자 이상" label="이름" />
+      </div>
       <div className="grid grid-cols-2 gap-3">
         <StyleCard imageUrl="https://picsum.photos/300" name="C컬 레이어드" selected={selected.includes(1)} onClick={() => toggle(1)} />
         <StyleCard imageUrl="https://picsum.photos/301" name="S컬 레이어드" selected={selected.includes(2)} onClick={() => toggle(2)} />
       </div>
+      {/* 
+      <div className="min-h-screen bg-bg flex items-center justify-center">
+        <button onClick={showToast}>토스트 테스트</button>
+        <Toast message="설문 URL이 복사되었어요" visible={visible} />
+      </div> */}
     </div>
   )
 }
