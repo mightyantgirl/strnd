@@ -1,7 +1,7 @@
 //step 2 원하는 무드 체크 칩 컴포넌트
 
 const baseClass = `
-  w-full  py-5 px-6 mr-2 mb-3 rounded-xl text-xl font-semibold
+  w-full  py-5 px-6 mr-2 mb-3 rounded-xl text-base font-semibold
   transition-all cursor-pointer border 
 `
 
