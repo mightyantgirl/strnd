@@ -30,11 +30,7 @@ export default function Dropdown({ options, value, onChange, placeholder, requir
       <button onClick={() => setIsOpen(!isOpen)} className={baseClass}>
         <div className="flex justify-between items-center">
           <span className={selectedLabel ? 'text-primary leading-none' : 'text-placeholder leading-none'}>{selectedLabel || placeholder}</span>
-          {isOpen ? (
-            <img className="block mr-2" style={{ width: '10px', height: '5px' }} src="/img/top.svg" />
-          ) : (
-            <img className="block mr-2" style={{ width: '10px', height: '5px' }} src="/img/bottom.svg" />
-          )}
+          {isOpen ? <img className="block mr-2" style={{ width: '10px', height: '5px' }} src="/img/top.svg" /> : <img className="block mr-2" style={{ width: '10px', height: '5px' }} src="/img/bottom.svg" />}
         </div>
       </button>
 

@@ -73,8 +73,8 @@
   --breakpoint-desktop: 1200px;
 
   /* Tailwind 기본 text-size 비활성화 (반응형 @utility로 직접 정의) */
+  --text-xxs: 11px;
   --text-xs: 12px;
-  --text-sm: 13px;
   --text-base: 14px;
   --text-lg: 16px;
   --text-xl: 18px;
@@ -85,7 +85,7 @@
    RESPONSIVE TYPOGRAPHY
    mobile → tablet(768px~)
    ============================================================ */
-
+/* 
 @utility text-large {
   font-size: 1.5rem;
   line-height: 1.33;
@@ -140,7 +140,7 @@
   @media (min-width: 768px) {
     font-size: 0.8125rem;
   }
-}
+} */
 
 /* ============================================================
    GLOBAL BASE
@@ -158,6 +158,8 @@
     color: var(--color-primary);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    height: 100%;
+    overflow: hidden;
   }
 
   /* 추가 */

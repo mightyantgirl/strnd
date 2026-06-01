@@ -60,7 +60,7 @@ export function SurveyCard({ date, status, VISIT_ROUTE, REF_DESIGNER, SERVICES, 
         </ul>
       </div>
       <div></div>
-      <Button variant="secondary" value="시술 내용 기록하기" onClick={() => {}} />
+      <Button variant="secondary" value="시술 내용 기록하기" height="sm" className="text-xs" onClick={() => {}} />
     </div>
   )
 }
