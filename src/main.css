@@ -150,6 +150,7 @@
 @layer base {
   html {
     -webkit-text-size-adjust: 100%;
+    height: 100%;
   }
 
   body {
@@ -160,6 +161,7 @@
     -moz-osx-font-smoothing: grayscale;
     height: 100%;
     overflow: hidden;
+    overflow-x: hidden;
   }
 
   /* 추가 */
@@ -170,5 +172,14 @@
     font-family: inherit;
     font-size: inherit;
     line-height: inherit;
+  }
+
+  * {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+
+  *::-webkit-scrollbar {
+    display: none;
   }
 }

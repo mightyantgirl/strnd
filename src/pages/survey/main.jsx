@@ -8,7 +8,7 @@ export default function SurveyMain({ name, isFirstVisit, onStart, lastVisitDays,
       {/* 헤더 */}
 
       {/* 컨텐츠 - 메인타이틀 */}
-      <div className={`${baseTextClass} py-22`}>
+      <div className={`${baseTextClass} flex-1 overflow-y-auto py-22`} style={{ touchAction: 'pan-y' }}>
         <h1 className="text-2xl font-bold text-primary mb-4">
           안녕하세요, <span className="text-brand">{name} </span>님!
           <br />

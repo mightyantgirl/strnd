@@ -21,42 +21,45 @@ export default function SurveyStep0({ onStart }) {
   ]
 
   return (
-    <div>
+    <div className="h-full flex flex-col">
       {/* 헤더 */}
       <SurveyHeader />
 
-      {/* 컨텐츠 - 메인타이틀 */}
-      <div className={`${baseTextClass} pt-22 pb-6 space-y-2`}>
-        <p>STEP 0</p>
-        <h1 className="text-2xl font-bold text-primary mb-4">
-          고객님의 간단한 정보를 <br />
-          입력해주세요.
-        </h1>
-      </div>
-
-      {/* 컨텐츠 - 설문 영역 */}
-      <div className="space-y-8">
-        <div>
-          <div className="w-full flex">
-            <CheckChip
-              label="남성"
-              selected={gender === '남성'}
-              onClick={() => {
-                setGender('남성')
-              }}
-            />
-            <CheckChip
-              label="여성"
-              selected={gender === '여성'}
-              onClick={() => {
-                setGender('여성')
-              }}
-            />
-          </div>
-          <p className="text-xs font-medium text-placeholder">필수 선택 요소입니다.</p>
+      {/* 컨텐츠 */}
+      <div className="flex-1 overflow-y-auto" style={{ touchAction: 'pan-y' }}>
+        {/* 컨텐츠 - 메인타이틀 */}
+        <div className={`${baseTextClass} pt-20 pb-6 space-y-2`}>
+          <p>STEP 0</p>
+          <h1 className="text-2xl font-bold text-primary mb-4">
+            고객님의 간단한 정보를 <br />
+            입력해주세요.
+          </h1>
         </div>
-        <Dropdown options={VISIT_ROUTE_OPTIONS} value={visitRoute} onChange={(val) => setVisitRoute(val)} placeholder="해당하는 항목을 선택해주세요" label="방문경로" required={true} />
-        <Input label="디자이너 소개 유무" placeholder="소개해 주신 분 성함을 알려주세요." />
+
+        {/* 컨텐츠 - 설문 영역 */}
+        <div className="space-y-8">
+          <div>
+            <div className="w-full flex text-lg">
+              <CheckChip
+                label="💁‍♂️남성"
+                selected={gender === '남성'}
+                onClick={() => {
+                  setGender('남성')
+                }}
+              />
+              <CheckChip
+                label="💁‍♀️여성"
+                selected={gender === '여성'}
+                onClick={() => {
+                  setGender('여성')
+                }}
+              />
+            </div>
+            <p className="text-xs font-medium text-placeholder">필수 선택 요소입니다.</p>
+          </div>
+          <Dropdown options={VISIT_ROUTE_OPTIONS} value={visitRoute} onChange={(val) => setVisitRoute(val)} placeholder="해당하는 항목을 선택해주세요" label="방문경로" required={true} />
+          <Input label="디자이너 소개 유무" placeholder="소개해 주신 분 성함을 알려주세요." />
+        </div>
       </div>
 
       {/* 푸터 */}
