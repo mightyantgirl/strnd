@@ -23,7 +23,7 @@ export default function Login() {
     // 연락처 검사
     const phoneRegex = /^010\d{4}\d{4}$/
     if (!phoneRegex.test(phone)) {
-      setPhoneError('올바른 연락처를 입력해주세요')
+      setPhoneError('올바른 연락처를 입력해주세요.')
       valid = false
     } else {
       setPhoneError('')
@@ -31,7 +31,7 @@ export default function Login() {
 
     // PIN 검사
     if (pin.length !== 4 || isNaN(pin)) {
-      setPinError('PIN은 4자리 숫자예요')
+      setPinError('PIN은 4자리 숫자입니다.')
       valid = false
     } else {
       setPinError('')
@@ -65,8 +65,8 @@ export default function Login() {
       <div className="absolute bottom-4 left-0 right-0 w-full space-y-8">
         <div>
           <div>
-            <Input value={phone} placeholder="연락처" onChange={(e) => setPhone(e.target.value)} error={phoneError} />
-            <Input value={pin} placeholder="PIN 번호" onChange={(e) => setPin(e.target.value)} error={pinError} />
+            <Input value={phone} placeholder="연락처" maxLength={11} onChange={(e) => setPhone(e.target.value)} error={phoneError} />
+            <Input value={pin} placeholder="PIN 번호" type="password" maxLength={4} onChange={(e) => setPin(e.target.value)} error={pinError} />
           </div>
           <div className="flex items-center gap-2">
             <button onClick={() => setAutoLogin(!autoLogin)}>

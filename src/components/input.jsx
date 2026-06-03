@@ -4,7 +4,7 @@ const baseClass = `w-full py-5 px-4 rounded-xl text-xs font-medium focus:outline
 const labelClass = `mb-2 text-xs font-semibold leading-none`
 const stateClass = `bg-card-bg text-primary border border-card-bg focus:border-focus placeholder:text-placeholder text-sm `
 
-export default function Input({ label, value, onChange, placeholder, error, required }) {
+export default function Input({ label, value, onChange, placeholder, error, required, type = 'text', maxLength }) {
   return (
     <div className="w-full mb-4">
       {label && (
@@ -14,7 +14,7 @@ export default function Input({ label, value, onChange, placeholder, error, requ
           {!required && <span className={`${labelClass} text-placeholder`}>선택</span>}
         </label>
       )}
-      <input style={{ height: '52px' }} placeholder={placeholder} value={value} onChange={onChange} className={`${baseClass} ${stateClass} ${error ? 'border-danger' : 'border-border'}`}></input>
+      <input style={{ height: '52px' }} placeholder={placeholder} value={value} type={type} maxLength={maxLength} onChange={onChange} className={`${baseClass} ${stateClass} ${error ? 'border-danger' : 'border-border'}`}></input>
       {error && <p className="text-xs font-medium text-danger mt-1">{error}</p>}
     </div>
   )
