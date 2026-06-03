@@ -5,7 +5,6 @@ import Chip from './components/Chip'
 import MoodChip from './components/moodchip'
 import Input from './components/input'
 import Toast from './components/toast'
-import { StyleCard } from './components/stylecard'
 import Dropdown from './components/dropdown'
 import Badge from './components/badge'
 import { CustomerCard } from './components/customercard'
@@ -97,10 +96,11 @@ export default function App() {
         <Input placeholder="1자 이상" label="이름" required={true} />
         <Input placeholder="" label="디자이너 소개 유무" required={false} />
       </div>
-      <div className="grid grid-cols-2 gap-3">
+
+      {/* <div className="grid grid-cols-2 gap-3">
         <StyleCard imageUrl="https://picsum.photos/300" name="C컬 레이어드" selected={selected.includes(1)} onClick={() => toggle(1)} />
         <StyleCard imageUrl="https://picsum.photos/301" name="S컬 레이어드" selected={selected.includes(2)} onClick={() => toggle(2)} />
-      </div>
+      </div> */}
 
       {/* 카테고리 뱃지 */}
       <div className="flex flex-row">

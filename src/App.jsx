@@ -5,7 +5,10 @@ import SurveyMain from './pages/survey/main'
 import SurveyStep0 from './pages/survey/step0'
 import SurveyStep1 from './pages/survey/step1'
 import SurveyStep2 from './pages/survey/step2'
+import SurveyStep3 from './pages/survey/step3'
 import SurveyStep4 from './pages/survey/step4'
+import SurveyStep5 from './pages/survey/step5'
+import SurveyDone from './pages/survey/surveydone'
 
 export default function App() {
   return (
@@ -25,8 +28,17 @@ export default function App() {
       {/* step2 */}
       {/* <SurveyStep2 /> */}
 
+      {/* step3 */}
+      {/* <SurveyStep3 /> */}
+
       {/* step4 */}
       {/* <SurveyStep4 /> */}
+
+      {/* step5 */}
+      {/* <SurveyStep5 /> */}
+
+      {/* done */}
+      {/* <SurveyDone /> */}
     </div>
   )
 }

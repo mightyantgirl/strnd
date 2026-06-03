@@ -3,24 +3,44 @@ import Input from './../../components/input'
 import Button from './../../components/button'
 import Modal from './../../components/modal'
 
-const baseTextClass = `text-xs  font-semibold`
+const baseTextClass = `text-xs font-semibold`
 
 export default function Login() {
   const [phone, setPhone] = useState('')
   const [pin, setPin] = useState('')
   const [autoLogin, setAutoLogin] = useState(false)
-
   const [phoneError, setPhoneError] = useState('')
   const [pinError, setPinError] = useState('')
-
-  //유효성 통과 시 모달 여닫힘
   const [modalOpen, setModalOpen] = useState(false)
 
-  // 유효성 검사 함수
+  // ① 실시간 연락처 검증
+  const handlePhoneChange = (e) => {
+    const value = e.target.value
+    setPhone(value)
+
+    const phoneRegex = /^010\d{4}\d{4}$/
+    if (value && !phoneRegex.test(value)) {
+      setPhoneError('올바른 연락처를 입력해주세요.')
+    } else {
+      setPhoneError('')
+    }
+  }
+
+  // ② 실시간 PIN 검증
+  const handlePinChange = (e) => {
+    const value = e.target.value
+    setPin(value)
+
+    if (value && (value.length !== 4 || isNaN(value))) {
+      setPinError('PIN은 4자리 숫자입니다.')
+    } else {
+      setPinError('')
+    }
+  }
+
+  // ③ 버튼 클릭 시 최종 검증
   const validate = () => {
     let valid = true
-
-    // 연락처 검사
     const phoneRegex = /^010\d{4}\d{4}$/
     if (!phoneRegex.test(phone)) {
       setPhoneError('올바른 연락처를 입력해주세요.')
@@ -28,23 +48,18 @@ export default function Login() {
     } else {
       setPhoneError('')
     }
-
-    // PIN 검사
     if (pin.length !== 4 || isNaN(pin)) {
       setPinError('PIN은 4자리 숫자입니다.')
       valid = false
     } else {
       setPinError('')
     }
-
     return valid
   }
 
-  //버튼 클릭 유효성 체크
   const handleLogin = () => {
     if (!validate()) return
     setModalOpen(true)
-
     console.log('phone:', phone)
     console.log('pin:', pin)
     console.log('autoLogin:', autoLogin)
@@ -52,7 +67,6 @@ export default function Login() {
 
   return (
     <div className="relative" style={{ height: '100dvh' }}>
-      {/* 컨텐츠 - 메인타이틀 */}
       <div className={`${baseTextClass} flex-1 overflow-y-auto py-22`} style={{ touchAction: 'pan-y' }}>
         <h1 className="text-2xl font-medium text-primary mb-4">
           한 올 한 올, <br />
@@ -61,12 +75,11 @@ export default function Login() {
         <img src="./img/strnd.svg" alt="서비스 로고" />
       </div>
 
-      {/* 로그인 인풋 */}
       <div className="absolute bottom-4 left-0 right-0 w-full space-y-8">
         <div>
           <div>
-            <Input value={phone} placeholder="연락처" maxLength={11} onChange={(e) => setPhone(e.target.value)} error={phoneError} />
-            <Input value={pin} placeholder="PIN 번호" type="password" maxLength={4} onChange={(e) => setPin(e.target.value)} error={pinError} />
+            <Input value={phone} placeholder="연락처" type="number" inputMode="numeric" maxLength={11} onChange={handlePhoneChange} error={phoneError} />
+            <Input value={pin} placeholder="PIN 번호" type="password" inputMode="numeric" maxLength={4} onChange={handlePinChange} error={pinError} />
           </div>
           <div className="flex items-center gap-2">
             <button onClick={() => setAutoLogin(!autoLogin)}>
@@ -75,9 +88,9 @@ export default function Login() {
             <span className="text-xs text-secondary font-semibold">자동로그인</span>
           </div>
         </div>
-
-        {/* 로그인 버튼 */}
-        <Button variant="primary" value="로그인" height="md" disabled={!phone || !pin} onClick={handleLogin} />
+        <Button variant="primary" disabled={!phone || !pin} onClick={handleLogin}>
+          로그인
+        </Button>
         <div className="flex justify-center gap-8">
           <span className={`${baseTextClass} text-placeholder`}>처음 오셨나요?</span>
           <span className={`${baseTextClass} underline pointer`} onClick={() => {}}>
