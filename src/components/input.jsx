@@ -6,7 +6,7 @@ const stateClass = `bg-card-bg text-primary border border-card-bg focus:border-f
 
 export default function Input({ label, value, onChange, placeholder, error, required }) {
   return (
-    <div className="w-full mb-5">
+    <div className="w-full mb-4">
       {label && (
         <label className="flex gap-2">
           <p className={labelClass}>{label}</p>
@@ -14,13 +14,8 @@ export default function Input({ label, value, onChange, placeholder, error, requ
           {!required && <span className={`${labelClass} text-placeholder`}>선택</span>}
         </label>
       )}
-      <input
-        style={{ height: '52px' }}
-        placeholder={placeholder}
-        value={value}
-        onChange={onChange}
-        className={`${baseClass} ${stateClass} ${error ? 'border-danger' : 'border-border'}`}></input>
-      {error && <p className="text-tiny text-danger">{error}</p>}
+      <input style={{ height: '52px' }} placeholder={placeholder} value={value} onChange={onChange} className={`${baseClass} ${stateClass} ${error ? 'border-danger' : 'border-border'}`}></input>
+      {error && <p className="text-xs font-medium text-danger mt-1">{error}</p>}
     </div>
   )
 }
