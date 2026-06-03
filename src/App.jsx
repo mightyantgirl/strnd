@@ -12,7 +12,7 @@ import SurveyDone from './pages/survey/surveydone'
 
 export default function App() {
   return (
-    <div className="bg-bg px-5 flex flex-col" style={{ height: '100dvh' }}>
+    <div className="bg-bg px-5" style={{ height: '100dvh' }}>
       {/* 1. 로그인 */}
       <Login />
 
