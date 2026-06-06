@@ -65,7 +65,7 @@ export default function Login() {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          phone: phone.replace(/-/g, ''), // 하이픈 제거
+          phone: phone.replace(/-/g, ''),
           pinCode: pin,
           rememberMe: autoLogin,
         }),
