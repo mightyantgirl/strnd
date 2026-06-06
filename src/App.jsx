@@ -9,9 +9,9 @@ export default function App() {
     <BrowserRouter>
       <div className="bg-bg px-5" style={{ height: '100dvh' }}>
         <Routes>
-          <Route path="/login" element={<Login />} />
+          <Route path="/" element={<Login />} />
           <Route path="/register" element={<Register />} />
-          <Route path="/" element={<Home />} />
+          <Route path="/home" element={<Home />} />
         </Routes>
       </div>
     </BrowserRouter>
