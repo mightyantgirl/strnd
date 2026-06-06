@@ -1,4 +1,6 @@
 import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
+
 import Input from './../../components/input'
 import Button from './../../components/button'
 
@@ -10,6 +12,8 @@ export default function Login() {
   const [autoLogin, setAutoLogin] = useState(false)
   const [phoneError, setPhoneError] = useState('')
   const [pinError, setPinError] = useState('')
+
+  const navigate = useNavigate()
 
   //  실시간 연락처 검증
   const handlePhoneChange = (e) => {
@@ -124,7 +128,11 @@ export default function Login() {
         </Button>
         <div className="flex justify-center gap-8">
           <span className={`${baseTextClass} text-placeholder`}>처음 오셨나요?</span>
-          <span className={`${baseTextClass} underline pointer`} onClick={() => {}}>
+          <span
+            className={`${baseTextClass} underline pointer`}
+            onClick={() => {
+              navigate('/Register')
+            }}>
             회원가입
           </span>
         </div>

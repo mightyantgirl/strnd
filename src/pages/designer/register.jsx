@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 
 import PageFooter from './../../components/pagefooter'
 import PageHeader from './../../components/pageheader'
@@ -17,6 +18,7 @@ export default function Register() {
   const [pinError, setPinError] = useState('')
   const [pinConfirmError, setPinConfirmError] = useState('')
 
+  const navigate = useNavigate()
   //유효성 검사 함수
   const handleRegister = async () => {
     let valid = true
@@ -76,7 +78,7 @@ export default function Register() {
   return (
     <div style={{ height: '100dvh' }} className="h-full flex flex-col">
       {/* 헤더 */}
-      <PageHeader title="회원가입" />
+      <PageHeader title="회원가입" onBack={() => navigate(-1)} />
 
       {/* 컨텐츠 */}
       <div className="flex-1 overflow-y-auto" style={{ touchAction: 'pan-y' }}>
