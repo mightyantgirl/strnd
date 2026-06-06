@@ -19,6 +19,7 @@ export default function Register() {
   const [pinConfirmError, setPinConfirmError] = useState('')
 
   const navigate = useNavigate()
+
   //유효성 검사 함수
   const handleRegister = async () => {
     let valid = true

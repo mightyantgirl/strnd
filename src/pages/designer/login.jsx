@@ -88,7 +88,7 @@ export default function Login() {
 
         localStorage.setItem('designerId', data.designerId)
         localStorage.setItem('designerName', data.designerName)
-        console.log('로그인 성공', data)
+        navigate('/home')
       } else {
         // 401 실패 처리
         setPinError(data.message)
