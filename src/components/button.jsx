@@ -12,7 +12,7 @@ const heightClass = {
   lg: 'py-5',
 }
 
-export default function Button({ variant = 'primary', value, children, onClick, disabled = false, className = '', height = 'md' }) {
+export default function Button({ variant = 'primary', value = '', children, onClick, disabled = false, className = '', height = 'md' }) {
   return (
     <button
       onClick={onClick}
