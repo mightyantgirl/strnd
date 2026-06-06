@@ -1,7 +1,6 @@
 import { useState } from 'react'
 import Input from './../../components/input'
 import Button from './../../components/button'
-import Modal from './../../components/modal'
 
 const baseTextClass = `text-xs font-semibold`
 
@@ -11,9 +10,8 @@ export default function Login() {
   const [autoLogin, setAutoLogin] = useState(false)
   const [phoneError, setPhoneError] = useState('')
   const [pinError, setPinError] = useState('')
-  const [modalOpen, setModalOpen] = useState(false)
 
-  // ① 실시간 연락처 검증
+  //  실시간 연락처 검증
   const handlePhoneChange = (e) => {
     const value = e.target.value
     setPhone(value)
@@ -26,7 +24,7 @@ export default function Login() {
     }
   }
 
-  // ② 실시간 PIN 검증
+  //  실시간 PIN 검증
   const handlePinChange = (e) => {
     const value = e.target.value
     setPin(value)
@@ -38,7 +36,7 @@ export default function Login() {
     }
   }
 
-  // ③ 버튼 클릭 시 최종 검증
+  // 버튼 클릭 시 최종 검증
   const validate = () => {
     let valid = true
     const phoneRegex = /^010\d{4}\d{4}$/
@@ -57,13 +55,47 @@ export default function Login() {
     return valid
   }
 
-  const handleLogin = () => {
+  const handleLogin = async () => {
     if (!validate()) return
-    setModalOpen(true)
-    console.log('phone:', phone)
-    console.log('pin:', pin)
-    console.log('autoLogin:', autoLogin)
+
+    try {
+      const response = await fetch('https://strnd-be.onrender.com/api/auth/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          phone: phone.replace(/-/g, ''), // 하이픈 제거
+          pinCode: pin,
+          rememberMe: autoLogin,
+        }),
+      })
+
+      const data = await response.json()
+
+      if (response.ok) {
+        if (autoLogin) {
+          // 자동로그인 ON
+          localStorage.setItem('token', data.accessToken)
+        } else {
+          // 자동로그인 OFF
+          sessionStorage.setItem('token', data.accessToken)
+        }
+
+        localStorage.setItem('designerId', data.designerId)
+        localStorage.setItem('designerName', data.designerName)
+        console.log('로그인 성공', data)
+      } else {
+        // 401 실패 처리
+        setPinError(data.message)
+      }
+    } catch (error) {
+      console.error('에러', error)
+      setPinError('네트워크 오류가 발생했어요')
+    }
   }
+
+  //
 
   return (
     <div className="relative" style={{ height: '100dvh' }}>
@@ -74,7 +106,6 @@ export default function Login() {
         </h1>
         <img src="./img/strnd.svg" alt="서비스 로고" />
       </div>
-
       <div className="absolute bottom-4 left-0 right-0 w-full space-y-8">
         <div>
           <div>
@@ -98,7 +129,6 @@ export default function Login() {
           </span>
         </div>
       </div>
-      <Modal isOpen={modalOpen} title="로그인 성공" confirmLabel="확인" confirmVariant="primary" onConfirm={() => setModalOpen(false)} onCancel={() => setModalOpen(false)} />
     </div>
   )
 }
