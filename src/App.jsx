@@ -11,14 +11,14 @@ const isLoggedIn = () => {
 export default function App() {
   return (
     <BrowserRouter>
-      <Routes>
-        <div className="bg-bg px-5" style={{ height: '100dvh' }}>
+      <div className="bg-bg px-5" style={{ height: '100dvh' }}>
+        <Routes>
           <Route path="/" element={isLoggedIn() ? <Navigate to="/home" /> : <Navigate to="/login" />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/home" element={<Home />} />
-        </div>
-      </Routes>
+        </Routes>
+      </div>
     </BrowserRouter>
   )
 }
