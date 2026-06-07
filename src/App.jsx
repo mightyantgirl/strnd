@@ -12,11 +12,12 @@ export default function App() {
   return (
     <BrowserRouter>
       <Routes>
-        {/* 루트 접속 시 토큰 있으면 홈, 없으면 로그인 */}
-        <Route path="/" element={isLoggedIn() ? <Navigate to="/home" /> : <Navigate to="/login" />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/register" element={<Register />} />
-        <Route path="/home" element={<Home />} />
+        <div className="bg-bg px-5" style={{ height: '100dvh' }}>
+          <Route path="/" element={isLoggedIn() ? <Navigate to="/home" /> : <Navigate to="/login" />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
+          <Route path="/home" element={<Home />} />
+        </div>
       </Routes>
     </BrowserRouter>
   )
