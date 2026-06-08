@@ -3,7 +3,7 @@
   "singleQuote": true,
   "endOfLine": "lf",
   "tabWidth": 2,
-  "printWidth": 99999,
+  "printWidth": 100,
   "htmlWhitespaceSensitivity": "ignore",
   "singleAttributePerLine": false,
   "bracketSameLine": true

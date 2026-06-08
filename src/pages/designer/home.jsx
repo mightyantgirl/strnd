@@ -1,22 +1,66 @@
 import { useNavigate } from 'react-router-dom'
+import { useState, useEffect } from 'react'
 
 import Input from './../../components/input'
-// import CustomerCard from './../../components/customercard'
+import CustomerCard from './../../components/customercard'
 import PageFooter from './../../components/pagefooter'
 
-const baseTextClass = `text-xs text-primary font-bold`
+import { getElapsedTime, formatPhone } from '../../utils/dateUtils'
+
+const baseTextClass = `text-base text-primary font-medium`
 
 export default function Home() {
+  const [cards, setCards] = useState([]) // 고객 카드 목록
+  const [monthlyCount, setMonthlyCount] = useState(0) // 이번 달 방문자 수
+  const [searchKeyword, setSearchKeyword] = useState('') // 검색어
+  const [isLoading, setIsLoading] = useState(true)
   const navigate = useNavigate()
+
+  // 디자이너 이름 정보 변수
+  const designerName =
+    localStorage.getItem('designerName') || sessionStorage.getItem('designerName')
+
+  // 실시간 검색 필터링
+  const filteredCards = cards.filter((card) => card.customerName.includes(searchKeyword))
+
+  //고객 카드 데이터 함수 페이지 열릴 때 API 호출
+  useEffect(() => {
+    const fetchHome = async () => {
+      try {
+        //로그인 단계에서 저장된 토큰 꺼내기
+        const token = localStorage.getItem('token') || sessionStorage.getItem('token')
+
+        const response = await fetch('https://strnd-be.onrender.com/api/home', {
+          method: 'GET',
+          headers: {
+            Authorization: `Bearer ${token}`,
+            //로그인 증명서 헤더에 담기
+            //토큰으로 인증
+            //없을 시 401 반환
+          },
+        })
+
+        const data = await response.json() // JSON으로 변환된 데이터 저장
+
+        setCards(data.recentCustomers) // 고객 저장
+        setMonthlyCount(data.monthlyVisitCount) // 방문자 수 저장
+      } catch (error) {
+        console.error('홈 데이터 로딩 실패:', error)
+      } finally {
+        setIsLoading(false)
+      }
+    }
+    fetchHome()
+  }, []) // 빈배열 = 화면 열릴 때 한 번만
 
   return (
     <div style={{ height: '100dvh' }} className="flex flex-col">
       <div className="w-full bg-bg fixed pr-9 pb-6 z-10">
         <div className="flex gap-5 mt-6 items-center justify-between">
           <img src="/img/strnd.svg" className="w-22" alt="로고" />
-          {/* <img src="/img/Subtract.svg" alt="설정" /> */}
+
           <button
-            className="text-placeholder text-base font-semibold"
+            className="text-placeholder text-base font-semibold mr-2"
             type="button"
             alt="로그아웃"
             onClick={() => {
@@ -31,23 +75,75 @@ export default function Home() {
 
       {/* 컨텐츠 */}
       <div className="flex-1 overflow-y-auto" style={{ touchAction: 'pan-y' }}>
-        {/* 컨텐츠 - 메인타이틀 */}
-        <div className={`${baseTextClass} pt-20 pb-6 space-y-2`}>
-          <h1 className="text-2xl font-bold text-primary mb-4">
-            안녕하세요, {} 님! <br />
-            오늘도 좋은 하루 되세요.
-          </h1>
-          <p className="text-placeholder">이번 달 총 {}명 방문했어요</p>
-        </div>
+        {isLoading ? (
+          <div className="animate-pulse">
+            {/* 타이틀 스켈레톤 */}
+            <div className="pt-20 pb-6 mb-15 space-y-8">
+              <div className="space-y-4">
+                <div className="h-7 bg-border rounded-lg w-48" />
+                <div className="h-7 bg-border rounded-lg w-36" />
+                <div className="h-4 bg-border rounded-md w-40" />
+              </div>
+              <div className="h-11 bg-border rounded-xl w-full" />
+            </div>
+            {/* 카드 스켈레톤 */}
+            <div className="h-4 bg-border rounded-md w-16 mb-3" />
+            <div className="space-y-2">
+              {[0, 1, 2].map((i) => (
+                <div key={i} className="w-full py-5 px-4 rounded-xl bg-card-bg">
+                  <div className="flex justify-between mb-3">
+                    <div className="h-4 bg-border rounded-md w-20" />
+                    <div className="h-4 bg-border rounded-md w-14" />
+                  </div>
+                  <div className="h-3 bg-border rounded-md w-28" />
+                </div>
+              ))}
+            </div>
+          </div>
+        ) : (
+          <div className="fade-in">
+            {/* 컨텐츠 - 메인타이틀 */}
+            <div className={`${baseTextClass} pt-20 pb-6 mb-15`}>
+              <div className="space-y-8">
+                <div>
+                  <h1 className="text-2xl font-bold text-primary mb-4">
+                    안녕하세요, <span className="text-brand">{designerName}</span> 님! <br />
+                    <span>오늘도 좋은 하루 되세요.</span>
+                  </h1>
+                  <p className="text-placeholder">이번 달 총 {monthlyCount}명 방문했어요</p>
+                </div>
+                {/*검색 인풋*/}
+                <Input
+                  search={true}
+                  value={searchKeyword}
+                  className="border border-brand"
+                  placeholder="고객 이름 검색"
+                  onChange={(e) => setSearchKeyword(e.target.value)}
+                />
+              </div>
+            </div>
 
-        {/* 컨텐츠 - 검색 인풋*/}
-        <Input placeholder="고객 이름 검색" />
-
-        {/* 컨텐츠 - 검색 내역 */}
-        {/* <CustomerCard /> */}
+            {/* 컨텐츠 - 검색 내역 */}
+            <p className={`${baseTextClass} font-semibold mb-3`}>고객 내역</p>
+            <div className="space-y-2">
+              {filteredCards.map((card) => {
+                return (
+                  <CustomerCard
+                    key={card.key}
+                    customerId={card.customerId}
+                    customerName={card.customerName}
+                    Phone={formatPhone(card.phone)}
+                    elapsedDays={getElapsedTime(card.lastVisitDt)}
+                    onClick={() => navigate(`/customers/${card.customerId}`)}
+                  />
+                )
+              })}
+            </div>
+          </div>
+        )}
       </div>
       {/* 푸터 */}
-      <PageFooter onNext={() => navigate('/register')} value="+ 신규 고객 등록" />
+      <PageFooter onNext={() => navigate('/customers/new')} value="+ 신규 고객 등록" />
     </div>
   )
 }

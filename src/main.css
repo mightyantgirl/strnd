@@ -147,6 +147,15 @@
    @layer base 안에 넣어야 @layer utilities보다 우선순위가 낮아짐
    ============================================================ */
 
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@utility fade-in {
+  animation: fadeIn 0.25s ease;
+}
+
 @layer base {
   html {
     -webkit-text-size-adjust: 100%;

@@ -12,7 +12,16 @@ const heightClass = {
   lg: 'py-5',
 }
 
-export default function Button({ variant = 'primary', value = '', children, onClick, disabled = false, className = '', height = 'md' }) {
+export default function Button({
+  variant = 'primary',
+  value = '',
+  children,
+  onClick,
+  disabled = false,
+  className = '',
+  height = 'md',
+  survey = false,
+}) {
   return (
     <button
       onClick={onClick}
@@ -25,7 +34,14 @@ export default function Button({ variant = 'primary', value = '', children, onCl
         ${className}
         ${heightClass[height]}
       `}>
-      {children ?? value}
+      {survey ? (
+        <p className="flex justify-between px-4">
+          {children ?? value}
+          <img src="/img/next.svg" />
+        </p>
+      ) : (
+        <p className="px-4">{children ?? value}</p>
+      )}
     </button>
   )
 }

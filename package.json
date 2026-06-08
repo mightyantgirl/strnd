@@ -11,13 +11,18 @@
   "dependencies": {
     "@ssgoi/core": "^6.4.0",
     "@ssgoi/react": "^6.4.0",
+    "axios": "^1.17.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
-    "react-router-dom": "^7.17.0"
+    "react-router-dom": "^7.17.0",
+    "tailwind-merge": "^3.6.0"
   },
   "devDependencies": {
     "@tailwindcss/vite": "^4.0.0",
     "@vitejs/plugin-react": "^4.0.0",
+    "eslint": "^9.39.4",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-react": "^7.37.5",
     "tailwindcss": "^4.0.0",
     "vite": "^6.0.0"
   }
