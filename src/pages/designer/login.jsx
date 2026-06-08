@@ -104,7 +104,9 @@ export default function Login() {
 
   return (
     <div className="relative" style={{ height: '100dvh' }}>
-      <div className={`${baseTextClass} flex-1 overflow-y-auto py-22`} style={{ touchAction: 'pan-y' }}>
+      <div
+        className={`${baseTextClass} flex-1 overflow-y-auto py-22`}
+        style={{ touchAction: 'pan-y' }}>
         <h1 className="text-xl font-medium text-primary mb-4">
           한 올 한 올, <br />
           당신의 결을 기록합니다.
@@ -113,13 +115,33 @@ export default function Login() {
       </div>
       <div className="absolute bottom-4 left-0 right-0 w-full space-y-8">
         <div className="space-y-5">
-          <div className="space-y-4">
-            <Input className="mb-2" value={phone} placeholder="연락처" type="number" inputMode="numeric" maxLength={11} onChange={handlePhoneChange} error={phoneError} />
-            <Input value={pin} placeholder="PIN 번호" type="password" inputMode="numeric" maxLength={4} onChange={handlePinChange} error={pinError} />
+          <div className="space-y-2">
+            <Input
+              className="mb-2"
+              value={phone}
+              placeholder="연락처"
+              type="number"
+              inputMode="numeric"
+              maxLength={11}
+              onChange={handlePhoneChange}
+              error={phoneError}
+            />
+            <Input
+              value={pin}
+              placeholder="PIN 번호"
+              type="password"
+              inputMode="numeric"
+              maxLength={4}
+              onChange={handlePinChange}
+              error={pinError}
+            />
           </div>
           <div className="flex items-center gap-2 pl-1">
             <button onClick={() => setAutoLogin(!autoLogin)}>
-              <img src={autoLogin ? './img/check.svg' : './img/check-disable.svg'} alt="자동로그인 체크" />
+              <img
+                src={autoLogin ? './img/check.svg' : './img/check-disable.svg'}
+                alt="자동로그인 체크"
+              />
             </button>
             <span className="text-xs text-secondary font-semibold">자동로그인</span>
           </div>
