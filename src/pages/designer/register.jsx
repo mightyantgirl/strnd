@@ -67,6 +67,7 @@ export default function Register() {
 
       if (response.ok) {
         console.log('회원가입 성공', data)
+        navigate('/home')
       } else {
         console.log('실패', data.message)
       }

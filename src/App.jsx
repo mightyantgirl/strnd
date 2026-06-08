@@ -1,13 +1,16 @@
 // App.jsx
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
+
 import Login from './pages/designer/login'
 import Register from './pages/designer/register'
 import Home from './pages/designer/home'
+import NotFound from './pages/404page'
+
+const isLoggedIn = () => {
+  return localStorage.getItem('token') || sessionStorage.getItem('token')
+}
 
 export default function App() {
-  const isLoggedIn = () => {
-    return localStorage.getItem('token') || sessionStorage.getItem('token')
-  }
   return (
     <BrowserRouter>
       <div className="bg-bg px-5" style={{ height: '100dvh' }}>
@@ -16,6 +19,7 @@ export default function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/home" element={<Home />} />
+          <Route path="*" element={<NotFound />} />
         </Routes>
       </div>
     </BrowserRouter>

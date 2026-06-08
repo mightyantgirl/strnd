@@ -1,4 +1,5 @@
 import { useNavigate } from 'react-router-dom'
+
 import Input from './../../components/input'
 // import CustomerCard from './../../components/customercard'
 import PageFooter from './../../components/pagefooter'
@@ -13,7 +14,18 @@ export default function Home() {
       <div className="w-full bg-bg fixed pr-9 pb-6 z-10">
         <div className="flex gap-5 mt-6 items-center justify-between">
           <img src="/img/strnd.svg" className="w-22" alt="로고" />
-          <img src="/img/Subtract.svg" alt="설정" />
+          {/* <img src="/img/Subtract.svg" alt="설정" /> */}
+          <button
+            className="text-placeholder text-base font-semibold"
+            type="button"
+            alt="로그아웃"
+            onClick={() => {
+              sessionStorage.removeItem('token')
+              localStorage.removeItem('token')
+              navigate('/login')
+            }}>
+            logout
+          </button>
         </div>
       </div>
 
