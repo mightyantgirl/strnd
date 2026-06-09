@@ -82,7 +82,7 @@ export default function Home() {
   return (
     <div style={{ height: '100dvh' }} className="flex flex-col">
       <div className="w-full bg-bg fixed pr-9 pb-6 z-10">
-        <div className="flex gap-5 mt-6 items-center justify-between">
+        <div className="flex gap-5 mt-5 items-center justify-between">
           <img src="/img/strnd.svg" className="w-22" alt="로고" />
 
           <button
