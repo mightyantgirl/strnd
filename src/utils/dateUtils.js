@@ -13,6 +13,7 @@ export function getElapsedTime(dateString) {
 
 // 연락처 포맷 변환
 export function formatPhone(phone) {
+  if (!phone) return ''
   return phone.replace(/(\d{3})(\d{4})(\d{4})/, '$1-$2-$3')
 }
 

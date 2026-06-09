@@ -38,7 +38,7 @@ export default function SurveyStep4({ onStart }) {
       {/* 컨텐츠 */}
       <div className="flex-1 overflow-y-auto" style={{ touchAction: 'pan-y' }}>
         {/* 컨텐츠 - 메인타이틀 */}
-        <div className={`${baseTextClass} pt-20 pb-6 space-y-2`}>
+        <div className={`${baseTextClass} pt-18 pb-8 space-y-2`}>
           <p>STEP 4</p>
           <h1 className="text-2xl font-bold text-primary mb-4">
             요즘 헤어 <br />
@@ -51,7 +51,12 @@ export default function SurveyStep4({ onStart }) {
           <div>
             <div className="flex-row">
               {CHIPS.map((chip) => (
-                <Chip key={chip.id} label={chip.label} selected={selected.includes(chip.id)} onClick={() => toggle(chip.id)} />
+                <Chip
+                  key={chip.id}
+                  label={chip.label}
+                  selected={selected.includes(chip.id)}
+                  onClick={() => toggle(chip.id)}
+                />
               ))}
             </div>
           </div>

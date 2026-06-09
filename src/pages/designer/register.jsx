@@ -85,7 +85,7 @@ export default function Register() {
       {/* 컨텐츠 */}
       <div className="flex-1 overflow-y-auto" style={{ touchAction: 'pan-y' }}>
         {/* 컨텐츠 - 메인타이틀 */}
-        <div className={`${baseTextClass} pt-20 pb-6 space-y-2`}>
+        <div className={`${baseTextClass} pt-18 pb-8 space-y-2`}>
           <h1 className="text-2xl font-bold text-primary mb-4">
             시작해볼까요? <br />
             기본 정보를 입력해주세요.
@@ -93,11 +93,49 @@ export default function Register() {
         </div>
 
         {/* 컨텐츠 - 인풋 영역 */}
-        <div className="flex-1 overflow-y-auto space-y-4">
-          <Input label="이름" value={name} required={true} placeholder="1자 이상" type="text" error={nameError} onChange={(e) => setName(e.target.value)} />
-          <Input label="연락처" value={phone} required={true} placeholder="10~11자 입력" type="number" inputMode="numeric" maxLength={11} error={phoneError} onChange={(e) => setPhone(e.target.value)} />
-          <Input label="PIN 설정" value={pin} required={true} placeholder="4자리 숫자" type="password" inputMode="numeric" maxLength={4} error={pinError} onChange={(e) => setPin(e.target.value)} />
-          <Input label="PIN 확인" value={pinConfirm} required={true} placeholder="4자리 숫자" type="password" inputMode="numeric" maxLength={4} error={pinConfirmError} onChange={(e) => setPinConfirm(e.target.value)} />
+        <div className="flex-1 overflow-y-auto space-y-6">
+          <Input
+            label="이름"
+            value={name}
+            required={true}
+            placeholder="1자 이상"
+            type="text"
+            error={nameError}
+            onChange={(e) => setName(e.target.value)}
+          />
+          <Input
+            label="연락처"
+            value={phone}
+            required={true}
+            placeholder="10~11자 입력"
+            type="number"
+            inputMode="numeric"
+            maxLength={11}
+            error={phoneError}
+            onChange={(e) => setPhone(e.target.value)}
+          />
+          <Input
+            label="PIN 설정"
+            value={pin}
+            required={true}
+            placeholder="4자리 숫자"
+            type="password"
+            inputMode="numeric"
+            maxLength={4}
+            error={pinError}
+            onChange={(e) => setPin(e.target.value)}
+          />
+          <Input
+            label="PIN 확인"
+            value={pinConfirm}
+            required={true}
+            placeholder="4자리 숫자"
+            type="password"
+            inputMode="numeric"
+            maxLength={4}
+            error={pinConfirmError}
+            onChange={(e) => setPinConfirm(e.target.value)}
+          />
         </div>
       </div>
 

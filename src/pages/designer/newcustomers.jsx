@@ -55,6 +55,10 @@ export default function NewCustomer() {
     })
     const data = await response.json()
     console.log('응답:', data)
+
+    if (response.ok) {
+      navigate('/home', { state: { refresh: true } })
+    }
   }
 
   return (
@@ -65,7 +69,7 @@ export default function NewCustomer() {
       {/* 컨텐츠 */}
       <div className="flex-1 overflow-y-auto" style={{ touchAction: 'pan-y' }}>
         {/* 컨텐츠 - 메인타이틀 */}
-        <div className={`${baseTextClass} pt-20 pb-6 space-y-2`}>
+        <div className={`${baseTextClass} pt-18 pb-8 space-y-2`}>
           <h1 className="text-2xl font-bold text-primary mb-4">
             새로운 고객의
             <br />
@@ -74,7 +78,7 @@ export default function NewCustomer() {
         </div>
 
         {/* 컨텐츠 - 인풋 영역 */}
-        <div className="flex-1 overflow-y-auto space-y-8">
+        <div className="flex-1 overflow-y-auto space-y-6">
           <Input
             label="이름"
             value={name}

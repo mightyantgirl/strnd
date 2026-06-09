@@ -28,7 +28,7 @@ export default function SurveyStep0({ onStart }) {
       {/* 컨텐츠 */}
       <div className="flex-1 overflow-y-auto" style={{ touchAction: 'pan-y' }}>
         {/* 컨텐츠 - 메인타이틀 */}
-        <div className={`${baseTextClass} pt-20 pb-6 space-y-2`}>
+        <div className={`${baseTextClass} pt-18 pb-8 space-y-2`}>
           <p>STEP 0</p>
           <h1 className="text-2xl font-bold text-primary mb-4">
             고객님의 간단한 정보를 <br />
@@ -57,7 +57,14 @@ export default function SurveyStep0({ onStart }) {
             </div>
             <p className="text-xs font-medium text-placeholder">필수 선택 요소입니다.</p>
           </div>
-          <Dropdown options={VISIT_ROUTE_OPTIONS} value={visitRoute} onChange={(val) => setVisitRoute(val)} placeholder="해당하는 항목을 선택해주세요" label="방문경로" required={true} />
+          <Dropdown
+            options={VISIT_ROUTE_OPTIONS}
+            value={visitRoute}
+            onChange={(val) => setVisitRoute(val)}
+            placeholder="해당하는 항목을 선택해주세요"
+            label="방문경로"
+            required={true}
+          />
           <Input label="디자이너 소개 유무" placeholder="소개해 주신 분 성함을 알려주세요." />
         </div>
       </div>

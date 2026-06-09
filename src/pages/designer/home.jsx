@@ -1,4 +1,4 @@
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useLocation } from 'react-router-dom'
 import { useState, useEffect } from 'react'
 
 import Input from './../../components/input'
@@ -10,18 +10,21 @@ import { getElapsedTime, formatPhone } from '../../utils/dateUtils'
 const baseTextClass = `text-base text-primary font-medium`
 
 export default function Home() {
-  const [cards, setCards] = useState([]) // 고객 카드 목록
+  const [recentCards, setRecentCards] = useState([]) // 홈 API 데이터
+  const [searchCards, setSearchCards] = useState([]) // 검색 API 데이터
+
   const [monthlyCount, setMonthlyCount] = useState(0) // 이번 달 방문자 수
   const [searchKeyword, setSearchKeyword] = useState('') // 검색어
   const [isLoading, setIsLoading] = useState(true)
   const navigate = useNavigate()
+  const location = useLocation()
 
   // 디자이너 이름 정보 변수
   const designerName =
     localStorage.getItem('designerName') || sessionStorage.getItem('designerName')
 
   // 실시간 검색 필터링
-  const filteredCards = cards.filter((card) => card.customerName.includes(searchKeyword))
+  const displayCards = searchKeyword ? searchCards : recentCards
 
   //고객 카드 데이터 함수 페이지 열릴 때 API 호출
   useEffect(() => {
@@ -41,8 +44,9 @@ export default function Home() {
         })
 
         const data = await response.json() // JSON으로 변환된 데이터 저장
+        console.log('홈 데이터:', data)
 
-        setCards(data.recentCustomers) // 고객 저장
+        setRecentCards(data.recentCustomers) // 고객 저장
         setMonthlyCount(data.monthlyVisitCount) // 방문자 수 저장
       } catch (error) {
         console.error('홈 데이터 로딩 실패:', error)
@@ -51,7 +55,29 @@ export default function Home() {
       }
     }
     fetchHome()
-  }, []) // 빈배열 = 화면 열릴 때 한 번만
+  }, [location]) // location 바뀔때마다 다시 호출
+
+  // 검색 될 때 마다 검색 api 호출
+  useEffect(() => {
+    if (!searchKeyword) return
+
+    const fetchSearch = async () => {
+      try {
+        const token = localStorage.getItem('token') || sessionStorage.getItem('token')
+        const response = await fetch(
+          `https://strnd-be.onrender.com/api/customers?keyword=${searchKeyword}`,
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          },
+        )
+        const data = await response.json()
+        setSearchCards(data)
+      } catch (error) {
+        console.error('검색 실패:', error)
+      }
+    }
+    fetchSearch()
+  }, [searchKeyword]) // 검색어 바뀔때마다
 
   return (
     <div style={{ height: '100dvh' }} className="flex flex-col">
@@ -103,7 +129,7 @@ export default function Home() {
         ) : (
           <div className="fade-in">
             {/* 컨텐츠 - 메인타이틀 */}
-            <div className={`${baseTextClass} pt-20 pb-6 mb-15`}>
+            <div className={`${baseTextClass} pt-18 pb-8 mb-15`}>
               <div className="space-y-8">
                 <div>
                   <h1 className="text-2xl font-bold text-primary mb-4">
@@ -124,9 +150,10 @@ export default function Home() {
             </div>
 
             {/* 컨텐츠 - 검색 내역 */}
-            <p className={`${baseTextClass} font-semibold mb-3`}>고객 내역</p>
+            {/* 최근 방문 고객 최대 5명 */}
+            <p className={`${baseTextClass} font-semibold mb-3`}>최근 내역</p>
             <div className="space-y-2">
-              {filteredCards.map((card) => {
+              {displayCards.map((card) => {
                 return (
                   <CustomerCard
                     key={card.key}

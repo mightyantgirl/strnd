@@ -113,9 +113,9 @@ export default function Login() {
         </h1>
         <img src="./img/strnd.svg" alt="서비스 로고" />
       </div>
-      <div className="absolute bottom-4 left-0 right-0 w-full space-y-8">
-        <div className="space-y-5">
-          <div className="space-y-2">
+      <div className="absolute bottom-4 left-0 right-0 w-full space-y-6">
+        <div className="space-y-3 mb-6">
+          <div className="space-y-1">
             <Input
               className="mb-2"
               value={phone}
