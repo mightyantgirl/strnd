@@ -78,7 +78,7 @@ export default function CustomerDetail() {
             </div>
           </div>
         ) : (
-          <div className="fade-in pt-18 pb-6 space-y-2">
+          <div className="fade-in pt-15 pb-6 space-y-2">
             <CustomerInfoCard
               name={name}
               lastVisitAt={`마지막 방문 ${getElapsedTime(lastVisitAt)}`}
