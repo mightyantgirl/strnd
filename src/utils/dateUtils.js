@@ -21,3 +21,16 @@ export function formatPhone(phone) {
 export function formatGender(g) {
   return g === 'MALE' ? '남성' : g === 'FEMALE' ? '여성' : '알 수 없음'
 }
+
+// 리스트를 최대 길이로 자르고 '...' 추가
+export function truncateList(arr, maxLength = 20) {
+  if (!arr || arr.length === 0) return ''
+  const joined = arr.join(', ')
+  return joined.length > maxLength ? joined.slice(0, maxLength) + '...' : joined
+}
+
+// 날짜 포맷 변환 (예: 2024-06-01T12:00:00 -> 2024-06-01)
+export function formatDate(dateString) {
+  if (!dateString) return ''
+  return dateString.split('T')[0] // 'T' 기준으로 앞부분만 가져오기
+}

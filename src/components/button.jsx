@@ -20,6 +20,7 @@ export default function Button({
   disabled = false,
   className = '',
   height = 'md',
+  onKeyDown,
   survey = false,
 }) {
   return (

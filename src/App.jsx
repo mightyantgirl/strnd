@@ -28,6 +28,7 @@ export default function App() {
 
           <Route path="/customers/new" element={<NewCustomer />} />
           <Route path="/customers/:customerId" element={<CustomerDetail />} />
+
           <Route path="*" element={<NotFound />} />
         </Routes>
       </div>

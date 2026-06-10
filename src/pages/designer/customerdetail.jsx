@@ -1,16 +1,30 @@
 import { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom'
-import { getElapsedTime, formatPhone, formatGender } from '../../utils/dateUtils'
+import {
+  getElapsedTime,
+  formatPhone,
+  formatGender,
+  truncateList,
+  formatDate,
+} from '../../utils/dateUtils'
 
 import PageFooter from './../../components/pagefooter'
 import PageHeader from './../../components/pageheader'
 import Button from './../../components/button'
 import Input from './../../components/input'
 import CustomerInfoCard from './../../components/customerinfocard'
+import VisitCard from './../../components/card'
+import SurveyCard from './../../components/surveycard'
 
 const baseTextClass = `text-xs text-primary font-medium`
+const activeTabClass = `bg-card-bg py-2 rounded-lg text-center text-secondary font-semibold transition-all duration-200`
+const inactiveTabClass = `bg-border py-2 rounded-lg text-center text-disabled font-semibold`
 
 export default function CustomerDetail() {
+  const [activeTab, setActiveTab] = useState('history')
+
+  const [todaySurvey, setTodaySurvey] = useState(false) // 오늘 설문 데이터 유무 surveyToken 있을 시 true
+
   const { customerId } = useParams() // URL 정보 받아오는 훅
   const [name, setName] = useState('')
   const [lastVisitAt, setLastVisitAt] = useState('')
@@ -19,6 +33,9 @@ export default function CustomerDetail() {
   const [isLoading, setIsLoading] = useState(true)
   // const [visitCount, setVisitCount] = useState('')
 
+  const [visits, setVisits] = useState([])
+
+  //고객 상세 카드 api 요청 함수
   useEffect(() => {
     const fetchCustomer = async () => {
       try {
@@ -44,6 +61,31 @@ export default function CustomerDetail() {
       }
     }
     fetchCustomer()
+  }, [])
+  // 히스토리 조회 api 요청함수
+  useEffect(() => {
+    const fetchHistory = async () => {
+      try {
+        const token = localStorage.getItem('token') || sessionStorage.getItem('token')
+
+        const response = await fetch(
+          `https://strnd-be.onrender.com/api/customers/${customerId}/visits`,
+          {
+            method: 'GET',
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          },
+        )
+        const data = await response.json()
+        // console.log('히스토리 데이터:', data)
+
+        setVisits(data) //완료 상태만 뿌려지게
+      } catch (error) {
+        console.error('데이터 로딩 실패:', error)
+      }
+    }
+    fetchHistory()
   }, [])
 
   const navigate = useNavigate()
@@ -88,10 +130,75 @@ export default function CustomerDetail() {
           </div>
         )}
 
-        <Button value="설문 시작하기" height="lg" survey={true} />
-        <p className="underline font-semibold text-placeholder py-5 px-4 text-center">
+        <Button value="설문 시작하기" height="lg" survey={true} onClick={() => {}} />
+        <p
+          className="underline font-semibold text-placeholder py-5 px-4 text-center"
+          onClick={() => {}}>
           설문 없이 바로 기록하기
         </p>
+
+        <div>
+          {/* 탭 */}
+          <div className="bg-border w-full rounded-lg mb-3">
+            <ol className="flex gap-2 p-1 ">
+              <li
+                onClick={() => {
+                  setActiveTab('history')
+                }}
+                style={{ width: '28dvh' }}
+                className={activeTab === 'history' ? activeTabClass : inactiveTabClass}>
+                히스토리
+              </li>
+              <li
+                onClick={() => {
+                  setActiveTab('todaySurvey')
+                }}
+                style={{ width: '28dvh' }}
+                className={activeTab === 'todaySurvey' ? activeTabClass : inactiveTabClass}>
+                오늘 설문
+              </li>
+              <li
+                onClick={() => {
+                  setActiveTab('memo')
+                }}
+                style={{ width: '28dvh' }}
+                className={activeTab === 'memo' ? activeTabClass : inactiveTabClass}>
+                메모
+              </li>
+            </ol>
+          </div>
+
+          {/* 히스토리 */}
+          {activeTab === 'history' && (
+            <div className="space-y-3">
+              {visits
+                .filter((visit) => visit.status === 'COMPLETED') // COMPLETED만 필터
+                .map((visit) => (
+                  <VisitCard
+                    service={visit.services}
+                    key={visit.visitId}
+                    visitId={visit.visitId}
+                    date={formatDate(visit.visitDt)}
+                    elapsedDays={getElapsedTime(visit.visitDt)}
+                    treatmentMenu={truncateList(visit.treatmentMenu)}
+                    treatmentDetail={visit.treatmentDetail}
+                    treatmentProduct={visit.treatmentProduct}
+                    treatmentNote={visit.treatmentNote}
+                  />
+                ))}
+            </div>
+          )}
+
+          {/* 설문 */}
+          {activeTab === 'todaySurvey' && (
+            <div>
+              <SurveyCard visitId={visits.find((visit) => visit.status !== 'COMPLETED')?.visitId} />
+            </div>
+          )}
+
+          {/* 메모 */}
+          {activeTab === 'memo' && <div>똥꼬</div>}
+        </div>
       </div>
     </div>
   )

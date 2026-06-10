@@ -146,7 +146,11 @@ export default function Login() {
             <span className="text-xs text-secondary font-semibold">자동로그인</span>
           </div>
         </div>
-        <Button variant="primary" disabled={!phone || !pin} onClick={handleLogin}>
+        <Button
+          variant="primary"
+          disabled={!phone || !pin}
+          onClick={handleLogin}
+          onKeyDown={(e) => e.key === 'Enter' && handleLogin()}>
           로그인
         </Button>
         <div className="flex justify-center gap-8">

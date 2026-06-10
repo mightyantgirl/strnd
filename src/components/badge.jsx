@@ -10,6 +10,17 @@ const variantClass = {
   grey: 'bg-bg text-placeholder',
 }
 
-export default function Badge({ color = '', label }) {
-  return <span className={`${baseClass} ${variantClass[color]}`}>{label}</span>
+export default function Badge({ color, label, service }) {
+  const serviceMap = {
+    CUT: { color: 'green', label: '컷' },
+    COLOR: { color: 'blue', label: '컬러' },
+    PERM: { color: 'purple', label: '펌' },
+    CARE: { color: 'orange', label: '케어' },
+  }
+
+  // service 있으면 map에서 꺼내고, 없으면 props 그대로 써
+  const finalColor = serviceMap[service]?.color ?? color
+  const finalLabel = serviceMap[service]?.label ?? label
+
+  return <span className={`${baseClass} ${variantClass[finalColor]}`}>{finalLabel}</span>
 }
