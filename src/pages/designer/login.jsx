@@ -1,6 +1,5 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { twMerge } from 'tailwind-merge'
 
 import Input from './../../components/input'
 import Button from './../../components/button'

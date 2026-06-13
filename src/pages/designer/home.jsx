@@ -37,17 +37,21 @@ export default function Home() {
           method: 'GET',
           headers: {
             Authorization: `Bearer ${token}`,
-            //로그인 증명서 헤더에 담기
-            //토큰으로 인증
-            //없을 시 401 반환
           },
         })
 
-        const data = await response.json() // JSON으로 변환된 데이터 저장
-        console.log('홈 데이터:', data)
+        //인증 만료 시 로그인 화면 이동
+        if (response.status === 401) {
+          localStorage.removeItem('token')
+          sessionStorage.removeItem('token')
+          navigate('/login')
+          return
+        }
 
-        setRecentCards(data.recentCustomers) // 고객 저장
-        setMonthlyCount(data.monthlyVisitCount) // 방문자 수 저장
+        const data = await response.json()
+
+        setRecentCards(data.recentCustomers)
+        setMonthlyCount(data.monthlyVisitCount)
       } catch (error) {
         console.error('홈 데이터 로딩 실패:', error)
       } finally {
@@ -157,6 +161,7 @@ export default function Home() {
                 return (
                   <CustomerCard
                     key={card.key}
+                    isActive={card.isActive}
                     customerId={card.customerId}
                     customerName={card.customerName}
                     Phone={formatPhone(card.phone)}

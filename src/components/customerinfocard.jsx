@@ -5,21 +5,34 @@ import ContextMenu from './contextmenu'
 const baseClass = `w-full py-5 px-4 rounded-xl  bg-card-bg `
 const baseTextClass = `text-xs text-placeholder font-medium`
 
-export default function CustomerInfoCard({ name, lastVisitAt, phone, gender, visitCount }) {
+export default function CustomerInfoCard({
+  name,
+  isActive,
+  lastVisitAt,
+  phone,
+  gender,
+  visitCount,
+}) {
   const [menuOpen, setMenuOpen] = useState(false)
 
   return (
     <div className={`${baseClass} ${baseTextClass} relative`}>
       <div className=" flex justify-between mb-6">
         <div className="flex items-center gap-2">
-          <p className="text-lg font-bold text-primary">{name}</p>
-          <span>
+          <span className="text-lg font-bold text-primary">{name}</span>
+          {isActive === false ? (
+            <span className="text-xs font-semibold mr-1 bg-badge-orange-bg text-badge-orange-text px-2 py-1 rounded-md">
+              비활성
+            </span>
+          ) : (
             <Badge label={lastVisitAt} color="grey" />
-          </span>
+          )}
         </div>
 
         {/* 점 세 개 버튼 */}
-        <button className="absolute py-5 px-4 right-0 top-0 content-center" onClick={() => setMenuOpen(!menuOpen)}>
+        <button
+          className="absolute py-5 px-4 right-0 top-0 content-center"
+          onClick={() => setMenuOpen(!menuOpen)}>
           <img src="/img/threedot.svg" alt="" />
         </button>
 

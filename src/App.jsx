@@ -7,7 +7,6 @@ import Home from './pages/designer/home'
 import NewCustomer from './pages/designer/newcustomers'
 import CustomerDetail from './pages/designer/customerdetail'
 import NotFound from './pages/404page'
-import axios from 'axios'
 
 const isLoggedIn = () => {
   return localStorage.getItem('token') || sessionStorage.getItem('token')
