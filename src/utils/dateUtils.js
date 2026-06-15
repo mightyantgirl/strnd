@@ -34,3 +34,24 @@ export function formatDate(dateString) {
   if (!dateString) return ''
   return dateString.split('T')[0] // 'T' 기준으로 앞부분만 가져오기
 }
+
+export function formatStatus(s) {
+  return s === 'SUBMITTED' ? '기록 대기 중' : '기록 완료'
+}
+
+export function formatService(s) {
+  return s === 'COLOR'
+    ? '컬러'
+    : s === 'PERM'
+      ? '펌'
+      : s === 'CUT'
+        ? '커트'
+        : s === 'CLINIC'
+          ? '클리닉'
+          : '상담'
+}
+
+export function formatList(list) {
+  if (!list || list.length === 0) return ''
+  return list.join(', ')
+}

@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import Button from './button'
+import { formatDate, formatStatus, formatService, formatList } from '../utils/dateUtils'
 
 const baseClass = `w-full py-5 px-4 rounded-xl border border-bg bg-card-bg `
 const baseTextClass = `text-base text-placeholder font-medium text-xs`
@@ -18,6 +19,7 @@ export default function SurveyCard({
   requestMemo,
   styleImageIds,
   onRecord,
+  onClick,
   visitId,
 }) {
   const [survey, setSurvey] = useState('')
@@ -52,9 +54,9 @@ export default function SurveyCard({
       <div className={`${baseTextClass} flex justify-between  mb-1 font-semi`}>
         <div className="flex items-center gap-3">
           <div className="bg-brand rounded-full w-2 h-2" />
-          <p className="font-semibold">{survey.visitDt}</p>
+          <p className="font-semibold">{formatDate(survey.visitDt)}</p>
         </div>
-        <p className="text-xs">{survey.status}</p>
+        <p className="text-xs">{formatStatus(survey.status)}</p>
       </div>
       <div>
         <ul>
@@ -74,21 +76,21 @@ export default function SurveyCard({
           <li>
             <div className={baseListClass}>
               <p className="font-bold text-disabled  mb-1">서비스 카테고리</p>
-              <p className="text-secondary">{survey.services}</p>
+              <p className="text-secondary">{formatService(survey.services)}</p>
             </div>
           </li>
 
           <li>
             <div className={baseListClass}>
               <p className="font-bold text-disabled  mb-1">선호 무드</p>
-              <p className="text-secondary">{survey.moods}</p>
+              <p className="text-secondary">{formatList(survey.moods)}</p>
             </div>
           </li>
 
           <li>
             <div className={baseListClass}>
               <p className="font-bold text-disabled  mb-1">헤어 고민</p>
-              <p className="text-secondary">{survey.hairConcerns}</p>
+              <p className="text-secondary">{formatList(survey.hairConcerns)}</p>
             </div>
           </li>
 
@@ -105,8 +107,8 @@ export default function SurveyCard({
         variant="secondary"
         value="시술 내용 기록하기"
         height="sm"
-        className="text-xs"
-        onClick={() => {}}
+        className="text-xs mt-2"
+        onClick={onClick}
       />
     </div>
   )

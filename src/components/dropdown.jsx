@@ -1,9 +1,17 @@
 import { useState, useEffect } from 'react'
 
-const baseClass = ` w-full py-5 px-4 rounded-xl bg-card-bg text-xs text-left font-medium items-center focus:outline-border`
-const labelClass = `flex mb-2 text-xs font-semibold leading-none`
+const baseClass = ` w-full py-5 px-4 rounded-xl bg-card-bg text-base text-left font-medium items-center border border-card-bg focus:outline-border placeholder:text-base`
+const labelClass = `flex mb-2 text-base font-semibold leading-none`
 
-export default function Dropdown({ options, value, onChange, placeholder, required, label }) {
+export default function Dropdown({
+  options,
+  value,
+  onChange,
+  placeholder,
+  error,
+  required,
+  label,
+}) {
   const [isOpen, setIsOpen] = useState(false)
 
   // 외부 클릭 시 닫힘
@@ -27,19 +35,37 @@ export default function Dropdown({ options, value, onChange, placeholder, requir
         </label>
       )}
       {/* 선택창 */}
-      <button onClick={() => setIsOpen(!isOpen)} className={baseClass}>
+      <button
+        onClick={() => setIsOpen(!isOpen)}
+        className={`${baseClass} ${error ? 'border-danger' : 'border-card-bg'}`}>
         <div className="flex justify-between items-center">
-          <span className={selectedLabel ? 'text-primary leading-none' : 'text-placeholder leading-none'}>{selectedLabel || placeholder}</span>
-          {isOpen ? <img className="block mr-2" style={{ width: '10px', height: '5px' }} src="/img/top.svg" /> : <img className="block mr-2" style={{ width: '10px', height: '5px' }} src="/img/bottom.svg" />}
+          <span
+            className={` ${selectedLabel ? 'text-primary leading-none' : 'text-placeholder  leading-none'}`}>
+            {selectedLabel || placeholder}
+          </span>
+          {isOpen ? (
+            <img
+              className="block mr-2"
+              style={{ width: '10px', height: '5px' }}
+              src="/img/top.svg"
+            />
+          ) : (
+            <img
+              className="block mr-2"
+              style={{ width: '10px', height: '5px' }}
+              src="/img/bottom.svg"
+            />
+          )}
         </div>
       </button>
+      {error && <p className="text-xs font-medium text-danger mt-1 pl-2">{error}</p>}
 
       {/* 드랍다운 클릭 시 열리는 화면 */}
       {isOpen && (
         <div
           className="w-full left-0 absolute
                         bg-card-bg rounded-xl
-                        overflow-hidden z-10 top-14">
+                        overflow-hidden z-10 top-14 py-2">
           {options.map((option) => (
             <button
               key={option.value}
@@ -47,7 +73,7 @@ export default function Dropdown({ options, value, onChange, placeholder, requir
                 onChange(option.value)
                 setIsOpen(false)
               }}
-              className="w-full py-3 px-4 mt-3  text-left text-xs text-primary
+              className="w-full py-3 px-4 mt-3  text-left text-base text-primary
                          focus:bg-tint transition-all">
               {option.label}
             </button>

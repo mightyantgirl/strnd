@@ -2,9 +2,22 @@
 
 const baseClass = `w-full py-5 px-4 rounded-xl text-base font-medium focus:outline-none`
 const labelClass = `mb-2 text-base font-semibold leading-none`
-const stateClass = `bg-card-bg text-primary border focus:border-focus placeholder:text-placeholder text-sm `
+const stateClass = `bg-card-bg text-primary focus:border-focus border border-card-bg placeholder:text-placeholder text-sm `
 
-export default function Input({ label, value, onChange, placeholder, error, search, required, type = 'text', maxLength, inputMode, className = '' }) {
+export default function Input({
+  label,
+  value,
+  onChange,
+  placeholder,
+  error,
+  subtext,
+  search,
+  required,
+  type = 'text',
+  maxLength,
+  inputMode,
+  className = '',
+}) {
   return (
     <div className="w-full relative">
       {label && (
@@ -15,9 +28,23 @@ export default function Input({ label, value, onChange, placeholder, error, sear
         </label>
       )}
 
-      <input style={{ height: '52px' }} placeholder={placeholder} value={value} type={type} inputMode={inputMode} maxLength={maxLength} onChange={onChange} className={`${baseClass} ${stateClass} ${error ? 'border-danger' : 'border-border'} ${className}`}></input>
-      {error && <p className="text-xs font-medium text-danger mt-1">{error}</p>}
-      {search && <img src="./img/search.svg" alt="" className="absolute right-5 top-1/2 -translate-y-1/2 " />}
+      <input
+        style={{ height: '52px' }}
+        placeholder={placeholder}
+        value={value}
+        type={type}
+        inputMode={inputMode}
+        subtext={subtext}
+        maxLength={maxLength}
+        onChange={onChange}
+        className={`${baseClass} ${stateClass} ${error ? 'border-danger' : 'border-border'} ${className}`}></input>
+      {subtext && !error && (
+        <p className="text-xs font-medium text-placeholder mt-2 pl-2">{subtext}</p>
+      )}
+      {error && <p className="text-xs font-medium text-danger mt-1 pl-2">{error}</p>}
+      {search && (
+        <img src="./img/search.svg" alt="" className="absolute right-5 top-1/2 -translate-y-1/2 " />
+      )}
     </div>
   )
 }

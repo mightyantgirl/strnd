@@ -6,6 +6,8 @@ import Register from './pages/designer/register'
 import Home from './pages/designer/home'
 import NewCustomer from './pages/designer/newcustomers'
 import CustomerDetail from './pages/designer/customerdetail'
+import RecordWithoutSurvey from './pages/designer/recordwithoutsurvey'
+import TreatmentResult from './pages/designer/treatmentresult'
 import NotFound from './pages/404page'
 
 const isLoggedIn = () => {
@@ -27,6 +29,9 @@ export default function App() {
 
           <Route path="/customers/new" element={<NewCustomer />} />
           <Route path="/customers/:customerId" element={<CustomerDetail />} />
+
+          <Route path="/customers/:customerId/record" element={<RecordWithoutSurvey />} />
+          <Route path="/customers/:customerId/result" element={<TreatmentResult />} />
 
           <Route path="*" element={<NotFound />} />
         </Routes>

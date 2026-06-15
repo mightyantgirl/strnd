@@ -69,6 +69,7 @@ export default function CustomerDetail() {
     }
     fetchCustomer()
   }, [])
+
   // 히스토리 조회 api 요청함수
   useEffect(() => {
     const fetchHistory = async () => {
@@ -95,6 +96,28 @@ export default function CustomerDetail() {
     fetchHistory()
   }, [])
 
+  // 설문 없이 기록하기 함수
+  const handleRecordWithoutSurvey = async () => {
+    const token = localStorage.getItem('token') || sessionStorage.getItem('token')
+
+    const response = await fetch('https://strnd-be.onrender.com/api/visits', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({
+        customerId: customerId,
+        skipSurvey: true, // 추가
+      }),
+    })
+
+    const data = await response.json()
+
+    navigate(`/customers/${customerId}/record`, { state: { visitId: data.visitId } })
+  }
+
+  // 메모 저장 함수
   const handleSaveMemo = async () => {
     const token = localStorage.getItem('token') || sessionStorage.getItem('token')
 
@@ -170,7 +193,7 @@ export default function CustomerDetail() {
         <Button value="설문 시작하기" height="lg" survey={true} onClick={() => {}} />
         <p
           className="underline font-semibold text-placeholder py-5 px-4 text-center"
-          onClick={() => {}}>
+          onClick={handleRecordWithoutSurvey}>
           설문 없이 바로 기록하기
         </p>
 
@@ -209,29 +232,38 @@ export default function CustomerDetail() {
           {activeTab === 'history' && (
             <div className="space-y-3">
               {visits
-                .filter((visit) => visit.status === 'COMPLETED') // COMPLETED만 필터
-                .map((visit) => (
-                  <VisitCard
-                    service={visit.services}
-                    key={visit.visitId}
-                    visitId={visit.visitId}
-                    date={formatDate(visit.visitDt)}
-                    elapsedDays={getElapsedTime(visit.visitDt)}
-                    treatmentMenu={truncateList(visit.treatmentMenu)}
-                    treatmentDetail={visit.treatmentDetail}
-                    treatmentProduct={visit.treatmentProduct}
-                    treatmentNote={visit.treatmentNote}
-                  />
-                ))}
+                .filter((visit) => visit.status === 'COMPLETED')
+                .map((visit) => {
+                  return (
+                    <VisitCard
+                      service={visit.services}
+                      key={visit.visitId}
+                      visitId={visit.visitId}
+                      date={formatDate(visit.visitDt)}
+                      elapsedDays={getElapsedTime(visit.visitDt)}
+                      treatmentMenu={truncateList(visit.treatmentMenu)}
+                      treatmentDetail={visit.treatmentDetail}
+                      treatmentProduct={visit.treatmentProduct}
+                      treatmentNote={visit.treatmentNote}
+                    />
+                  )
+                })}
             </div>
           )}
 
-          {/* 설문 */}
+          {/*오늘 설문 */}
           {activeTab === 'todaySurvey' && (
             <div>
               {visits.some((visit) => visit.status === 'SUBMITTED') ? (
                 <SurveyCard
-                  visitId={visits.find((visit) => visit.status !== 'COMPLETED')?.visitId}
+                  visitId={visits.find((visit) => visit.status === 'SUBMITTED')?.visitId}
+                  onClick={() => {
+                    navigate(`/customers/${customerId}/result`, {
+                      state: {
+                        visitId: visits.find((visit) => visit.status === 'SUBMITTED')?.visitId,
+                      },
+                    })
+                  }}
                 />
               ) : (
                 <div className="flex flex-col items-center mt-8">
