@@ -1,5 +1,7 @@
 // 날짜 변환
 export function getElapsedTime(dateString) {
+  if (!dateString) return '없음'
+
   const now = new Date()
   const past = new Date(dateString)
   const diffDays = Math.floor((now - past) / (1000 * 60 * 60 * 24))

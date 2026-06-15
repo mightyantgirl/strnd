@@ -183,7 +183,7 @@ export default function CustomerDetail() {
             <CustomerInfoCard
               name={name}
               isActive={isActive}
-              lastVisitAt={`마지막 방문 ${getElapsedTime(lastVisitAt)}`}
+              lastVisitAt={lastVisitAt ? `마지막 방문 ${getElapsedTime(lastVisitAt)}` : '첫 방문'}
               phone={formatPhone(phone)}
               gender={formatGender(gender)}
             />
