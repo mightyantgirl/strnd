@@ -28,9 +28,17 @@ export default function Home() {
 
   //고객 카드 데이터 함수 페이지 열릴 때 API 호출
   useEffect(() => {
+    // 스플래시에서 프리로드한 데이터가 있으면 fetch 스킵
+    if (location.state?.homeData) {
+      const { homeData } = location.state
+      setRecentCards(homeData.recentCustomers)
+      setMonthlyCount(homeData.monthlyVisitCount)
+      setIsLoading(false)
+      return
+    }
+
     const fetchHome = async () => {
       try {
-        //로그인 단계에서 저장된 토큰 꺼내기
         const token = localStorage.getItem('token') || sessionStorage.getItem('token')
 
         const response = await fetch('https://strnd-be.onrender.com/api/home', {
@@ -40,7 +48,6 @@ export default function Home() {
           },
         })
 
-        //인증 만료 시 로그인 화면 이동
         if (response.status === 401) {
           localStorage.removeItem('token')
           sessionStorage.removeItem('token')

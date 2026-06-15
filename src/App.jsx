@@ -1,5 +1,5 @@
 // App.jsx
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
+import { BrowserRouter, Routes, Route } from 'react-router-dom'
 
 import Login from './pages/designer/login'
 import Register from './pages/designer/register'
@@ -9,20 +9,14 @@ import CustomerDetail from './pages/designer/customerdetail'
 import RecordWithoutSurvey from './pages/designer/recordwithoutsurvey'
 import TreatmentResult from './pages/designer/treatmentresult'
 import NotFound from './pages/404page'
-
-const isLoggedIn = () => {
-  return localStorage.getItem('token') || sessionStorage.getItem('token')
-}
+import Splash from './pages/splash'
 
 export default function App() {
   return (
     <BrowserRouter>
       <div className="bg-bg px-5" style={{ height: '100dvh' }}>
         <Routes>
-          <Route
-            path="/"
-            element={isLoggedIn() ? <Navigate to="/home" /> : <Navigate to="/login" />}
-          />
+          <Route path="/" element={<Splash />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/home" element={<Home />} />
