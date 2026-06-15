@@ -10,7 +10,10 @@ export default function SurveyHeader({ currentStep, totalStep, onBack }) {
 
         {/* 프로그래스바 */}
         <div className="flex-1 h-1 bg-border rounded-full">
-          <div className="h-1 bg-brand rounded-full transition-all" style={{ width: `${progress}%` }} />
+          <div
+            className="h-1 bg-brand rounded-full transition-all"
+            style={{ width: `${progress}%` }}
+          />
         </div>
       </div>
     </div>

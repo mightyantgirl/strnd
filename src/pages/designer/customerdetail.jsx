@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { useNavigate, useParams } from 'react-router-dom'
+import { useNavigate, useParams, useLocation } from 'react-router-dom'
 import {
   getElapsedTime,
   formatPhone,
@@ -14,6 +14,7 @@ import CustomerInfoCard from './../../components/customerinfocard'
 import VisitCard from './../../components/card'
 import SurveyCard from './../../components/surveycard'
 import TextFiled from './../../components/textfiled'
+import Toast from './../../components/toast'
 
 const baseTextClass = `text-xs text-primary font-medium`
 const activeTabClass = `bg-card-bg py-2 rounded-lg text-center text-secondary font-semibold transition-all duration-200`
@@ -36,7 +37,27 @@ export default function CustomerDetail() {
   const [memo, setMemo] = useState('')
   const [originalMemo, setOriginalMemo] = useState('') // 원본 저장용
 
+  const [toastMessage, setToastMessage] = useState('') // 토스트에 표시할 글자
+  const [toastVisible, setToastVisible] = useState(false) // 보일지 말지
+
   const isChanged = memo !== originalMemo
+
+  const location = useLocation()
+
+  const showToast = (message) => {
+    setToastMessage(message) // 1. 메시지 넣기
+    setToastVisible(true) // 2. 보이게 하기
+
+    setTimeout(() => {
+      setToastVisible(false) // 3. 3초 후 다시 숨기기
+    }, 3000)
+  }
+
+  useEffect(() => {
+    if (location.state?.toast) {
+      showToast(location.state.toast)
+    }
+  }, [])
 
   //고객 상세 카드 api 요청 함수
   useEffect(() => {
@@ -108,7 +129,7 @@ export default function CustomerDetail() {
       },
       body: JSON.stringify({
         customerId: customerId,
-        skipSurvey: true, // 추가
+        skipSurvey: true,
       }),
     })
 
@@ -121,7 +142,7 @@ export default function CustomerDetail() {
   const handleSaveMemo = async () => {
     const token = localStorage.getItem('token') || sessionStorage.getItem('token')
 
-    const response = await fetch(`https://strnd-be.onrender.com/api/customers/${customerId}`, {
+    await fetch(`https://strnd-be.onrender.com/api/customers/${customerId}`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
@@ -231,23 +252,32 @@ export default function CustomerDetail() {
           {/* 히스토리 */}
           {activeTab === 'history' && (
             <div className="space-y-3">
-              {visits
-                .filter((visit) => visit.status === 'COMPLETED')
-                .map((visit) => {
-                  return (
-                    <VisitCard
-                      service={visit.services}
-                      key={visit.visitId}
-                      visitId={visit.visitId}
-                      date={formatDate(visit.visitDt)}
-                      elapsedDays={getElapsedTime(visit.visitDt)}
-                      treatmentMenu={truncateList(visit.treatmentMenu)}
-                      treatmentDetail={visit.treatmentDetail}
-                      treatmentProduct={visit.treatmentProduct}
-                      treatmentNote={visit.treatmentNote}
-                    />
-                  )
-                })}
+              {!visits.length ? (
+                <div className="flex flex-col items-center mt-8">
+                  <img src="../img/none.svg" alt="" />
+                  <span className="text-base text-disabled font-semibold mt-3">
+                    방문 기록이 아직 없어요.
+                  </span>
+                </div>
+              ) : (
+                visits
+                  .filter((visit) => visit.status === 'COMPLETED')
+                  .map((visit) => {
+                    return (
+                      <VisitCard
+                        service={visit.services}
+                        key={visit.visitId}
+                        visitId={visit.visitId}
+                        date={formatDate(visit.visitDt)}
+                        elapsedDays={getElapsedTime(visit.visitDt)}
+                        treatmentMenu={truncateList(visit.treatmentMenu)}
+                        treatmentDetail={visit.treatmentDetail}
+                        treatmentProduct={visit.treatmentProduct}
+                        treatmentNote={visit.treatmentNote}
+                      />
+                    )
+                  })
+              )}
             </div>
           )}
 
@@ -268,7 +298,7 @@ export default function CustomerDetail() {
               ) : (
                 <div className="flex flex-col items-center mt-8">
                   <img src="../img/none.svg" alt="" />
-                  <span className="text-wbase text-disabled font-semibold mt-3">
+                  <span className="text-base text-disabled font-semibold mt-3">
                     작성된 설문이 아직 없어요.
                   </span>
                 </div>
@@ -292,6 +322,7 @@ export default function CustomerDetail() {
           )}
         </div>
       </div>
+      <Toast message={toastMessage} visible={toastVisible} type="check" />
     </div>
   )
 }

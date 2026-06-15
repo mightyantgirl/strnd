@@ -155,10 +155,18 @@ export default function Home() {
 
             {/* 컨텐츠 - 검색 내역 */}
             {/* 최근 방문 고객 최대 5명 */}
-            <p className={`${baseTextClass} font-semibold mb-3`}>최근 내역</p>
+            {!searchKeyword ? (
+              <p className={`${baseTextClass} font-semibold mb-3`}>최근 방문 고객</p>
+            ) : (
+              <p className={`${baseTextClass} font-semibold mb-3`}>검색 결과</p>
+            )}
             <div className="space-y-2">
-              {displayCards.map((card) => {
-                return (
+              {!displayCards.length ? (
+                <p className="text-placeholder text-base text-center py-10">
+                  검색 결과가 없습니다.
+                </p>
+              ) : (
+                displayCards.map((card) => (
                   <CustomerCard
                     key={card.key}
                     isActive={card.isActive}
@@ -168,8 +176,8 @@ export default function Home() {
                     elapsedDays={getElapsedTime(card.lastVisitDt)}
                     onClick={() => navigate(`/customers/${card.customerId}`)}
                   />
-                )
-              })}
+                ))
+              )}
             </div>
           </div>
         )}

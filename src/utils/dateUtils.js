@@ -1,6 +1,6 @@
 // 날짜 변환
 export function getElapsedTime(dateString) {
-  if (!dateString) return '없음'
+  if (!dateString) return '첫 방문'
 
   const now = new Date()
   const past = new Date(dateString)

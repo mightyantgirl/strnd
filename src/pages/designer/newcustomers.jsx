@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom'
 
 import PageFooter from './../../components/pagefooter'
 import PageHeader from './../../components/pageheader'
+import Toast from './../../components/toast'
 import Input from './../../components/input'
 
 const baseTextClass = `text-xs text-primary font-medium`
@@ -15,7 +16,19 @@ export default function NewCustomer() {
   const [nameError, setNameError] = useState('')
   const [phoneError, setPhoneError] = useState('')
 
+  const [toastMessage, setToastMessage] = useState('') // 토스트에 표시할 글자
+  const [toastVisible, setToastVisible] = useState(false) // 보일지 말지
+
   const navigate = useNavigate()
+
+  const showToast = (message) => {
+    setToastMessage(message) // 1. 메시지 넣기
+    setToastVisible(true) // 2. 보이게 하기
+
+    setTimeout(() => {
+      setToastVisible(false) // 3. 3초 후 다시 숨기기
+    }, 3000)
+  }
 
   //유효성 검사
   const handleSubmit = async () => {
@@ -54,10 +67,15 @@ export default function NewCustomer() {
       }),
     })
     const data = await response.json()
-    console.log('응답:', data)
+    // console.log('응답:', data)
 
     if (response.ok) {
-      navigate('/home', { state: { refresh: true } })
+      navigate(`/customers/${data.customerId}`, {
+        state: { refresh: true, toast: '신규 고객이 등록되었어요.' },
+      })
+    } else {
+      showToast(data.message)
+      return
     }
   }
 
@@ -110,6 +128,7 @@ export default function NewCustomer() {
         </div>
       </div>
 
+      <Toast message={toastMessage} visible={toastVisible} type="base" />
       {/* 푸터 */}
       <PageFooter onNext={handleSubmit} value="등록" />
     </div>
