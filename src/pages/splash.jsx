@@ -50,7 +50,7 @@ export default function Splash() {
     <div
       className="flex items-center justify-center transition-opacity duration-300"
       style={{ height: '100dvh', opacity: visible ? 1 : 0 }}>
-      <img src="/img/app.svg" alt="strnd" className="w-24" />
+      <img src="/img/app.svg" alt="strnd" className="w-36" />
     </div>
   )
 }
