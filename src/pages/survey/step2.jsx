@@ -45,7 +45,7 @@ export default function SurveyStep2({ onStart }) {
 
         {/* 컨텐츠 - 설문 영역 */}
         <div className="space-y-8">
-          <div>
+          <>
             <div className="flex-col">
               {MOODCHIPS.map((chip) => (
                 <MoodChip
@@ -57,7 +57,7 @@ export default function SurveyStep2({ onStart }) {
                 />
               ))}
             </div>
-          </div>
+          </>
         </div>
       </div>
 

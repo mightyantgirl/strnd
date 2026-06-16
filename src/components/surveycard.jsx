@@ -58,7 +58,7 @@ export default function SurveyCard({
         </div>
         <p className="text-xs">{formatStatus(survey.status)}</p>
       </div>
-      <div>
+      <>
         <ul>
           <li>
             <div className={baseListClass}>
@@ -101,8 +101,7 @@ export default function SurveyCard({
             </div>
           </li>
         </ul>
-      </div>
-      <div></div>
+      </>
       <Button
         variant="secondary"
         value="시술 내용 기록하기"

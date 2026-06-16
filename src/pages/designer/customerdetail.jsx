@@ -218,7 +218,7 @@ export default function CustomerDetail() {
           설문 없이 바로 기록하기
         </p>
 
-        <div>
+        <>
           {/* 탭 */}
           <div className="bg-border w-full rounded-lg mb-3">
             <ol className="flex gap-2 p-1 ">
@@ -283,7 +283,7 @@ export default function CustomerDetail() {
 
           {/*오늘 설문 */}
           {activeTab === 'todaySurvey' && (
-            <div>
+            <>
               {visits.some((visit) => visit.status === 'SUBMITTED') ? (
                 <SurveyCard
                   visitId={visits.find((visit) => visit.status === 'SUBMITTED')?.visitId}
@@ -303,24 +303,22 @@ export default function CustomerDetail() {
                   </span>
                 </div>
               )}
-            </div>
+            </>
           )}
 
           {/* 메모 */}
 
           {activeTab === 'memo' && (
-            <div>
-              <div>
-                <TextFiled
+            <>
+              <TextFiled
                   value={memo}
                   onChange={(e) => setMemo(e.target.value)}
                   handleSaveMemo={handleSaveMemo}
                   disabled={!isChanged}
                 />
-              </div>
-            </div>
+            </>
           )}
-        </div>
+        </>
       </div>
       <Toast message={toastMessage} visible={toastVisible} type="check" />
     </div>

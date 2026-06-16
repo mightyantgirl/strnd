@@ -48,7 +48,7 @@ export default function SurveyStep4({ onStart }) {
 
         {/* 컨텐츠 - 설문 영역 */}
         <div className="space-y-8">
-          <div>
+          <>
             <div className="flex-row">
               {CHIPS.map((chip) => (
                 <Chip
@@ -59,7 +59,7 @@ export default function SurveyStep4({ onStart }) {
                 />
               ))}
             </div>
-          </div>
+          </>
         </div>
       </div>
 

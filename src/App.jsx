@@ -8,6 +8,8 @@ import NewCustomer from './pages/designer/newcustomers'
 import CustomerDetail from './pages/designer/customerdetail'
 import RecordWithoutSurvey from './pages/designer/recordwithoutsurvey'
 import TreatmentResult from './pages/designer/treatmentresult'
+import SurveyMain from './pages/survey/main'
+
 import NotFound from './pages/404page'
 import Splash from './pages/splash'
 
@@ -26,6 +28,8 @@ export default function App() {
 
           <Route path="/customers/:customerId/record" element={<RecordWithoutSurvey />} />
           <Route path="/customers/:customerId/result" element={<TreatmentResult />} />
+
+          <Route path="/survey/:visitId" element={<SurveyMain />} />
 
           <Route path="*" element={<NotFound />} />
         </Routes>
