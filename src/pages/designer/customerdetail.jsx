@@ -107,7 +107,6 @@ export default function CustomerDetail() {
           },
         )
         const data = await response.json()
-        // console.log('히스토리 데이터:', data)
 
         setVisits(data) //완료 상태만 뿌려지게
       } catch (error) {
@@ -136,6 +135,25 @@ export default function CustomerDetail() {
     const data = await response.json()
 
     navigate(`/customers/${customerId}/record`, { state: { visitId: data.visitId } })
+  }
+
+  //설문 기록하기 함수
+  const startSurvey = async () => {
+    const token = localStorage.getItem('token') || sessionStorage.getItem('token')
+
+    const response = await fetch('https://strnd-be.onrender.com/api/visits', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({
+        customerId: customerId,
+      }),
+    })
+
+    const data = await response.json()
+    navigate(`/survey/${data.visitId}?customerId=${customerId}`)
   }
 
   // 메모 저장 함수
@@ -211,7 +229,7 @@ export default function CustomerDetail() {
           </div>
         )}
 
-        <Button value="설문 시작하기" height="lg" survey={true} onClick={() => {}} />
+        <Button value="설문 시작하기" height="lg" survey={true} onClick={startSurvey} />
         <p
           className="underline font-semibold text-placeholder py-5 px-4 text-center"
           onClick={handleRecordWithoutSurvey}>
@@ -311,11 +329,11 @@ export default function CustomerDetail() {
           {activeTab === 'memo' && (
             <>
               <TextFiled
-                  value={memo}
-                  onChange={(e) => setMemo(e.target.value)}
-                  handleSaveMemo={handleSaveMemo}
-                  disabled={!isChanged}
-                />
+                value={memo}
+                onChange={(e) => setMemo(e.target.value)}
+                handleSaveMemo={handleSaveMemo}
+                disabled={!isChanged}
+              />
             </>
           )}
         </>

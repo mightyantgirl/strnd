@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { useNavigate, useParams } from 'react-router-dom'
 
 import SurveyFooter from './../../components/surveyfooter'
 import SurveyHeader from './../../components/surveyheader'
@@ -8,6 +9,8 @@ const baseTextClass = `text-xs text-primary font-bold`
 
 export default function SurveyStep3({ onStart }) {
   const [selected, setSelected] = useState([])
+  const navigate = useNavigate()
+  const { visitId } = useParams()
 
   const STYLECARDS = [
     { id: 1, imageUrl: './img/hair_01.png', label: 'C컬 레이어드' },
@@ -34,7 +37,7 @@ export default function SurveyStep3({ onStart }) {
   return (
     <div className="h-full flex flex-col">
       {/* 헤더 */}
-      <SurveyHeader />
+      <SurveyHeader onBack={() => navigate(-1)} />
 
       {/* 컨텐츠 */}
       <div className="flex-1 overflow-y-auto" style={{ touchAction: 'pan-y' }}>
@@ -64,7 +67,11 @@ export default function SurveyStep3({ onStart }) {
       </div>
 
       {/* 푸터 */}
-      <SurveyFooter children="복수 선택이 가능합니다." onNext={onStart} />
+      <SurveyFooter
+        value="다음"
+        children="복수 선택이 가능합니다."
+        onNext={() => navigate(`/survey/${visitId}/step4`)}
+      />
     </div>
   )
 }

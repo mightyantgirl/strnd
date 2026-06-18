@@ -13,6 +13,21 @@ export function getElapsedTime(dateString) {
   return `${Math.floor(diffDays / 365)}년 전`
 }
 
+// 날짜 변환
+export function getElapsedDay(dateString) {
+  if (!dateString) return '첫 방문'
+
+  const now = new Date()
+  const past = new Date(dateString)
+  const diffDays = Math.floor((now - past) / (1000 * 60 * 60 * 24))
+
+  if (diffDays === 0) return '오늘'
+  if (diffDays < 7) return `${diffDays}일`
+  if (diffDays < 30) return `${Math.floor(diffDays / 7)}주`
+  if (diffDays < 365) return `${Math.floor(diffDays / 30)}개월`
+  return `${Math.floor(diffDays / 365)}년`
+}
+
 // 연락처 포맷 변환
 export function formatPhone(phone) {
   if (!phone) return ''

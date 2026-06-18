@@ -13,6 +13,7 @@ export default function Input({
   subtext,
   search,
   required,
+  onKeyDown,
   type = 'text',
   maxLength,
   inputMode,
@@ -33,6 +34,7 @@ export default function Input({
         placeholder={placeholder}
         value={value}
         type={type}
+        onKeyDown={onKeyDown}
         inputMode={inputMode}
         subtext={subtext}
         maxLength={maxLength}

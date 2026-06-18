@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { useNavigate, useParams } from 'react-router-dom'
 
 import SurveyFooter from './../../components/surveyfooter'
 import SurveyHeader from './../../components/surveyheader'
@@ -6,8 +7,10 @@ import MoodChip from './../../components/moodchip'
 
 const baseTextClass = `text-xs text-primary font-bold`
 
-export default function SurveyStep2({ onStart }) {
+export default function SurveyStep2() {
   const [selected, setSelected] = useState([])
+  const navigate = useNavigate()
+  const { visitId } = useParams()
 
   const MOODCHIPS = [
     { id: 1, emoji: '🌿', label: '자연스럽고 편안한' },
@@ -29,7 +32,7 @@ export default function SurveyStep2({ onStart }) {
   return (
     <div className="h-full flex flex-col">
       {/* 헤더 */}
-      <SurveyHeader />
+      <SurveyHeader onBack={() => navigate(-1)} />
 
       {/* 컨텐츠 */}
       <div className="flex-1 overflow-y-auto" style={{ touchAction: 'pan-y' }}>
@@ -62,7 +65,11 @@ export default function SurveyStep2({ onStart }) {
       </div>
 
       {/* 푸터 */}
-      <SurveyFooter children="복수 선택이 가능합니다." onNext={onStart} />
+      <SurveyFooter
+        value="다음"
+        children="복수 선택이 가능합니다."
+        onNext={() => navigate(`/survey/${visitId}/step3`)}
+      />
     </div>
   )
 }

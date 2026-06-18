@@ -26,6 +26,7 @@ export default function Button({
   return (
     <button
       onClick={onClick}
+      onKeyDown={onKeyDown}
       disabled={disabled}
       className={`
         w-full rounded-lg text-base font-semibold

@@ -66,7 +66,9 @@ export default function Register() {
       const data = await response.json()
 
       if (response.ok) {
-        console.log('회원가입 성공', data)
+        localStorage.setItem('token', data.accessToken)
+        localStorage.setItem('designerName', data.designerName)
+
         navigate('/home')
       } else {
         console.log('실패', data.message)

@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { useNavigate, useParams } from 'react-router-dom'
 
 import SurveyFooter from './../../components/surveyfooter'
 import SurveyHeader from './../../components/surveyheader'
@@ -11,6 +12,8 @@ const baseTextClass = `text-xs text-primary font-bold`
 export default function SurveyStep0({ onStart }) {
   const [visitRoute, setVisitRoute] = useState('')
   const [gender, setGender] = useState('')
+  const navigate = useNavigate()
+  const { visitId } = useParams()
 
   const VISIT_ROUTE_OPTIONS = [
     { value: 'naver', label: '네이버 검색' },
@@ -23,7 +26,7 @@ export default function SurveyStep0({ onStart }) {
   return (
     <div className="h-full flex flex-col">
       {/* 헤더 */}
-      <SurveyHeader />
+      <SurveyHeader onBack={() => navigate(-1)} />
 
       {/* 컨텐츠 */}
       <div className="flex-1 overflow-y-auto" style={{ touchAction: 'pan-y' }}>
@@ -70,7 +73,7 @@ export default function SurveyStep0({ onStart }) {
       </div>
 
       {/* 푸터 */}
-      <SurveyFooter onNext={onStart} />
+      <SurveyFooter value="다음" onNext={() => navigate(`/survey/${visitId}/step1`)} />
     </div>
   )
 }

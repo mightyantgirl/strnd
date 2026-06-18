@@ -133,6 +133,9 @@ export default function Login() {
               maxLength={4}
               onChange={handlePinChange}
               error={pinError}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter') handleLogin()
+              }}
             />
           </div>
           <div className="flex items-center gap-2 pl-1">
@@ -149,7 +152,9 @@ export default function Login() {
           variant="primary"
           disabled={!phone || !pin}
           onClick={handleLogin}
-          onKeyDown={(e) => e.key === 'Enter' && handleLogin()}>
+          onKeyDown={(e) => {
+            if (e.key === 'Enter') handleLogin()
+          }}>
           로그인
         </Button>
         <div className="flex justify-center gap-8">
