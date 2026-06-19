@@ -1,0 +1,134 @@
+import { useState, useEffect } from 'react'
+import { useNavigate, useLocation, useParams } from 'react-router-dom'
+
+import SurveyFooter from '../../components/surveyfooter'
+import Step0 from './step0'
+import Step1 from './step1'
+import Step2 from './step2'
+import Step3 from './step3'
+import Step4 from './step4'
+import Step5 from './step5'
+
+export default function SurveySteps() {
+  const [currentStep, setCurrentStep] = useState(0)
+  const [validationError, setValidationError] = useState('')
+
+  const navigate = useNavigate()
+  const location = useLocation()
+  const { visitId } = useParams()
+
+  const surveyToken = location.state?.surveyToken ?? sessionStorage.getItem('surveyToken')
+
+  useEffect(() => {
+    if (location.state?.surveyToken) {
+      sessionStorage.setItem('surveyToken', location.state.surveyToken)
+    }
+  }, [])
+
+  const [surveyData, setSurveyData] = useState({
+    // 동의 (SurveyMain에서 받음)
+    consentRequiredYn: location.state?.consentRequiredYn ?? false,
+    consentOptionalYn: location.state?.consentOptionalYn ?? false,
+
+    // Step 0 — 기본정보
+    gender: '',
+    visitRoute: '',
+    refDesigner: '',
+
+    // Step 1 — 시술 선택
+    serviceId: null,
+
+    // Step 2 — 선호 무드
+    moods: [],
+
+    // Step 3 — 이미지 카드
+    styleImageIds: [],
+
+    // Step 4 — 모발 상태
+    hairConcerns: [],
+
+    // Step 5 — 추가 요청
+    requestMemo: '',
+  })
+
+  const submitSurvey = async () => {
+    try {
+      const response = await fetch(`https://strnd-be.onrender.com/api/survey/${surveyToken}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(surveyData),
+      })
+
+      if (!response.ok) {
+        const err = await response.json()
+        console.error('survey submit failed:', err)
+        return
+      }
+
+      sessionStorage.removeItem('surveyToken')
+      navigate(`/survey/${visitId}/done`)
+    } catch (error) {
+      console.error(error)
+    }
+  }
+
+  const updateSurveyData = (key, value) => {
+    setSurveyData((prev) => ({ ...prev, [key]: value }))
+    setValidationError('')
+  }
+
+  const isStepValid = () => {
+    if (currentStep === 0) return surveyData.gender !== ''
+    if (currentStep === 1) return surveyData.serviceId !== null
+    return true
+  }
+
+  const ERROR_MESSAGES = {
+    0: '성별을 선택해주세요.',
+    1: '시술 항목을 선택해주세요.',
+  }
+
+  const footerConfig = {
+    0: { value: '다음', children: '' },
+    1: { value: '다음', children: '필수 선택 항목입니다.' },
+    2: { value: '다음', children: '복수 선택이 가능합니다.' },
+    3: { value: '다음', children: '복수 선택이 가능합니다.' },
+    4: { value: '다음', children: '복수 선택이 가능합니다.' },
+    5: { value: '제출하기', children: '' },
+  }
+
+  return (
+    <div className="h-full flex flex-col">
+      {currentStep === 0 && <Step0 surveyData={surveyData} onUpdate={updateSurveyData} />}
+      {currentStep === 1 && <Step1 surveyData={surveyData} onUpdate={updateSurveyData} />}
+      {currentStep === 2 && <Step2 surveyData={surveyData} onUpdate={updateSurveyData} />}
+      {currentStep === 3 && <Step3 surveyData={surveyData} onUpdate={updateSurveyData} />}
+      {currentStep === 4 && <Step4 surveyData={surveyData} onUpdate={updateSurveyData} />}
+      {currentStep === 5 && <Step5 surveyData={surveyData} onUpdate={updateSurveyData} />}
+
+      <div className="fixed w-full bottom-0 -mx-5 px-5">
+        {validationError && (
+          <p className="text-xs text-red-400 text-center mb-2">{validationError}</p>
+        )}
+        <SurveyFooter
+          value={footerConfig[currentStep].value}
+          children={footerConfig[currentStep].children}
+          onNext={() => {
+            if (currentStep === 5) {
+              submitSurvey()
+            } else {
+              if (!isStepValid()) {
+                setValidationError(ERROR_MESSAGES[currentStep] ?? '')
+                return
+              }
+              setValidationError('')
+              setCurrentStep(currentStep + 1)
+            }
+          }}
+        />
+      </div>
+    </div>
+  )
+}

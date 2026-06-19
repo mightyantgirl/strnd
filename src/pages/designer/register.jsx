@@ -110,7 +110,7 @@ export default function Register() {
             value={phone}
             required={true}
             placeholder="10~11자 입력"
-            type="number"
+            type="text"
             inputMode="numeric"
             maxLength={11}
             error={phoneError}

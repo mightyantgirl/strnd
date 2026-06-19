@@ -1,10 +1,12 @@
-import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 
 import SurveyFooter from '../../components/surveyfooter'
 
 const baseTextClass = `text-xs text-primary font-bold`
 
-export default function SurveyDone({ onStart }) {
+export default function SurveyDone() {
+  const navigate = useNavigate()
+
   return (
     <div className="h-full flex flex-col">
       {/* 헤더 */}
@@ -24,7 +26,7 @@ export default function SurveyDone({ onStart }) {
       </div>
 
       {/* 푸터 */}
-      <SurveyFooter onNext={onStart} />
+      <SurveyFooter value="메인으로 돌아가기" onNext={() => navigate('/home')} />
     </div>
   )
 }

@@ -1,16 +1,12 @@
-import { useState } from 'react'
-import { useNavigate, useParams } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 
-import SurveyFooter from './../../components/surveyfooter'
 import SurveyHeader from './../../components/surveyheader'
 import CheckChip from './../../components/checkchip'
 
 const baseTextClass = `text-xs text-primary font-bold`
 
-export default function SurveyStep1() {
-  const [service, setService] = useState('')
+export default function SurveyStep1({ surveyData, onUpdate }) {
   const navigate = useNavigate()
-  const { visitId } = useParams()
 
   return (
     <div className="h-full flex flex-col">
@@ -34,50 +30,37 @@ export default function SurveyStep1() {
             <div className="w-full flex text-lg">
               <CheckChip
                 label="컷"
-                selected={service === '컷'}
-                onClick={() => {
-                  setService('컷')
-                }}
+                selected={surveyData.serviceId === 1}
+                onClick={() => onUpdate('serviceId', 1)}
               />
               <CheckChip
                 label="펌"
-                selected={service === '펌'}
-                onClick={() => {
-                  setService('펌')
-                }}
+                selected={surveyData.serviceId === 2}
+                onClick={() => onUpdate('serviceId', 2)}
               />
             </div>
             <div className="w-full flex text-lg">
               <CheckChip
                 label="컬러"
-                selected={service === '컬러'}
-                onClick={() => {
-                  setService('컬러')
-                }}
+                selected={surveyData.serviceId === 3}
+                onClick={() => onUpdate('serviceId', 3)}
               />
               <CheckChip
                 label="클리닉"
-                selected={service === '클리닉'}
-                onClick={() => {
-                  setService('클리닉')
-                }}
+                selected={surveyData.serviceId === 4}
+                onClick={() => onUpdate('serviceId', 4)}
               />
             </div>
             <div className="w-full flex text-lg">
               <CheckChip
                 label="🔎 정확한 상담이 필요해요"
-                selected={service === '상담'}
-                onClick={() => {
-                  setService('상담')
-                }}
+                selected={surveyData.serviceId === 5}
+                onClick={() => onUpdate('serviceId', 5)}
               />
             </div>
           </div>
         </div>
       </div>
-
-      {/* 푸터 */}
-      <SurveyFooter value="다음" onNext={() => navigate(`/survey/${visitId}/step2`)} />
     </div>
   )
 }

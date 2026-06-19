@@ -1,16 +1,12 @@
-import { useState } from 'react'
-import { useNavigate, useParams } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 
-import SurveyFooter from '../../components/surveyfooter'
 import SurveyHeader from '../../components/surveyheader'
 import Chip from '../../components/chip'
 
 const baseTextClass = `text-xs text-primary font-bold`
 
-export default function SurveyStep4() {
-  const [selected, setSelected] = useState([])
+export default function SurveyStep4({ surveyData, onUpdate }) {
   const navigate = useNavigate()
-  const { visitId } = useParams()
 
   const CHIPS = [
     { id: 1, label: '➰ 자주 엉켜요' },
@@ -24,13 +20,11 @@ export default function SurveyStep4() {
     { id: 9, label: '⏰ 아침 스타일링이 힘들어요' },
   ]
 
-  const toggle = (id) => {
-    setSelected(
-      (prev) =>
-        prev.includes(id)
-          ? prev.filter((item) => item !== id) // 있으면 제거
-          : [...prev, id], // 없으면 추가
-    )
+  const toggle = (label) => {
+    const next = surveyData.hairConcerns.includes(label)
+      ? surveyData.hairConcerns.filter((item) => item !== label)
+      : [...surveyData.hairConcerns, label]
+    onUpdate('hairConcerns', next)
   }
 
   return (
@@ -57,21 +51,14 @@ export default function SurveyStep4() {
                 <Chip
                   key={chip.id}
                   label={chip.label}
-                  selected={selected.includes(chip.id)}
-                  onClick={() => toggle(chip.id)}
+                  selected={surveyData.hairConcerns.includes(chip.label)}
+                  onClick={() => toggle(chip.label)}
                 />
               ))}
             </div>
           </>
         </div>
       </div>
-
-      {/* 푸터 */}
-      <SurveyFooter
-        value="다음"
-        children="복수 선택이 가능합니다."
-        onNext={() => navigate(`/survey/${visitId}/step5`)}
-      />
     </div>
   )
 }

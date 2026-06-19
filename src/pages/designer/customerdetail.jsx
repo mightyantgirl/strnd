@@ -41,6 +41,7 @@ export default function CustomerDetail() {
   const [toastVisible, setToastVisible] = useState(false) // 보일지 말지
 
   const isChanged = memo !== originalMemo
+  const visitCount = visits.filter((visit) => visit.status === 'COMPLETED').length
 
   const location = useLocation()
 
@@ -153,7 +154,11 @@ export default function CustomerDetail() {
     })
 
     const data = await response.json()
-    navigate(`/survey/${data.visitId}?customerId=${customerId}`)
+    console.log('data:', data)
+    console.log('surveyToken:', data.surveyToken)
+    navigate(`/survey/${data.visitId}?customerId=${customerId}`, {
+      state: { surveyToken: data.surveyToken },
+    })
   }
 
   // 메모 저장 함수
@@ -222,6 +227,7 @@ export default function CustomerDetail() {
             <CustomerInfoCard
               name={name}
               isActive={isActive}
+              visitCount={visitCount}
               lastVisitAt={lastVisitAt ? `마지막 방문 ${getElapsedTime(lastVisitAt)}` : '첫 방문'}
               phone={formatPhone(phone)}
               gender={formatGender(gender)}
@@ -333,6 +339,7 @@ export default function CustomerDetail() {
                 onChange={(e) => setMemo(e.target.value)}
                 handleSaveMemo={handleSaveMemo}
                 disabled={!isChanged}
+                save={true}
               />
             </>
           )}

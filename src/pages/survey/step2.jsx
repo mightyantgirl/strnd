@@ -1,16 +1,12 @@
-import { useState } from 'react'
-import { useNavigate, useParams } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 
-import SurveyFooter from './../../components/surveyfooter'
 import SurveyHeader from './../../components/surveyheader'
 import MoodChip from './../../components/moodchip'
 
 const baseTextClass = `text-xs text-primary font-bold`
 
-export default function SurveyStep2() {
-  const [selected, setSelected] = useState([])
+export default function SurveyStep2({ surveyData, onUpdate }) {
   const navigate = useNavigate()
-  const { visitId } = useParams()
 
   const MOODCHIPS = [
     { id: 1, emoji: '🌿', label: '자연스럽고 편안한' },
@@ -20,13 +16,11 @@ export default function SurveyStep2() {
     { id: 5, emoji: '🌙', label: '세련되고 고급스러운' },
   ]
 
-  const toggle = (id) => {
-    setSelected(
-      (prev) =>
-        prev.includes(id)
-          ? prev.filter((item) => item !== id) // 있으면 제거
-          : [...prev, id], // 없으면 추가
-    )
+  const toggle = (label) => {
+    const next = surveyData.moods.includes(label)
+      ? surveyData.moods.filter((item) => item !== label)
+      : [...surveyData.moods, label]
+    onUpdate('moods', next)
   }
 
   return (
@@ -55,21 +49,14 @@ export default function SurveyStep2() {
                   key={chip.id}
                   emoji={chip.emoji}
                   label={chip.label}
-                  selected={selected.includes(chip.id)}
-                  onClick={() => toggle(chip.id)}
+                  selected={surveyData.moods.includes(chip.label)}
+                  onClick={() => toggle(chip.label)}
                 />
               ))}
             </div>
           </>
         </div>
       </div>
-
-      {/* 푸터 */}
-      <SurveyFooter
-        value="다음"
-        children="복수 선택이 가능합니다."
-        onNext={() => navigate(`/survey/${visitId}/step3`)}
-      />
     </div>
   )
 }

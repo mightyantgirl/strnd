@@ -8,6 +8,7 @@ export default function TextFiled({
   error,
   disabled,
   handleSaveMemo,
+  save,
   type = 'text',
   maxLength,
 }) {
@@ -29,12 +30,14 @@ export default function TextFiled({
         className={`${baseClass} ${stateClass} ${error ? 'border-danger' : 'border-border'} resize-none`}></textarea>
       {error && <p className="text-xs font-medium text-danger mt-1">{error}</p>}
 
-      <button
-        className="absolute py-2 px-3 right-4 bottom-4 content-center  rounded-sm bg-tint text-brand font-semibold disabled:bg-bg disabled:text-white"
-        onClick={handleSaveMemo}
-        disabled={disabled}>
-        저장
-      </button>
+      {save && (
+        <button
+          className="absolute py-2 px-3 right-4 bottom-4 content-center  rounded-sm bg-tint text-brand font-semibold disabled:bg-bg disabled:text-white"
+          onClick={handleSaveMemo}
+          disabled={disabled}>
+          저장
+        </button>
+      )}
     </div>
   )
 }

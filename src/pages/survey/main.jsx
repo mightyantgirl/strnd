@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react'
 import SurveyFooter from './../../components/surveyfooter'
 import BottomSheet from './../../components/bottomSheet'
 
-import { getElapsedDay } from '../../utils/dateUtils'
+import { getElapsedDay, formatList } from '../../utils/dateUtils'
 
 const baseTextClass = `text-xs text-placeholder font-medium`
 
@@ -18,10 +18,15 @@ export default function SurveyMain() {
   const [name, setName] = useState('')
   const [lastVisitAt, setLastVisitAt] = useState('')
   const [lastVisitService, setLastVisitService] = useState('')
+  const [isFirstVisit, setIsFirstVisit] = useState(true)
 
-  const location = useLocation()
   const navigate = useNavigate()
+  const location = useLocation()
+  const surveyToken = location.state?.surveyToken
 
+  console.log('lastVisitAt:', lastVisitAt)
+  console.log('isFirstVisit:', isFirstVisit)
+  console.log('오늘날짜:', new Date().toISOString().slice(0, 10))
   //고객 상세 카드 api 요청 함수
   useEffect(() => {
     const fetchCustomer = async () => {
@@ -64,7 +69,10 @@ export default function SurveyMain() {
 
         const data = await response.json()
 
-        setLastVisitService(data[0]?.treatmentMenu)
+        const completedVisits = data.filter((v) => v.status === 'COMPLETED')
+
+        setIsFirstVisit(completedVisits.length === 0) // 완료된 방문 없으면 첫방문
+        setLastVisitService(completedVisits[0]?.treatmentMenu ?? null)
       } catch (error) {
         console.error('히스토리 로딩 실패:', error)
       }
@@ -84,7 +92,7 @@ export default function SurveyMain() {
           안녕하세요, <span className="text-brand">{name} </span>님!
           <br />
           <p>
-            {!lastVisitAt ? (
+            {isFirstVisit ? (
               '방문해주셔서 감사합니다.'
             ) : (
               <>
@@ -95,9 +103,11 @@ export default function SurveyMain() {
           </p>
         </h1>
         <p>
-          {!lastVisitAt
+          {isFirstVisit
             ? '좋은 기억 만드실 수 있도록 최선을 다하겠습니다.'
-            : `마지막으로 받은 시술은 ${lastVisitService} 입니다.`}
+            : lastVisitService
+              ? `마지막으로 받은 시술은 ${formatList(lastVisitService)} 입니다.`
+              : '이전 시술 정보가 없어요.'}
         </p>
       </div>
 
@@ -126,7 +136,11 @@ export default function SurveyMain() {
       <SurveyFooter
         value="시작하기"
         onNext={() => {
-          checkActive ? navigate(`/survey/${visitId}/step0`) : console.log('동의 안하셨어요')
+          checkActive
+            ? navigate(`/survey/${visitId}/steps`, {
+                state: { surveyToken, consentRequiredYn: true, consentOptionalYn: true },
+              })
+            : console.log('동의 안하셨어요')
         }}
       />
     </div>

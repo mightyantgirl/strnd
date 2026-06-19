@@ -1,7 +1,5 @@
-import { useState } from 'react'
-import { useNavigate, useParams } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 
-import SurveyFooter from './../../components/surveyfooter'
 import SurveyHeader from './../../components/surveyheader'
 import Input from './../../components/input'
 import Dropdown from './../../components/dropdown'
@@ -9,11 +7,8 @@ import CheckChip from './../../components/checkchip'
 
 const baseTextClass = `text-xs text-primary font-bold`
 
-export default function SurveyStep0({ onStart }) {
-  const [visitRoute, setVisitRoute] = useState('')
-  const [gender, setGender] = useState('')
+export default function SurveyStep0({ surveyData, onUpdate }) {
   const navigate = useNavigate()
-  const { visitId } = useParams()
 
   const VISIT_ROUTE_OPTIONS = [
     { value: 'naver', label: '네이버 검색' },
@@ -45,35 +40,33 @@ export default function SurveyStep0({ onStart }) {
             <div className="w-full flex text-lg">
               <CheckChip
                 label="💁‍♂️남성"
-                selected={gender === '남성'}
-                onClick={() => {
-                  setGender('남성')
-                }}
+                selected={surveyData.gender === 'MALE'}
+                onClick={() => onUpdate('gender', 'MALE')}
               />
               <CheckChip
                 label="💁‍♀️여성"
-                selected={gender === '여성'}
-                onClick={() => {
-                  setGender('여성')
-                }}
+                selected={surveyData.gender === 'FEMALE'}
+                onClick={() => onUpdate('gender', 'FEMALE')}
               />
             </div>
             <p className="text-xs font-medium text-placeholder">필수 선택 요소입니다.</p>
           </div>
           <Dropdown
             options={VISIT_ROUTE_OPTIONS}
-            value={visitRoute}
-            onChange={(val) => setVisitRoute(val)}
+            value={surveyData.visitRoute}
+            onChange={(val) => onUpdate('visitRoute', val)}
             placeholder="해당하는 항목을 선택해주세요"
             label="방문경로"
             required={true}
           />
-          <Input label="디자이너 소개 유무" placeholder="소개해 주신 분 성함을 알려주세요." />
+          <Input
+            label="디자이너 소개 유무"
+            placeholder="소개해 주신 분 성함을 알려주세요."
+            value={surveyData.refDesigner}
+            onChange={(e) => onUpdate('refDesigner', e.target.value)}
+          />
         </div>
       </div>
-
-      {/* 푸터 */}
-      <SurveyFooter value="다음" onNext={() => navigate(`/survey/${visitId}/step1`)} />
     </div>
   )
 }

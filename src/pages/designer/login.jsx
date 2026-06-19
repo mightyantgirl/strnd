@@ -119,7 +119,7 @@ export default function Login() {
               className="mb-2"
               value={phone}
               placeholder="연락처"
-              type="number"
+              type="text"
               inputMode="numeric"
               maxLength={11}
               onChange={handlePhoneChange}
