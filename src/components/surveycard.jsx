@@ -68,7 +68,7 @@ export default function SurveyCard({
           </li>
           <li>
             <div className={baseListClass}>
-              <p className="font-bold text-disabled mb-1">디자이너 소개 유무</p>
+              <p className="font-bold text-disabled mb-1">소개 유무</p>
               <p className="text-secondary">{survey.refDesigner}</p>
             </div>
           </li>

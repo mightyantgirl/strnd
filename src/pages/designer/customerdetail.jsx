@@ -11,7 +11,7 @@ import {
 import PageHeader from './../../components/pageheader'
 import Button from './../../components/button'
 import CustomerInfoCard from './../../components/customerinfocard'
-import VisitCard from './../../components/card'
+import VisitCard from '../../components/visitcard'
 import SurveyCard from './../../components/surveycard'
 import TextFiled from './../../components/textfiled'
 import Toast from './../../components/toast'

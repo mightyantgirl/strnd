@@ -24,9 +24,16 @@ export default function SurveyMain() {
   const location = useLocation()
   const surveyToken = location.state?.surveyToken
 
-  console.log('lastVisitAt:', lastVisitAt)
-  console.log('isFirstVisit:', isFirstVisit)
-  console.log('오늘날짜:', new Date().toISOString().slice(0, 10))
+  const isToday = lastVisitAt?.startsWith(new Date().toISOString().slice(0, 10))
+
+  //동의 후 뒤로 갔을 때 동의 값 세션 저장확인
+  useEffect(() => {
+    const consentDone = sessionStorage.getItem('consentDone')
+    if (consentDone === 'true') {
+      setCheckActive(true)
+    }
+  }, [])
+
   //고객 상세 카드 api 요청 함수
   useEffect(() => {
     const fetchCustomer = async () => {
@@ -94,6 +101,8 @@ export default function SurveyMain() {
           <p>
             {isFirstVisit ? (
               '방문해주셔서 감사합니다.'
+            ) : isToday ? (
+              '오늘 다시 방문해주셨네요.'
             ) : (
               <>
                 <span className="text-brand">{getElapsedDay(lastVisitAt)}</span> 만에
@@ -113,22 +122,28 @@ export default function SurveyMain() {
 
       {/* 푸터 */}
 
-      <div className="flex items-center gap-2 pl-1 mb-4">
+      <div className="flex items-center gap-2 pl-1 mb-2">
         <button onClick={() => setOpenSheet(!openSheet)}>
-          <img
-            src={checkActive ? '/img/check.svg' : '/img/check-disable.svg'}
-            alt="개인정보동의 체크"
-          />
+          <span className="text-xs text-placeholder font-semibold underline">
+            개인정보제공 동의
+          </span>
         </button>
-        <span className="text-xs text-secondary font-semibold">개인정보제공 동의</span>
       </div>
       {openSheet && (
         <BottomSheet
           isOpen={openSheet}
           onClose={() => setOpenSheet(false)}
-          onConfirm={() => {
-            setCheckActive(true) // 체크 활성화
-            setOpenSheet(false) // 모달 닫기
+          onConfirm={(consentData) => {
+            sessionStorage.setItem('consentDone', 'true') //동의 완료 세션 저장
+            setCheckActive(true)
+            setOpenSheet(false)
+            navigate(`/survey/${visitId}/steps`, {
+              state: {
+                surveyToken,
+                consentRequiredYn: consentData.consentRequiredYn,
+                consentOptionalYn: consentData.consentOptionalYn,
+              },
+            })
           }}
         />
       )}
@@ -138,9 +153,13 @@ export default function SurveyMain() {
         onNext={() => {
           checkActive
             ? navigate(`/survey/${visitId}/steps`, {
-                state: { surveyToken, consentRequiredYn: true, consentOptionalYn: true },
+                state: {
+                  surveyToken,
+                  consentRequiredYn: checkActive.consentRequiredYn,
+                  consentOptionalYn: checkActive.consentOptionalYn,
+                },
               })
-            : console.log('동의 안하셨어요')
+            : setOpenSheet(!openSheet, { state: { surveyToken } })
         }}
       />
     </div>

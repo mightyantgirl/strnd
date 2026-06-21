@@ -1,5 +1,5 @@
 const toastBase =
-  'flex items-center fixed bottom-30 left-1/2 -translate-x-1/2 px-5 py-3 rounded-full text-xs font-medium transition-all duration-300 whitespace-nowrap'
+  'flex items-center fixed bottom-30 left-1/2 -translate-x-1/2 px-5 py-3 rounded-full text-xs font-medium transition-all duration-300 whitespace-nowrap z-30'
 
 const toastVariant = {
   base: 'bg-secondary text-white',
