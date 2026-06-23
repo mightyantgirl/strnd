@@ -134,7 +134,6 @@ export default function SurveyMain() {
           isOpen={openSheet}
           onClose={() => setOpenSheet(false)}
           onConfirm={(consentData) => {
-            sessionStorage.setItem('consentDone', 'true') //동의 완료 세션 저장
             setCheckActive(true)
             setOpenSheet(false)
             navigate(`/survey/${visitId}/steps`, {

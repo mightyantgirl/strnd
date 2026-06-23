@@ -1,6 +1,5 @@
 import { useNavigate } from 'react-router-dom'
 
-import SurveyHeader from './../../components/surveyheader'
 import Input from './../../components/input'
 import Dropdown from './../../components/dropdown'
 import CheckChip from './../../components/checkchip'
@@ -8,8 +7,6 @@ import CheckChip from './../../components/checkchip'
 const baseTextClass = `text-xs text-primary font-bold`
 
 export default function SurveyStep0({ surveyData, onUpdate }) {
-  const navigate = useNavigate()
-
   const VISIT_ROUTE_OPTIONS = [
     { value: 'naver', label: '네이버 검색' },
     { value: 'instagram', label: '인스타그램' },
@@ -21,7 +18,6 @@ export default function SurveyStep0({ surveyData, onUpdate }) {
   return (
     <div className="h-full flex flex-col">
       {/* 헤더 */}
-      <SurveyHeader onBack={() => navigate(-1)} />
 
       {/* 컨텐츠 */}
       <div className="flex-1 overflow-y-auto" style={{ touchAction: 'pan-y' }}>
@@ -60,7 +56,7 @@ export default function SurveyStep0({ surveyData, onUpdate }) {
             required={true}
           />
           <Input
-            label="디자이너 소개 유무"
+            label="소개 유무"
             placeholder="소개해 주신 분 성함을 알려주세요."
             value={surveyData.refDesigner}
             onChange={(e) => onUpdate('refDesigner', e.target.value)}

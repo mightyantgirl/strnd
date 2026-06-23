@@ -2,7 +2,7 @@ import { useState } from 'react'
 
 import Badge from './badge'
 
-const baseClass = `w-full py-4 px-4 rounded-xl border border-bg bg-card-bg `
+const baseClass = `w-full py-5 px-4 rounded-xl border border-bg bg-card-bg `
 const baseTextClass = `text-base text-placeholder font-medium`
 
 export default function VisitCard({
@@ -46,24 +46,24 @@ export default function VisitCard({
       <div className="text-left">
         <ul className={`${baseTextClass} space-y-2`}>
           <li>
-            <div className="flex-col">
+            <div className="flex-col space-y-1">
               <p className="font-semibold text-xs">시술 내용</p>
-              <p className="text-secondary">{treatmentDetail}</p>
+              <p className="text-secondary text-xs">{treatmentDetail}</p>
             </div>
           </li>
           <li>
             {treatmentProduct && (
-              <div className="flex-col">
+              <div className="flex-col space-y-1">
                 <p className="font-semibold text-xs">사용 약제</p>
-                <p className="text-secondary"> {treatmentProduct}</p>
+                <p className="text-secondary text-xs"> {treatmentProduct}</p>
               </div>
             )}
           </li>
           <li>
             {treatmentNote && (
-              <div className="flex-col">
+              <div className="flex-col space-y-1">
                 <p className="font-semibold text-xs">시술 메모</p>
-                <p className="text-secondary"> {treatmentNote}</p>
+                <p className="text-secondary text-xs"> {treatmentNote}</p>
               </div>
             )}
           </li>
@@ -71,11 +71,11 @@ export default function VisitCard({
       </div>
       {/* 클릭 시 노출 */}
       {isOpen && detailData && (
-        <div className="text-left px-3 py-3 rounded-md" style={{ backgroundColor: '#f3f3f0' }}>
+        <div className="text-left px-3 py-3 rounded-md mt-3" style={{ backgroundColor: '#f3f3f0' }}>
           {detailData.visitRoute && (
             <div className="flex items-center mb-3">
               <img src="/img/mini_check.svg" className="mr-2"></img>
-              <span className="font-semibold text-brand">설문 내용</span>
+              <span className="font-semibold text-brand text-xs">설문 내용</span>
             </div>
           )}
           {detailData.visitRoute && (
@@ -83,40 +83,40 @@ export default function VisitCard({
               <li>
                 {detailData.visitRoute && (
                   <div className="flex-col">
-                    <p className="font-semibold text-xs">방문 경로</p>
-                    <p className="text-secondary ">{detailData.visitRoute}</p>
+                    <p className="font-semibold text-xs mb-1">방문 경로</p>
+                    <p className="text-secondary  text-xs">{detailData.visitRoute}</p>
                   </div>
                 )}
               </li>
               <li>
                 {detailData.refDesigner && (
                   <div className="flex-col">
-                    <p className="font-semibold text-xs">소개 유무</p>
-                    <p className="text-secondary "> {detailData.refDesigner}</p>
+                    <p className="font-semibold text-xs mb-1">소개 유무</p>
+                    <p className="text-secondary  text-xs"> {detailData.refDesigner}</p>
                   </div>
                 )}
               </li>
               <li>
                 {detailData.moods && (
                   <div className="flex-col">
-                    <p className="font-semibold text-xs">선호 무드</p>
-                    <p className="text-secondary ">{detailData.moods?.join(', ')}</p>
+                    <p className="font-semibold text-xs mb-1">선호 무드</p>
+                    <p className="text-secondary text-xs">{detailData.moods?.join(', ')}</p>
                   </div>
                 )}
               </li>
               <li>
                 {detailData.hairConcerns && (
                   <div className="flex-col">
-                    <p className="font-semibold text-xs">헤어 고민</p>
-                    <p className="text-secondary ">{detailData.hairConcerns?.join(', ')}</p>
+                    <p className="font-semibold text-xs mb-1">헤어 고민</p>
+                    <p className="text-secondary  text-xs">{detailData.hairConcerns?.join(', ')}</p>
                   </div>
                 )}
               </li>
               <li>
                 {detailData.requestMemo && (
                   <div className="flex-col">
-                    <p className="font-semibold text-xs">요청 사항</p>
-                    <p className="text-secondary "> {detailData.requestMemo}</p>
+                    <p className="font-semibold text-xs mb-1">요청 사항</p>
+                    <p className="text-secondary  text-xs"> {detailData.requestMemo}</p>
                   </div>
                 )}
               </li>

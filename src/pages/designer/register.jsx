@@ -4,10 +4,23 @@ import { useNavigate } from 'react-router-dom'
 import PageFooter from './../../components/pagefooter'
 import PageHeader from './../../components/pageheader'
 import Input from './../../components/input'
+import Toast from './../../components/toast'
 
 const baseTextClass = `text-xs text-primary font-bold`
 
 export default function Register() {
+  const [toastMessage, setToastMessage] = useState('') // 토스트에 표시할 글자
+  const [toastVisible, setToastVisible] = useState(false) // 보일지 말지
+
+  const showToast = (message) => {
+    setToastMessage(message)
+    setToastVisible(true)
+
+    setTimeout(() => {
+      setToastVisible(false)
+    }, 3000)
+  }
+
   const [name, setName] = useState('')
   const [phone, setPhone] = useState('')
   const [pin, setPin] = useState('')
@@ -71,7 +84,7 @@ export default function Register() {
 
         navigate('/home')
       } else {
-        console.log('실패', data.message)
+        showToast(data.message)
       }
     } catch (error) {
       console.error('에러', error)
@@ -143,6 +156,8 @@ export default function Register() {
 
       {/* 푸터 */}
       <PageFooter onNext={handleRegister} value="가입" />
+
+      <Toast message={toastMessage} visible={toastVisible} type="base" />
     </div>
   )
 }

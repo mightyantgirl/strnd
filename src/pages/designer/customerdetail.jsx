@@ -34,6 +34,7 @@ export default function CustomerDetail() {
   // const [visitCount, setVisitCount] = useState('')
 
   const [visits, setVisits] = useState([])
+  const [surveyData, setSurveyData] = useState(null)
   const [memo, setMemo] = useState('')
   const [originalMemo, setOriginalMemo] = useState('') // 원본 저장용
 
@@ -108,8 +109,17 @@ export default function CustomerDetail() {
           },
         )
         const data = await response.json()
+        setVisits(data)
 
-        setVisits(data) //완료 상태만 뿌려지게
+        const submitted = data.find((v) => v.status === 'SUBMITTED')
+        if (submitted) {
+          const detailRes = await fetch(
+            `https://strnd-be.onrender.com/api/visits/${submitted.visitId}`,
+            { method: 'GET', headers: { Authorization: `Bearer ${token}` } },
+          )
+          const detail = await detailRes.json()
+          setSurveyData(detail)
+        }
       } catch (error) {
         console.error('데이터 로딩 실패:', error)
       }
@@ -310,7 +320,7 @@ export default function CustomerDetail() {
             <>
               {visits.some((visit) => visit.status === 'SUBMITTED') ? (
                 <SurveyCard
-                  visitId={visits.find((visit) => visit.status === 'SUBMITTED')?.visitId}
+                  data={surveyData}
                   onClick={() => {
                     navigate(`/customers/${customerId}/result`, {
                       state: {

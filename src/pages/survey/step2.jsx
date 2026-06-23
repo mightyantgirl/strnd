@@ -1,13 +1,10 @@
 import { useNavigate } from 'react-router-dom'
 
-import SurveyHeader from './../../components/surveyheader'
 import MoodChip from './../../components/moodchip'
 
 const baseTextClass = `text-xs text-primary font-bold`
 
 export default function SurveyStep2({ surveyData, onUpdate }) {
-  const navigate = useNavigate()
-
   const MOODCHIPS = [
     { id: 1, emoji: '🌿', label: '자연스럽고 편안한' },
     { id: 2, emoji: '✂️', label: '깔끔하고 단정한' },
@@ -26,7 +23,6 @@ export default function SurveyStep2({ surveyData, onUpdate }) {
   return (
     <div className="h-full flex flex-col">
       {/* 헤더 */}
-      <SurveyHeader onBack={() => navigate(-1)} />
 
       {/* 컨텐츠 */}
       <div className="flex-1 overflow-y-auto" style={{ touchAction: 'pan-y' }}>

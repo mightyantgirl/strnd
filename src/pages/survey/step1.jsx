@@ -1,18 +1,10 @@
-import { useNavigate } from 'react-router-dom'
-
-import SurveyHeader from './../../components/surveyheader'
 import CheckChip from './../../components/checkchip'
 
 const baseTextClass = `text-xs text-primary font-bold`
 
 export default function SurveyStep1({ surveyData, onUpdate }) {
-  const navigate = useNavigate()
-
   return (
     <div className="h-full flex flex-col">
-      {/* 헤더 */}
-      <SurveyHeader onBack={() => navigate(-1)} />
-
       {/* 컨텐츠 */}
       <div className="flex-1 overflow-y-auto" style={{ touchAction: 'pan-y' }}>
         {/* 컨텐츠 - 메인타이틀 */}

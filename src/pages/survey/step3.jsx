@@ -1,37 +1,30 @@
-import { useNavigate } from 'react-router-dom'
-
-import SurveyHeader from './../../components/surveyheader'
-import StyleCard from '../../components/stylecard'
+import Chip from '../../components/chip'
 
 const baseTextClass = `text-xs text-primary font-bold`
 
 export default function SurveyStep3({ surveyData, onUpdate }) {
-  const navigate = useNavigate()
-
-  const STYLECARDS = [
-    { id: 1, imageUrl: './img/hair_01.png', label: 'C컬 레이어드' },
-    { id: 2, imageUrl: './img/hair_02.png', label: 'S컬 레이어드' },
-    { id: 3, imageUrl: './img/hair_03.png', label: '히피펌' },
-    { id: 4, imageUrl: './img/hair_04.png', label: '숏컷' },
-    { id: 5, imageUrl: './img/hair_05.png', label: '원랭스 컷' },
-    { id: 6, imageUrl: './img/hair_06.png', label: '어쩌구펌' },
-    { id: 7, imageUrl: './img/hair_07.png', label: '어쩌구펌' },
-    { id: 8, imageUrl: './img/hair_08.png', label: '어쩌구펌' },
-    { id: 9, imageUrl: './img/hair_09.png', label: '어쩌구펌' },
-    { id: 10, imageUrl: './img/hair_10.png', label: '어쩌구펌' },
+  const CHIPS = [
+    { id: 1, label: '➰ 자주 엉켜요' },
+    { id: 2, label: '✂️ 커트 라인이 마음에 안들어요' },
+    { id: 3, label: '⚡️ 건조해요' },
+    { id: 4, label: '🎨️ 색이 마음에 안들어요' },
+    { id: 5, label: '💨 볼륨이 없고 처져요' },
+    { id: 6, label: '✂️️️ 기장이 애매해요' },
+    { id: 7, label: '💊 숱이 너무 많거나 적어요' },
+    { id: 8, label: '‍⚡ 손상이 심해요' },
+    { id: 9, label: '⏰ 아침 스타일링이 힘들어요' },
   ]
 
-  const toggle = (id) => {
-    const next = surveyData.styleImageIds.includes(id)
-      ? surveyData.styleImageIds.filter((item) => item !== id)
-      : [...surveyData.styleImageIds, id]
-    onUpdate('styleImageIds', next)
+  const toggle = (label) => {
+    const next = surveyData.hairConcerns.includes(label)
+      ? surveyData.hairConcerns.filter((item) => item !== label)
+      : [...surveyData.hairConcerns, label]
+    onUpdate('hairConcerns', next)
   }
 
   return (
     <div className="h-full flex flex-col">
       {/* 헤더 */}
-      <SurveyHeader onBack={() => navigate(-1)} />
 
       {/* 컨텐츠 */}
       <div className="flex-1 overflow-y-auto" style={{ touchAction: 'pan-y' }}>
@@ -39,25 +32,25 @@ export default function SurveyStep3({ surveyData, onUpdate }) {
         <div className={`${baseTextClass} pt-18 pb-8 space-y-2`}>
           <p>STEP 3</p>
           <h1 className="text-2xl font-bold text-primary mb-4">
-            참고하고 싶은
-            <br />
-            스타일이 있나요?
+            요즘 헤어 <br />
+            고민이 있나요?
           </h1>
         </div>
 
         {/* 컨텐츠 - 설문 영역 */}
         <div className="space-y-8">
-          <div className="grid grid-cols-2 gap-3">
-            {STYLECARDS.map((card) => (
-              <StyleCard
-                key={card.id}
-                imageUrl={card.imageUrl}
-                label={card.label}
-                selected={surveyData.styleImageIds.includes(card.id)}
-                onClick={() => toggle(card.id)}
-              />
-            ))}
-          </div>
+          <>
+            <div className="flex-row">
+              {CHIPS.map((chip) => (
+                <Chip
+                  key={chip.id}
+                  label={chip.label}
+                  selected={surveyData.hairConcerns.includes(chip.label)}
+                  onClick={() => toggle(chip.label)}
+                />
+              ))}
+            </div>
+          </>
         </div>
       </div>
     </div>

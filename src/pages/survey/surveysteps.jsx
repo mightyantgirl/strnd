@@ -2,12 +2,14 @@ import { useState, useEffect } from 'react'
 import { useNavigate, useLocation, useParams } from 'react-router-dom'
 
 import SurveyFooter from '../../components/surveyfooter'
+import SurveyHeader from '../../components/surveyheader'
 import Step0 from './step0'
 import Step1 from './step1'
 import Step2 from './step2'
 import Step3 from './step3'
 import Step4 from './step4'
 import Step5 from './step5'
+import Toast from '../../components/toast'
 
 export default function SurveySteps() {
   const [currentStep, setCurrentStep] = useState(0)
@@ -16,6 +18,18 @@ export default function SurveySteps() {
   const navigate = useNavigate()
   const location = useLocation()
   const { visitId } = useParams()
+
+  const [toastMessage, setToastMessage] = useState('') // 토스트에 표시할 글자
+  const [toastVisible, setToastVisible] = useState(false) // 보일지 말지
+
+  const showToast = (message) => {
+    setToastMessage(message)
+    setToastVisible(true)
+
+    setTimeout(() => {
+      setToastVisible(false)
+    }, 3000)
+  }
 
   const surveyToken = location.state?.surveyToken ?? sessionStorage.getItem('surveyToken')
 
@@ -41,11 +55,11 @@ export default function SurveySteps() {
     // Step 2 — 선호 무드
     moods: [],
 
-    // Step 3 — 이미지 카드
-    styleImageIds: [],
-
-    // Step 4 — 모발 상태
+    // Step 3 — 모발 상태
     hairConcerns: [],
+
+    // Step 4 — 이미지 카드
+    styleImageIds: [],
 
     // Step 5 — 추가 요청
     requestMemo: '',
@@ -80,13 +94,13 @@ export default function SurveySteps() {
   }
 
   const isStepValid = () => {
-    if (currentStep === 0) return surveyData.gender !== ''
+    if (currentStep === 0) return surveyData.gender !== '' && surveyData.visitRoute !== ''
     if (currentStep === 1) return surveyData.serviceId !== null
     return true
   }
 
   const ERROR_MESSAGES = {
-    0: '성별을 선택해주세요.',
+    0: '필수 값을 선택해주세요.',
     1: '시술 항목을 선택해주세요.',
   }
 
@@ -101,6 +115,17 @@ export default function SurveySteps() {
 
   return (
     <div className="h-full flex flex-col">
+      <SurveyHeader
+        currentStep={currentStep}
+        onBack={() => {
+          if (currentStep === 0) {
+            navigate(-1)
+          } else {
+            setCurrentStep(currentStep - 1)
+          }
+        }}
+      />
+
       {currentStep === 0 && <Step0 surveyData={surveyData} onUpdate={updateSurveyData} />}
       {currentStep === 1 && <Step1 surveyData={surveyData} onUpdate={updateSurveyData} />}
       {currentStep === 2 && <Step2 surveyData={surveyData} onUpdate={updateSurveyData} />}
@@ -120,7 +145,7 @@ export default function SurveySteps() {
               submitSurvey()
             } else {
               if (!isStepValid()) {
-                setValidationError(ERROR_MESSAGES[currentStep] ?? '')
+                showToast(ERROR_MESSAGES[currentStep] ?? '')
                 return
               }
               setValidationError('')
@@ -128,6 +153,8 @@ export default function SurveySteps() {
             }
           }}
         />
+
+        <Toast message={toastMessage} visible={toastVisible} type="base" />
       </div>
     </div>
   )
