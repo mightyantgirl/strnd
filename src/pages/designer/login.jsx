@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 import Input from './../../components/input'
@@ -14,6 +14,16 @@ export default function Login() {
   const [pinError, setPinError] = useState('')
 
   const navigate = useNavigate()
+
+  //로그인 토큰 정보 확인
+  useEffect(() => {
+    const token = localStorage.getItem('token') || sessionStorage.getItem('token')
+    if (token) {
+      navigate('/home')
+    } else {
+      navigate('/login')
+    }
+  }, [])
 
   //  실시간 연락처 검증
   const handlePhoneChange = (e) => {

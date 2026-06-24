@@ -26,6 +26,14 @@ export default function Home() {
   // 실시간 검색 필터링
   const displayCards = searchKeyword ? searchCards : recentCards
 
+  //로그인 토큰 정보 확인
+  useEffect(() => {
+    const token = localStorage.getItem('token') || sessionStorage.getItem('token')
+    if (!token) {
+      navigate('/login')
+    }
+  }, [])
+
   //고객 카드 데이터 함수 페이지 열릴 때 API 호출
   useEffect(() => {
     const fetchHome = async () => {

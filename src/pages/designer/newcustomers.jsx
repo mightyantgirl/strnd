@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 import PageFooter from './../../components/pagefooter'
@@ -20,6 +20,14 @@ export default function NewCustomer() {
   const [toastVisible, setToastVisible] = useState(false) // 보일지 말지
 
   const navigate = useNavigate()
+
+  //로그인 토큰 정보 확인
+  useEffect(() => {
+    const token = localStorage.getItem('token') || sessionStorage.getItem('token')
+    if (!token) {
+      navigate('/login')
+    }
+  }, [])
 
   const showToast = (message) => {
     setToastMessage(message) // 1. 메시지 넣기

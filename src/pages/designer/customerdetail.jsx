@@ -61,6 +61,14 @@ export default function CustomerDetail() {
     }
   }, [])
 
+  //로그인 토큰 정보 확인
+  useEffect(() => {
+    const token = localStorage.getItem('token') || sessionStorage.getItem('token')
+    if (!token) {
+      navigate('/login')
+    }
+  }, [])
+
   //고객 상세 카드 api 요청 함수
   useEffect(() => {
     const fetchCustomer = async () => {
