@@ -6,10 +6,13 @@ import CustomerCard from './../../components/customercard'
 import PageFooter from './../../components/pagefooter'
 
 import { getElapsedTime, formatPhone } from '../../utils/dateUtils'
+import useAuthGuard from '../../hooks/useAuthGuard'
 
 const baseTextClass = `text-base text-primary font-medium`
 
 export default function Home() {
+  useAuthGuard()
+
   const [recentCards, setRecentCards] = useState([]) // 홈 API 데이터
   const [searchCards, setSearchCards] = useState([]) // 검색 API 데이터
 
@@ -25,14 +28,6 @@ export default function Home() {
 
   // 실시간 검색 필터링
   const displayCards = searchKeyword ? searchCards : recentCards
-
-  //로그인 토큰 정보 확인
-  useEffect(() => {
-    const token = localStorage.getItem('token') || sessionStorage.getItem('token')
-    if (!token) {
-      navigate('/login')
-    }
-  }, [])
 
   //고객 카드 데이터 함수 페이지 열릴 때 API 호출
   useEffect(() => {

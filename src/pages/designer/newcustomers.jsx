@@ -5,10 +5,13 @@ import PageFooter from './../../components/pagefooter'
 import PageHeader from './../../components/pageheader'
 import Toast from './../../components/toast'
 import Input from './../../components/input'
+import useAuthGuard from '../../hooks/useAuthGuard'
 
 const baseTextClass = `text-xs text-primary font-medium`
 
 export default function NewCustomer() {
+  useAuthGuard()
+
   const [name, setName] = useState('')
   const [phone, setPhone] = useState('')
   const [memo, setMemo] = useState('')
@@ -20,14 +23,6 @@ export default function NewCustomer() {
   const [toastVisible, setToastVisible] = useState(false) // 보일지 말지
 
   const navigate = useNavigate()
-
-  //로그인 토큰 정보 확인
-  useEffect(() => {
-    const token = localStorage.getItem('token') || sessionStorage.getItem('token')
-    if (!token) {
-      navigate('/login')
-    }
-  }, [])
 
   const showToast = (message) => {
     setToastMessage(message) // 1. 메시지 넣기

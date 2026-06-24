@@ -1,12 +1,24 @@
+import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
-import Toast from '../../components/toast'
 import SurveyFooter from '../../components/surveyfooter'
+import Toast from '../../components/toast'
+import useSurveyDoneGuard from '../../hooks/useSurveyDoneGuard'
 
 const baseTextClass = `text-xs text-primary font-bold`
 
 export default function SurveyDone() {
   const navigate = useNavigate()
+  const [toastMessage, setToastMessage] = useState('')
+  const [toastVisible, setToastVisible] = useState(false)
+
+  const showToast = (message) => {
+    setToastMessage(message)
+    setToastVisible(true)
+    setTimeout(() => setToastVisible(false), 3000)
+  }
+
+  useSurveyDoneGuard(() => showToast('이미 제출된 설문이에요.'))
 
   return (
     <div className="h-full flex flex-col">
@@ -28,6 +40,7 @@ export default function SurveyDone() {
 
       {/* 푸터 */}
       <SurveyFooter value="메인으로 돌아가기" onNext={() => navigate('/home')} />
+      <Toast message={toastMessage} visible={toastVisible} type="base" />
     </div>
   )
 }

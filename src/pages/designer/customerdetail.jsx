@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { useNavigate, useParams, useLocation } from 'react-router-dom'
+import useAuthGuard from '../../hooks/useAuthGuard'
 import {
   getElapsedTime,
   formatPhone,
@@ -21,6 +22,8 @@ const activeTabClass = `bg-card-bg py-2 rounded-lg text-center text-secondary fo
 const inactiveTabClass = `bg-border py-2 rounded-lg text-center text-disabled font-semibold`
 
 export default function CustomerDetail() {
+  useAuthGuard()
+
   const [activeTab, setActiveTab] = useState('history')
   const [isActive, setIsActive] = useState(true)
 
@@ -58,14 +61,6 @@ export default function CustomerDetail() {
   useEffect(() => {
     if (location.state?.toast) {
       showToast(location.state.toast)
-    }
-  }, [])
-
-  //로그인 토큰 정보 확인
-  useEffect(() => {
-    const token = localStorage.getItem('token') || sessionStorage.getItem('token')
-    if (!token) {
-      navigate('/login')
     }
   }, [])
 

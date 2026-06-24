@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
+import useAuthGuard from '../../hooks/useAuthGuard'
 
 import PageFooter from '../../components/pagefooter'
 import PageHeader from '../../components/pageheader'
@@ -16,6 +17,8 @@ const OPTIONS = [
 ]
 
 export default function TreatmentResult() {
+  useAuthGuard()
+
   const location = useLocation()
   const visitId = location.state?.visitId
 
