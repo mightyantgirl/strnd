@@ -20,10 +20,12 @@ export default function SurveySteps() {
 
   const [toastMessage, setToastMessage] = useState('') // 토스트에 표시할 글자
   const [toastVisible, setToastVisible] = useState(false) // 보일지 말지
+  const [toastType, setToastType] = useState('')
 
-  const showToast = (message) => {
+  const showToast = (message, type) => {
     setToastMessage(message)
     setToastVisible(true)
+    setToastType(type)
 
     setTimeout(() => {
       setToastVisible(false)
@@ -81,7 +83,7 @@ export default function SurveySteps() {
       }
 
       sessionStorage.removeItem('surveyToken')
-      showToast('설문이 제출되었습니다')
+      showToast('설문이 제출되었습니다', 'check')
       setTimeout(() => navigate(`/survey/${visitId}/done`), 1500)
     } catch (error) {
       console.error(error)
@@ -90,7 +92,6 @@ export default function SurveySteps() {
 
   const updateSurveyData = (key, value) => {
     setSurveyData((prev) => ({ ...prev, [key]: value }))
-    setValidationError('')
   }
 
   const isStepValid = () => {
@@ -141,14 +142,14 @@ export default function SurveySteps() {
             submitSurvey()
           } else {
             if (!isStepValid()) {
-              showToast(ERROR_MESSAGES[currentStep] ?? '')
+              showToast(ERROR_MESSAGES[currentStep] ?? '', 'base')
               return
             }
             setCurrentStep(currentStep + 1)
           }
         }}
       />
-      <Toast message={toastMessage} visible={toastVisible} type="base" />
+      <Toast message={toastMessage} visible={toastVisible} type={toastType} />
     </div>
   )
 }

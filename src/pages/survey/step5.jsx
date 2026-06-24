@@ -1,21 +1,9 @@
-import { useState } from 'react'
 import TextFiled from './../../components/textfiled'
 import Toast from '../../components/toast'
 
 const baseTextClass = `text-xs text-primary font-bold`
 
 export default function SurveyStep5({ surveyData, onUpdate }) {
-  const [toastMessage, setToastMessage] = useState('') // 토스트에 표시할 글자
-  const [toastVisible, setToastVisible] = useState(false) // 보일지 말지
-
-  const showToast = (message) => {
-    setToastMessage(message)
-    setToastVisible(true)
-
-    setTimeout(() => {
-      setToastVisible(false)
-    }, 3000)
-  }
   return (
     <div>
       <div>
@@ -28,7 +16,6 @@ export default function SurveyStep5({ surveyData, onUpdate }) {
             전달하고 싶은 사항이 있나요?
           </h1>
         </div>
-        <Toast message={toastMessage} visible={toastVisible} type="base" />
 
         {/* 컨텐츠 - 설문 영역 */}
         <div className="space-y-8">
