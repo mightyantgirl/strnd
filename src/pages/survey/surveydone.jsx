@@ -1,5 +1,6 @@
 import { useNavigate } from 'react-router-dom'
 
+import Toast from '../../components/toast'
 import SurveyFooter from '../../components/surveyfooter'
 
 const baseTextClass = `text-xs text-primary font-bold`

@@ -13,7 +13,6 @@ import Toast from '../../components/toast'
 
 export default function SurveySteps() {
   const [currentStep, setCurrentStep] = useState(0)
-  const [validationError, setValidationError] = useState('')
 
   const navigate = useNavigate()
   const location = useLocation()
@@ -82,7 +81,8 @@ export default function SurveySteps() {
       }
 
       sessionStorage.removeItem('surveyToken')
-      navigate(`/survey/${visitId}/done`)
+      showToast('설문이 제출되었습니다')
+      setTimeout(() => navigate(`/survey/${visitId}/done`), 1500)
     } catch (error) {
       console.error(error)
     }
@@ -125,7 +125,7 @@ export default function SurveySteps() {
           }
         }}
       />
-      <div className="flex-1 min-h-0 overflow-y-auto pb-24" style={{ touchAction: 'pan-y' }}>
+      <div className="flex-1 min-h-0 overflow-y-auto" style={{ touchAction: 'pan-y' }}>
         {currentStep === 0 && <Step0 surveyData={surveyData} onUpdate={updateSurveyData} />}
         {currentStep === 1 && <Step1 surveyData={surveyData} onUpdate={updateSurveyData} />}
         {currentStep === 2 && <Step2 surveyData={surveyData} onUpdate={updateSurveyData} />}
@@ -133,29 +133,22 @@ export default function SurveySteps() {
         {currentStep === 4 && <Step4 surveyData={surveyData} onUpdate={updateSurveyData} />}
         {currentStep === 5 && <Step5 surveyData={surveyData} onUpdate={updateSurveyData} />}
       </div>
-      <div className="fixed w-full bottom-0 -mx-5 px-5">
-        {validationError && (
-          <p className="text-xs text-red-400 text-center mb-2">{validationError}</p>
-        )}
-        <SurveyFooter
-          value={footerConfig[currentStep].value}
-          children={footerConfig[currentStep].children}
-          onNext={() => {
-            if (currentStep === 5) {
-              submitSurvey()
-            } else {
-              if (!isStepValid()) {
-                showToast(ERROR_MESSAGES[currentStep] ?? '')
-                return
-              }
-              setValidationError('')
-              setCurrentStep(currentStep + 1)
+      <SurveyFooter
+        value={footerConfig[currentStep].value}
+        children={footerConfig[currentStep].children}
+        onNext={() => {
+          if (currentStep === 5) {
+            submitSurvey()
+          } else {
+            if (!isStepValid()) {
+              showToast(ERROR_MESSAGES[currentStep] ?? '')
+              return
             }
-          }}
-        />
-
-        <Toast message={toastMessage} visible={toastVisible} type="base" />
-      </div>
+            setCurrentStep(currentStep + 1)
+          }
+        }}
+      />
+      <Toast message={toastMessage} visible={toastVisible} type="base" />
     </div>
   )
 }
