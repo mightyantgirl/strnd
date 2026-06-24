@@ -27,6 +27,7 @@ export default function TextFiled({
         value={value}
         maxLength={maxLength}
         onChange={onChange}
+        onFocus={(e) => e.target.scrollIntoView({ behavior: 'smooth', block: 'center' })}
         className={`${baseClass} ${stateClass} ${error ? 'border-danger' : 'border-border'} resize-none`}></textarea>
       {error && <p className="text-xs font-medium text-danger mt-1">{error}</p>}
 

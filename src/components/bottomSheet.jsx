@@ -138,10 +138,9 @@ export default function BottomSheet({ onClose, onConfirm }) {
                       보유·이용 기간
                       <ul className="ml-4 mt-1 list-disc">
                         <li>동의일로부터 3년 </li>
-                        <li>
-                          단, 아래의 경우 즉시 파기합니다.
-                          <span>고객님이 동의를 철회한 경우 서비스 이용 관계가 종료된 경우</span>
-                        </li>
+                        <li>단, 아래의 경우 즉시 파기합니다.</li>{' '}
+                        <p>- 고객님이 동의를 철회한 경우 </p>
+                        <p>- 서비스 이용 관계가 종료된 경우</p>
                       </ul>
                     </li>
                     <li>
@@ -223,11 +222,9 @@ export default function BottomSheet({ onClose, onConfirm }) {
                       보유·이용 기간
                       <ul className="ml-4 mt-1 list-disc">
                         <li>동의일로부터 3년 </li>
-                        <li>
-                          단, 아래의 경우 즉시 파기합니다.
-                          <span>고객님이 동의를 철회한 경우 </span>
-                          <span>서비스 이용 관계가 종료된 경우</span>
-                        </li>
+                        <li>단, 아래의 경우 즉시 파기합니다.</li>
+                        <p>- 고객님이 동의를 철회한 경우 </p>
+                        <p>- 서비스 이용 관계가 종료된 경우</p>
                       </ul>
                     </li>
                     <li>

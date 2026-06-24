@@ -39,6 +39,7 @@ export default function Input({
         subtext={subtext}
         maxLength={maxLength}
         onChange={onChange}
+        onFocus={(e) => e.target.scrollIntoView({ behavior: 'smooth', block: 'center' })}
         className={`${baseClass} ${stateClass} ${error ? 'border-danger' : 'border-border'} ${className}`}></input>
       {subtext && !error && (
         <p className="text-xs font-medium text-placeholder mt-2 pl-2">{subtext}</p>
