@@ -192,6 +192,8 @@ export default function CustomerDetail() {
     setOriginalMemo(memo)
   }
 
+  //고객 상세 status별 안내화면 분기처리 함수
+
   //   const handleDelete = async () => {
   //   const token = localStorage.getItem('token') || sessionStorage.getItem('token')
   //   await fetch(`https://strnd-be.onrender.com/api/customers/${customerId}`, {
@@ -286,7 +288,7 @@ export default function CustomerDetail() {
           {/* 히스토리 */}
           {activeTab === 'history' && (
             <div className="space-y-3">
-              {!visits.length ? (
+              {visits.filter((visit) => visit.status === 'COMPLETED').length === 0 ? (
                 <div className="flex flex-col items-center mt-8">
                   <img src="../img/none.svg" alt="" />
                   <span className="text-base text-disabled font-semibold mt-3">
@@ -296,21 +298,19 @@ export default function CustomerDetail() {
               ) : (
                 visits
                   .filter((visit) => visit.status === 'COMPLETED')
-                  .map((visit) => {
-                    return (
-                      <VisitCard
-                        service={visit.services}
-                        key={visit.visitId}
-                        visitId={visit.visitId}
-                        date={formatDate(visit.visitDt)}
-                        elapsedDays={getElapsedTime(visit.visitDt)}
-                        treatmentMenu={truncateList(visit.treatmentMenu)}
-                        treatmentDetail={visit.treatmentDetail}
-                        treatmentProduct={visit.treatmentProduct}
-                        treatmentNote={visit.treatmentNote}
-                      />
-                    )
-                  })
+                  .map((visit) => (
+                    <VisitCard
+                      service={visit.services}
+                      key={visit.visitId}
+                      visitId={visit.visitId}
+                      date={formatDate(visit.visitDt)}
+                      elapsedDays={getElapsedTime(visit.visitDt)}
+                      treatmentMenu={truncateList(visit.treatmentMenu)}
+                      treatmentDetail={visit.treatmentDetail}
+                      treatmentProduct={visit.treatmentProduct}
+                      treatmentNote={visit.treatmentNote}
+                    />
+                  ))
               )}
             </div>
           )}

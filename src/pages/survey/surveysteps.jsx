@@ -114,7 +114,7 @@ export default function SurveySteps() {
   }
 
   return (
-    <div className="h-full flex flex-col">
+    <div style={{ height: '100dvh' }} className="flex flex-col">
       <SurveyHeader
         currentStep={currentStep}
         onBack={() => {
@@ -125,14 +125,14 @@ export default function SurveySteps() {
           }
         }}
       />
-
-      {currentStep === 0 && <Step0 surveyData={surveyData} onUpdate={updateSurveyData} />}
-      {currentStep === 1 && <Step1 surveyData={surveyData} onUpdate={updateSurveyData} />}
-      {currentStep === 2 && <Step2 surveyData={surveyData} onUpdate={updateSurveyData} />}
-      {currentStep === 3 && <Step3 surveyData={surveyData} onUpdate={updateSurveyData} />}
-      {currentStep === 4 && <Step4 surveyData={surveyData} onUpdate={updateSurveyData} />}
-      {currentStep === 5 && <Step5 surveyData={surveyData} onUpdate={updateSurveyData} />}
-
+      <div className="flex-1 min-h-0 overflow-y-auto pb-24" style={{ touchAction: 'pan-y' }}>
+        {currentStep === 0 && <Step0 surveyData={surveyData} onUpdate={updateSurveyData} />}
+        {currentStep === 1 && <Step1 surveyData={surveyData} onUpdate={updateSurveyData} />}
+        {currentStep === 2 && <Step2 surveyData={surveyData} onUpdate={updateSurveyData} />}
+        {currentStep === 3 && <Step3 surveyData={surveyData} onUpdate={updateSurveyData} />}
+        {currentStep === 4 && <Step4 surveyData={surveyData} onUpdate={updateSurveyData} />}
+        {currentStep === 5 && <Step5 surveyData={surveyData} onUpdate={updateSurveyData} />}
+      </div>
       <div className="fixed w-full bottom-0 -mx-5 px-5">
         {validationError && (
           <p className="text-xs text-red-400 text-center mb-2">{validationError}</p>

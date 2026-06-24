@@ -29,11 +29,8 @@ export default function SurveyStep4({ surveyData, onUpdate }) {
   }
 
   return (
-    <div className="h-full flex flex-col">
-      {/* 헤더 */}
-
-      {/* 컨텐츠 */}
-      <div className="flex-1 overflow-y-auto" style={{ touchAction: 'pan-y' }}>
+    <div>
+      <div>
         {/* 컨텐츠 - 메인타이틀 */}
         <div className={`${baseTextClass} pt-18 pb-8 space-y-2`}>
           <p>STEP 4</p>

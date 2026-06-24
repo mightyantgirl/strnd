@@ -1,7 +1,7 @@
 //step 0,1 공통 체크 칩 컴포넌트
 
 const baseClass = `
-  w-full  py-5 px-6 mr-2 mb-3 rounded-xl text-base font-semibold
+  w-full py-[3dvh] px-6 mr-2 mb-3 rounded-xl text-base font-semibold
   transition-all cursor-pointer border 
 `
 
@@ -15,7 +15,7 @@ export default function CheckChip({ label, selected = false, onClick, className 
       className={`${baseClass}
             ${selected ? selectedClass : defaultClass}
             `}>
-      <div className="px-4 py-6">
+      <div className="px-4 py-[3dvh]">
         <p>{label}</p>
       </div>
     </button>
