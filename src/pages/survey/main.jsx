@@ -141,6 +141,7 @@ export default function SurveyMain() {
                 surveyToken,
                 consentRequiredYn: consentData.consentRequiredYn,
                 consentOptionalYn: consentData.consentOptionalYn,
+                isFirstVisit,
               },
             })
           }}
@@ -156,6 +157,7 @@ export default function SurveyMain() {
                   surveyToken,
                   consentRequiredYn: checkActive.consentRequiredYn,
                   consentOptionalYn: checkActive.consentOptionalYn,
+                  isFirstVisit,
                 },
               })
             : setOpenSheet(!openSheet, { state: { surveyToken } })

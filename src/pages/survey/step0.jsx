@@ -6,12 +6,12 @@ import CheckChip from './../../components/checkchip'
 
 const baseTextClass = `text-xs text-primary font-bold`
 
-export default function SurveyStep0({ surveyData, onUpdate }) {
+export default function SurveyStep0({ surveyData, onUpdate, isFirstVisit }) {
   const VISIT_ROUTE_OPTIONS = [
     { value: 'naver', label: '네이버 검색' },
     { value: 'instagram', label: '인스타그램' },
     { value: 'friend', label: '지인 소개' },
-    { value: 'revisit', label: '재방문' },
+    ...(!isFirstVisit ? [{ value: 'revisit', label: '재방문' }] : []),
     { value: 'other', label: '기타' },
   ]
 

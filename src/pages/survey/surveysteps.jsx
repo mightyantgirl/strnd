@@ -33,6 +33,7 @@ export default function SurveySteps() {
   }
 
   const surveyToken = location.state?.surveyToken ?? sessionStorage.getItem('surveyToken')
+  const isFirstVisit = location.state?.isFirstVisit ?? true
 
   useEffect(() => {
     if (location.state?.surveyToken) {
@@ -127,7 +128,7 @@ export default function SurveySteps() {
         }}
       />
       <div className="flex-1 min-h-0 overflow-y-auto" style={{ touchAction: 'pan-y' }}>
-        {currentStep === 0 && <Step0 surveyData={surveyData} onUpdate={updateSurveyData} />}
+        {currentStep === 0 && <Step0 surveyData={surveyData} onUpdate={updateSurveyData} isFirstVisit={isFirstVisit} />}
         {currentStep === 1 && <Step1 surveyData={surveyData} onUpdate={updateSurveyData} />}
         {currentStep === 2 && <Step2 surveyData={surveyData} onUpdate={updateSurveyData} />}
         {currentStep === 3 && <Step3 surveyData={surveyData} onUpdate={updateSurveyData} />}
