@@ -21,7 +21,7 @@ export default function App() {
       <div className="bg-bg px-5" style={{ height: '100dvh' }}>
         <Routes>
           <Route path="/" element={<Splash />} />
-          <Route path="/login" element={<Login />} />
+          <Route path="/login" element={<Login />} /> 
           <Route path="/register" element={<Register />} />
           <Route path="/home" element={<Home />} />
 

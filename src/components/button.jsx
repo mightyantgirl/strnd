@@ -28,7 +28,6 @@ export default function Button({
       onClick={onClick}
       onKeyDown={onKeyDown}
       disabled={disabled}
-      onFocus={(e) => e.target.scrollIntoView({ behavior: 'smooth', block: 'center' })}
       className={`
         w-full rounded-lg text-base font-semibold
         transition-all cursor-pointer
