@@ -169,9 +169,7 @@ export default function CustomerDetail() {
     const data = await response.json()
     console.log('data:', data)
     console.log('surveyToken:', data.surveyToken)
-    navigate(`/survey/${data.visitId}?customerId=${customerId}`, {
-      state: { surveyToken: data.surveyToken },
-    })
+    navigate(`/survey/${data.visitId}?customerId=${customerId}&surveyToken=${data.surveyToken}`)
   }
 
   // 메모 저장 함수

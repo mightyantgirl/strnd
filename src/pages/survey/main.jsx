@@ -1,4 +1,4 @@
-import { useNavigate, useParams, useLocation, useSearchParams } from 'react-router-dom'
+import { useNavigate, useParams, useSearchParams } from 'react-router-dom'
 import { useState, useEffect } from 'react'
 import SurveyFooter from './../../components/surveyfooter'
 import BottomSheet from './../../components/bottomSheet'
@@ -20,9 +20,11 @@ export default function SurveyMain() {
   const [lastVisitService, setLastVisitService] = useState('')
   const [isFirstVisit, setIsFirstVisit] = useState(true)
 
+  const [customerName, setCustomerName] = useState(true)
+  const [lastTreatmentMenu, setLastTreatmentMenu] = useState(true)
+
   const navigate = useNavigate()
-  const location = useLocation()
-  const surveyToken = location.state?.surveyToken
+  const surveyToken = searchParams.get('surveyToken')
 
   const isToday = lastVisitAt?.startsWith(new Date().toISOString().slice(0, 10))
 
@@ -49,8 +51,31 @@ export default function SurveyMain() {
 
         const data = await response.json()
 
-        setName(data.customerName)
         setLastVisitAt(data.lastVisitDt)
+      } catch (error) {
+        console.error('데이터 로딩 실패:', error)
+      }
+    }
+    fetchCustomer()
+  }, [])
+
+  //설문 페이지 정보 조회 api 요청 함수
+  useEffect(() => {
+    const fetchCustomer = async () => {
+      try {
+        const token = localStorage.getItem('token') || sessionStorage.getItem('token')
+
+        const response = await fetch(`https://strnd-be.onrender.com/api/survey/${surveyToken}`, {
+          method: 'GET',
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        })
+
+        const data = await response.json()
+
+        setLastTreatmentMenu(data.lastTreatmentMenu)
+        setCustomerName(data.customerName)
       } catch (error) {
         console.error('데이터 로딩 실패:', error)
       }
@@ -96,7 +121,7 @@ export default function SurveyMain() {
         className={`${baseTextClass} flex-1 overflow-y-auto py-22`}
         style={{ touchAction: 'pan-y' }}>
         <h1 className="text-2xl font-bold text-primary mb-4">
-          안녕하세요, <span className="text-brand">{name} </span>님!
+          안녕하세요, <span className="text-brand">{customerName} </span>님!
           <br />
           <p>
             {isFirstVisit ? (
@@ -115,7 +140,7 @@ export default function SurveyMain() {
           {isFirstVisit
             ? '좋은 기억 만드실 수 있도록 최선을 다하겠습니다.'
             : lastVisitService
-              ? `마지막으로 받은 시술은 ${formatList(lastVisitService)} 입니다.`
+              ? `마지막으로 받은 시술은 ${formatList(lastTreatmentMenu)} 입니다.`
               : '이전 시술 정보가 없어요.'}
         </p>
       </div>
@@ -136,9 +161,8 @@ export default function SurveyMain() {
           onConfirm={(consentData) => {
             setCheckActive(true)
             setOpenSheet(false)
-            navigate(`/survey/${visitId}/steps`, {
+            navigate(`/survey/${visitId}/steps?surveyToken=${surveyToken}`, {
               state: {
-                surveyToken,
                 consentRequiredYn: consentData.consentRequiredYn,
                 consentOptionalYn: consentData.consentOptionalYn,
                 isFirstVisit,
@@ -152,9 +176,8 @@ export default function SurveyMain() {
         value="시작하기"
         onNext={() => {
           checkActive
-            ? navigate(`/survey/${visitId}/steps`, {
+            ? navigate(`/survey/${visitId}/steps?surveyToken=${surveyToken}`, {
                 state: {
-                  surveyToken,
                   consentRequiredYn: checkActive.consentRequiredYn,
                   consentOptionalYn: checkActive.consentOptionalYn,
                   isFirstVisit,

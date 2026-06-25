@@ -1,5 +1,3 @@
-import { useNavigate } from 'react-router-dom'
-
 import Input from './../../components/input'
 import Dropdown from './../../components/dropdown'
 import CheckChip from './../../components/checkchip'

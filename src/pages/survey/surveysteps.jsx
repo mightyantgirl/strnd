@@ -1,5 +1,6 @@
-import { useState, useEffect } from 'react'
-import { useNavigate, useLocation, useParams } from 'react-router-dom'
+import { useState } from 'react'
+import { useNavigate, useLocation, useParams, useSearchParams } from 'react-router-dom'
+
 
 import SurveyFooter from '../../components/surveyfooter'
 import SurveyHeader from '../../components/surveyheader'
@@ -17,6 +18,7 @@ export default function SurveySteps() {
   const navigate = useNavigate()
   const location = useLocation()
   const { visitId } = useParams()
+  const [searchParams] = useSearchParams()
 
   const [toastMessage, setToastMessage] = useState('') // 토스트에 표시할 글자
   const [toastVisible, setToastVisible] = useState(false) // 보일지 말지
@@ -32,14 +34,8 @@ export default function SurveySteps() {
     }, 3000)
   }
 
-  const surveyToken = location.state?.surveyToken ?? sessionStorage.getItem('surveyToken')
+  const surveyToken = searchParams.get('surveyToken')
   const isFirstVisit = location.state?.isFirstVisit ?? true
-
-  useEffect(() => {
-    if (location.state?.surveyToken) {
-      sessionStorage.setItem('surveyToken', location.state.surveyToken)
-    }
-  }, [])
 
   const [surveyData, setSurveyData] = useState({
     // 동의 (SurveyMain에서 받음)
@@ -83,7 +79,6 @@ export default function SurveySteps() {
         return
       }
 
-      sessionStorage.removeItem('surveyToken')
       showToast('설문이 제출되었습니다', 'check')
       setTimeout(() => navigate(`/survey/${visitId}/done`), 1500)
     } catch (error) {
