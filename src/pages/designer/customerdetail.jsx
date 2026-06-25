@@ -212,7 +212,7 @@ export default function CustomerDetail() {
       <PageHeader title="고객 상세" onBack={() => navigate('/home')} />
 
       {/* 컨텐츠 */}
-      <div className="flex-1 overflow-y-auto" style={{ touchAction: 'pan-y' }}>
+      <div className="relative flex-1 overflow-y-auto" style={{ touchAction: 'pan-y' }}>
         {isLoading ? (
           <div className="animate-pulse pt-18 pb-6 space-y-2">
             {/* CustomerInfoCard 스켈레톤 */}
@@ -236,7 +236,7 @@ export default function CustomerDetail() {
             </div>
           </div>
         ) : (
-          <div className="fade-in pt-15 pb-6 space-y-2">
+          <div className=" top-0  fade-in pt-15 pb-6 space-y-2">
             <CustomerInfoCard
               name={name}
               isActive={isActive}
@@ -245,116 +245,117 @@ export default function CustomerDetail() {
               phone={formatPhone(phone)}
               gender={formatGender(gender)}
             />
+            <div className="mt-4">
+              <Button value="설문 시작하기" height="lg" survey={true} onClick={startSurvey} />
+              <p
+                className="underline font-semibold text-placeholder py-5 px-4 text-center"
+                onClick={handleRecordWithoutSurvey}>
+                설문 없이 바로 기록하기
+              </p>
+            </div>
+
+            <>
+              {/* 탭 */}
+              <div className="bg-border w-full rounded-lg mb-3">
+                <ol className="flex gap-2 p-1 ">
+                  <li
+                    onClick={() => {
+                      setActiveTab('history')
+                    }}
+                    style={{ width: '28dvh' }}
+                    className={activeTab === 'history' ? activeTabClass : inactiveTabClass}>
+                    히스토리
+                  </li>
+                  <li
+                    onClick={() => {
+                      setActiveTab('todaySurvey')
+                    }}
+                    style={{ width: '28dvh' }}
+                    className={activeTab === 'todaySurvey' ? activeTabClass : inactiveTabClass}>
+                    오늘 설문
+                  </li>
+                  <li
+                    onClick={() => {
+                      setActiveTab('memo')
+                    }}
+                    style={{ width: '28dvh' }}
+                    className={activeTab === 'memo' ? activeTabClass : inactiveTabClass}>
+                    메모
+                  </li>
+                </ol>
+              </div>
+
+              {/* 히스토리 */}
+              {activeTab === 'history' && (
+                <div className="space-y-3">
+                  {visits.filter((visit) => visit.status === 'COMPLETED').length === 0 ? (
+                    <div className="flex flex-col items-center mt-8">
+                      <img src="../img/none.svg" alt="" />
+                      <span className="text-base text-disabled font-semibold mt-3">
+                        방문 기록이 아직 없어요.
+                      </span>
+                    </div>
+                  ) : (
+                    visits
+                      .filter((visit) => visit.status === 'COMPLETED')
+                      .map((visit) => (
+                        <VisitCard
+                          service={visit.services}
+                          key={visit.visitId}
+                          visitId={visit.visitId}
+                          date={formatDate(visit.visitDt)}
+                          elapsedDays={getElapsedTime(visit.visitDt)}
+                          treatmentMenu={truncateList(visit.treatmentMenu)}
+                          treatmentDetail={visit.treatmentDetail}
+                          treatmentProduct={visit.treatmentProduct}
+                          treatmentNote={visit.treatmentNote}
+                        />
+                      ))
+                  )}
+                </div>
+              )}
+
+              {/*오늘 설문 */}
+              {activeTab === 'todaySurvey' && (
+                <>
+                  {visits.some((visit) => visit.status === 'SUBMITTED') ? (
+                    <SurveyCard
+                      data={surveyData}
+                      onClick={() => {
+                        navigate(`/customers/${customerId}/result`, {
+                          state: {
+                            visitId: visits.find((visit) => visit.status === 'SUBMITTED')?.visitId,
+                          },
+                        })
+                      }}
+                    />
+                  ) : (
+                    <div className="flex flex-col items-center mt-8">
+                      <img src="../img/none.svg" alt="" />
+                      <span className="text-base text-disabled font-semibold mt-3">
+                        작성된 설문이 아직 없어요.
+                      </span>
+                    </div>
+                  )}
+                </>
+              )}
+
+              {/* 메모 */}
+
+              {activeTab === 'memo' && (
+                <>
+                  <TextFiled
+                    value={memo}
+                    onChange={(e) => setMemo(e.target.value)}
+                    handleSaveMemo={handleSaveMemo}
+                    disabled={!isChanged}
+                    save={true}
+                  />
+                </>
+              )}
+            </>
           </div>
         )}
-
-        <Button value="설문 시작하기" height="lg" survey={true} onClick={startSurvey} />
-        <p
-          className="underline font-semibold text-placeholder py-5 px-4 text-center"
-          onClick={handleRecordWithoutSurvey}>
-          설문 없이 바로 기록하기
-        </p>
-
-        <>
-          {/* 탭 */}
-          <div className="bg-border w-full rounded-lg mb-3">
-            <ol className="flex gap-2 p-1 ">
-              <li
-                onClick={() => {
-                  setActiveTab('history')
-                }}
-                style={{ width: '28dvh' }}
-                className={activeTab === 'history' ? activeTabClass : inactiveTabClass}>
-                히스토리
-              </li>
-              <li
-                onClick={() => {
-                  setActiveTab('todaySurvey')
-                }}
-                style={{ width: '28dvh' }}
-                className={activeTab === 'todaySurvey' ? activeTabClass : inactiveTabClass}>
-                오늘 설문
-              </li>
-              <li
-                onClick={() => {
-                  setActiveTab('memo')
-                }}
-                style={{ width: '28dvh' }}
-                className={activeTab === 'memo' ? activeTabClass : inactiveTabClass}>
-                메모
-              </li>
-            </ol>
-          </div>
-
-          {/* 히스토리 */}
-          {activeTab === 'history' && (
-            <div className="space-y-3">
-              {visits.filter((visit) => visit.status === 'COMPLETED').length === 0 ? (
-                <div className="flex flex-col items-center mt-8">
-                  <img src="../img/none.svg" alt="" />
-                  <span className="text-base text-disabled font-semibold mt-3">
-                    방문 기록이 아직 없어요.
-                  </span>
-                </div>
-              ) : (
-                visits
-                  .filter((visit) => visit.status === 'COMPLETED')
-                  .map((visit) => (
-                    <VisitCard
-                      service={visit.services}
-                      key={visit.visitId}
-                      visitId={visit.visitId}
-                      date={formatDate(visit.visitDt)}
-                      elapsedDays={getElapsedTime(visit.visitDt)}
-                      treatmentMenu={truncateList(visit.treatmentMenu)}
-                      treatmentDetail={visit.treatmentDetail}
-                      treatmentProduct={visit.treatmentProduct}
-                      treatmentNote={visit.treatmentNote}
-                    />
-                  ))
-              )}
-            </div>
-          )}
-
-          {/*오늘 설문 */}
-          {activeTab === 'todaySurvey' && (
-            <>
-              {visits.some((visit) => visit.status === 'SUBMITTED') ? (
-                <SurveyCard
-                  data={surveyData}
-                  onClick={() => {
-                    navigate(`/customers/${customerId}/result`, {
-                      state: {
-                        visitId: visits.find((visit) => visit.status === 'SUBMITTED')?.visitId,
-                      },
-                    })
-                  }}
-                />
-              ) : (
-                <div className="flex flex-col items-center mt-8">
-                  <img src="../img/none.svg" alt="" />
-                  <span className="text-base text-disabled font-semibold mt-3">
-                    작성된 설문이 아직 없어요.
-                  </span>
-                </div>
-              )}
-            </>
-          )}
-
-          {/* 메모 */}
-
-          {activeTab === 'memo' && (
-            <>
-              <TextFiled
-                value={memo}
-                onChange={(e) => setMemo(e.target.value)}
-                handleSaveMemo={handleSaveMemo}
-                disabled={!isChanged}
-                save={true}
-              />
-            </>
-          )}
-        </>
       </div>
       <Toast message={toastMessage} visible={toastVisible} type="check" />
     </div>
