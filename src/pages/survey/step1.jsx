@@ -5,9 +5,9 @@ const baseTextClass = `text-xs text-primary font-bold`
 export default function SurveyStep1({ surveyData, onUpdate }) {
   return (
     <div>
-      <div>
+      <div className="relative">
         {/* 컨텐츠 - 메인타이틀 */}
-        <div className={`${baseTextClass} pt-18 pb-8 space-y-2`}>
+        <div className={`${baseTextClass} top-0 pt-18 pb-8 space-y-2`}>
           <p>STEP 1</p>
           <h1 className="text-2xl font-bold text-primary mb-4">
             오늘 원하는 시술을 <br />

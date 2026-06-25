@@ -214,7 +214,7 @@ export default function CustomerDetail() {
       {/* 컨텐츠 */}
       <div className="relative flex-1 overflow-y-auto" style={{ touchAction: 'pan-y' }}>
         {isLoading ? (
-          <div className="animate-pulse pt-18 pb-6 space-y-2">
+          <div className="animate-pulse pt-12 pb-6 space-y-2">
             {/* CustomerInfoCard 스켈레톤 */}
             <div className="w-full py-5 px-4 rounded-xl bg-card-bg">
               <div className="flex justify-between mb-6">
@@ -234,9 +234,28 @@ export default function CustomerDetail() {
                 </div>
               </div>
             </div>
+            {/* 버튼 스켈레톤 */}
+            <div className="mt-4 space-y-3">
+              <div className="h-14 bg-border rounded-xl w-full" />
+              <div className="h-4 bg-border rounded-md w-36 mx-auto" />
+            </div>
+            {/* 탭 스켈레톤 */}
+            <div className="h-10 bg-border rounded-lg w-full mt-4" />
+            {/* 카드 스켈레톤 */}
+            <div className="space-y-2 mt-3">
+              {[0, 1, 2].map((i) => (
+                <div key={i} className="w-full py-5 px-4 rounded-xl bg-card-bg">
+                  <div className="flex justify-between mb-3">
+                    <div className="h-4 bg-border rounded-md w-20" />
+                    <div className="h-4 bg-border rounded-md w-14" />
+                  </div>
+                  <div className="h-3 bg-border rounded-md w-40" />
+                </div>
+              ))}
+            </div>
           </div>
         ) : (
-          <div className=" top-0  fade-in pt-15 pb-6 space-y-2">
+          <div className=" top-0  fade-in pt-12 pb-6">
             <CustomerInfoCard
               name={name}
               isActive={isActive}
