@@ -16,6 +16,7 @@ import VisitCard from '../../components/visitcard'
 import SurveyCard from './../../components/surveycard'
 import TextFiled from './../../components/textfiled'
 import Toast from './../../components/toast'
+import Filter from './../../components/filter'
 
 const baseTextClass = `text-xs text-primary font-medium`
 const activeTabClass = `bg-card-bg py-2 rounded-lg text-center text-secondary font-semibold transition-all duration-200`
@@ -26,6 +27,7 @@ export default function CustomerDetail() {
 
   const [activeTab, setActiveTab] = useState('history')
   const [isActive, setIsActive] = useState(true)
+  const [openSheet, setOpenSheet] = useState(false)
 
   const { customerId } = useParams() // URL 정보 받아오는 훅
   const [name, setName] = useState('')
@@ -43,15 +45,19 @@ export default function CustomerDetail() {
 
   const [toastMessage, setToastMessage] = useState('') // 토스트에 표시할 글자
   const [toastVisible, setToastVisible] = useState(false) // 보일지 말지
+  const [toastType, setToastType] = useState(false) // 보일지 말지
 
   const isChanged = memo !== originalMemo
   const visitCount = visits.filter((visit) => visit.status === 'COMPLETED').length
+  const hasSubmittedSurvey = visits.some((v) => v.status === 'SUBMITTED')
 
+  const navigate = useNavigate()
   const location = useLocation()
 
-  const showToast = (message) => {
+  const showToast = (message, type) => {
     setToastMessage(message) // 1. 메시지 넣기
     setToastVisible(true) // 2. 보이게 하기
+    setToastType(type)
 
     setTimeout(() => {
       setToastVisible(false) // 3. 3초 후 다시 숨기기
@@ -69,23 +75,16 @@ export default function CustomerDetail() {
     const fetchCustomer = async () => {
       try {
         const token = localStorage.getItem('token') || sessionStorage.getItem('token')
-
         const response = await fetch(`https://strnd-be.onrender.com/api/customers/${customerId}`, {
-          method: 'GET',
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
+          headers: { Authorization: `Bearer ${token}` },
         })
-
         const data = await response.json()
-
         setName(data.customerName)
         setLastVisitAt(data.lastVisitDt)
         setPhone(data.phone)
         setGender(data.gender)
         setMemo(data.memo)
         setOriginalMemo(data.memo)
-
         setIsActive(data.isActive)
       } catch (error) {
         console.error('데이터 로딩 실패:', error)
@@ -101,24 +100,17 @@ export default function CustomerDetail() {
     const fetchHistory = async () => {
       try {
         const token = localStorage.getItem('token') || sessionStorage.getItem('token')
-
         const response = await fetch(
           `https://strnd-be.onrender.com/api/customers/${customerId}/visits`,
-          {
-            method: 'GET',
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          },
+          { headers: { Authorization: `Bearer ${token}` } },
         )
         const data = await response.json()
         setVisits(data)
-
         const submitted = data.find((v) => v.status === 'SUBMITTED')
         if (submitted) {
           const detailRes = await fetch(
             `https://strnd-be.onrender.com/api/visits/${submitted.visitId}`,
-            { method: 'GET', headers: { Authorization: `Bearer ${token}` } },
+            { headers: { Authorization: `Bearer ${token}` } },
           )
           const detail = await detailRes.json()
           setSurveyData(detail)
@@ -167,9 +159,11 @@ export default function CustomerDetail() {
     })
 
     const data = await response.json()
-    console.log('data:', data)
-    console.log('surveyToken:', data.surveyToken)
-    navigate(`/survey/${data.visitId}?customerId=${customerId}&surveyToken=${data.surveyToken}`)
+    if (hasSubmittedSurvey) {
+      showToast('아직 진행중인 설문이 남았어요.', 'error')
+    } else {
+      navigate(`/survey/${data.visitId}?customerId=${customerId}&surveyToken=${data.surveyToken}`)
+    }
   }
 
   // 메모 저장 함수
@@ -203,8 +197,6 @@ export default function CustomerDetail() {
   //   })
   //   navigate('/home')
   // }
-
-  const navigate = useNavigate()
 
   return (
     <div style={{ height: '100dvh' }} className={`${baseTextClass} h-full flex flex-col`}>
@@ -241,18 +233,6 @@ export default function CustomerDetail() {
             </div>
             {/* 탭 스켈레톤 */}
             <div className="h-10 bg-border rounded-lg w-full mt-4" />
-            {/* 카드 스켈레톤 */}
-            <div className="space-y-2 mt-3">
-              {[0, 1, 2].map((i) => (
-                <div key={i} className="w-full py-5 px-4 rounded-xl bg-card-bg">
-                  <div className="flex justify-between mb-3">
-                    <div className="h-4 bg-border rounded-md w-20" />
-                    <div className="h-4 bg-border rounded-md w-14" />
-                  </div>
-                  <div className="h-3 bg-border rounded-md w-40" />
-                </div>
-              ))}
-            </div>
           </div>
         ) : (
           <div className=" top-0  fade-in pt-12 pb-6">
@@ -275,7 +255,7 @@ export default function CustomerDetail() {
 
             <>
               {/* 탭 */}
-              <div className="bg-border w-full rounded-lg mb-3">
+              <div className="bg-border w-full rounded-lg mb-2">
                 <ol className="flex gap-2 p-1 ">
                   <li
                     onClick={() => {
@@ -303,6 +283,17 @@ export default function CustomerDetail() {
                   </li>
                 </ol>
               </div>
+              <div className="flex items-center justify-between mb-2">
+                <div className="flex justify-start">
+                  <button
+                    onClick={() => setOpenSheet(true)}
+                    className="flex items-center gap-1 text-xs text-placeholder font-medium py-1">
+                    <span className="bg-border py-1 px-3 rounded-full">상세 필터</span>
+                  </button>
+                </div>
+                <img src="/img/retrun.svg" alt="" className="w-3 h-3 mr-2" />
+              </div>
+              {openSheet && <Filter onClose={() => setOpenSheet(false)} onApply={() => {}} />}
 
               {/* 히스토리 */}
               {activeTab === 'history' && (
@@ -376,7 +367,7 @@ export default function CustomerDetail() {
           </div>
         )}
       </div>
-      <Toast message={toastMessage} visible={toastVisible} type="check" />
+      <Toast message={toastMessage} visible={toastVisible} type={toastType} />
     </div>
   )
 }

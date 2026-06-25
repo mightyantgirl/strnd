@@ -73,13 +73,13 @@ export default function BottomSheet({ onClose, onConfirm }) {
           onTouchEnd={handleTouchEnd}>
           <div className="bg-border rounded-full w-13" style={{ height: '6px' }}></div>
         </div>
-        <div className="py-6 flex items-center justify-between ">
+        <div className="py-3 mb-2 flex items-center justify-between ">
           <p className="text-base font-semibold text-primary">개인정보 수집 동의</p>
         </div>
 
         <div className=" w-full space-y-5 mb-10">
           <div className="flex justify-between bg-tint px-3 py-4 rounded-xl">
-            <span className="text-lg font-medium text-primary">약관 전체 동의</span>
+            <span className="text-base font-bold text-primary">약관 전체 동의</span>
             <button onClick={() => handleAllConsent()}>
               <img
                 src={checkActive.consentALL ? '../img/check.svg' : '../img/check-disable.svg'}
@@ -92,6 +92,16 @@ export default function BottomSheet({ onClose, onConfirm }) {
             <li>
               <div className="flex justify-between px-2">
                 <div
+                  onClick={() => {
+                    setRequiredDetail(!requiredDetail)
+                    setOptionalDetail(false)
+                  }}>
+                  <span className="mr-1">(필수) 항목 동의</span>
+                  <span>
+                    <button className="underline">보기</button>
+                  </span>
+                </div>
+                <div
                   onClick={() => handleConsent('consentRequiredYn')}
                   className="flex items-center gap-2">
                   <img
@@ -101,15 +111,9 @@ export default function BottomSheet({ onClose, onConfirm }) {
                         : '/img/mini_check_disabled.svg'
                     }
                     alt=""
-                    className="w-3"
+                    className="w-3 mr-2"
                   />
-                  <span>(필수) 항목 동의</span>
                 </div>
-                <span>
-                  <button onClick={() => setRequiredDetail(!requiredDetail)} className="underline">
-                    보기
-                  </button>
-                </span>
               </div>
               {/* 필수 동의 내용 */}
               {requiredDetail && (
@@ -174,27 +178,30 @@ export default function BottomSheet({ onClose, onConfirm }) {
                 </div>
               )}
             </li>
-            <li className=" mt-3">
+            <li className=" mt-3 ">
               <div className="flex justify-between px-2">
-                <div
-                  onClick={() => handleConsent('consentOptionalYn')}
-                  className="flex items-center gap-2">
-                  <img
-                    src={
-                      checkActive.consentOptionalYn
-                        ? '/img/mini_check.svg'
-                        : '/img/mini_check_disabled.svg'
-                    }
-                    alt=""
-                    className="w-3"
-                  />
-                  <span>(선택) 항목 동의</span>
+                <div className="flex items-center gap-2">
+                  <div
+                    onClick={() => {
+                      setOptionalDetail(!optionalDetail)
+                      setRequiredDetail(false)
+                    }}>
+                    <span className="mr-1">(선택) 항목 동의</span>
+                    <span>
+                      <button className="underline">보기</button>
+                    </span>
+                  </div>
                 </div>
-                <span>
-                  <button onClick={() => setOptionalDetail(!optionalDetail)} className="underline">
-                    보기
-                  </button>
-                </span>
+                <img
+                  onClick={() => handleConsent('consentOptionalYn')}
+                  src={
+                    checkActive.consentOptionalYn
+                      ? '/img/mini_check.svg'
+                      : '/img/mini_check_disabled.svg'
+                  }
+                  alt=""
+                  className="w-3 mr-2"
+                />
               </div>
               {optionalDetail && (
                 <div className="bg-bg w-full h-60 mt-3 px-3 py-4 rounded-lg overflow-auto space-y-1">

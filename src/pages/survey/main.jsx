@@ -15,7 +15,6 @@ export default function SurveyMain() {
   const [checkActive, setCheckActive] = useState(false)
   const [openSheet, setOpenSheet] = useState(false)
 
-  const [name, setName] = useState('')
   const [lastVisitAt, setLastVisitAt] = useState('')
   const [lastVisitService, setLastVisitService] = useState('')
   const [isFirstVisit, setIsFirstVisit] = useState(true)
@@ -27,14 +26,6 @@ export default function SurveyMain() {
   const surveyToken = searchParams.get('surveyToken')
 
   const isToday = lastVisitAt?.startsWith(new Date().toISOString().slice(0, 10))
-
-  //동의 후 뒤로 갔을 때 동의 값 세션 저장확인
-  useEffect(() => {
-    const consentDone = sessionStorage.getItem('consentDone')
-    if (consentDone === 'true') {
-      setCheckActive(true)
-    }
-  }, [])
 
   //고객 상세 카드 api 요청 함수
   useEffect(() => {
