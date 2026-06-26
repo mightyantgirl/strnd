@@ -66,12 +66,12 @@ export default function QRBottomSheet({ onClose, surveyUrl }) {
           <div className="bg-border rounded-full w-13 h-[6px]" />
         </div>
 
-        <p className="text-2xl font-bold text-primary text-center leading-snug mb-3">
+        <p className="text-2xl font-bold text-primary text-center leading-snug mb-4">
           더 <span className="text-brand">멋진 스타일</span>을 위해
           <br />딱 1분만 투자해주세요!
         </p>
 
-        <p className="text-xs font-semibold text-placeholder text-center mb-6">
+        <p className="text-xs font-semibold text-placeholder text-center mb-8">
           QR을 스캔하면 맞춤 스타일 추천을 받을 수 있어요.
         </p>
 
@@ -82,7 +82,7 @@ export default function QRBottomSheet({ onClose, surveyUrl }) {
         </div>
 
         <p
-          className="text-xs font-semibold text-placeholder underline text-center mb-6 cursor-pointer"
+          className="text-xs font-semibold text-placeholder underline text-center mt-7 mb-7 cursor-pointer"
           onClick={() => window.open(surveyUrl, '_blank')}>
           링크로 바로 이동
         </p>

@@ -147,11 +147,13 @@ export default function Filter({ onClose, onApply, initialValues }) {
               <input
                 type="date"
                 value={startDate}
+                placeholder="0000.00.00"
                 onChange={(e) => setStartDate(e.target.value)}
                 className="flex-1 text-xs text-placeholder bg-card-bg border border-border rounded-lg px-3 h-10 outline-none"
               />
               <input
                 type="date"
+                placeholder="0000.00.00"
                 value={endDate}
                 onChange={(e) => setEndDate(e.target.value)}
                 className="flex-1 text-xs text-placeholder bg-card-bg border border-border rounded-lg px-3 h-10 outline-none"

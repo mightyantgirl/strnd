@@ -1,4 +1,4 @@
-const baseClass = `w-full py-5 px-4 rounded-xl text-xs font-medium focus:outline-none`
+1const baseClass = `w-full py-5 px-4 rounded-xl text-xs font-medium focus:outline-none`
 const stateClass = `bg-card-bg text-primary border border-card-bg focus:border-focus placeholder:text-placeholder text-sm `
 
 export default function TextFiled({
