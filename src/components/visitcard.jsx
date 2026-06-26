@@ -1,6 +1,6 @@
 import { useState } from 'react'
-
 import Badge from './badge'
+import useApiFetch from '../hooks/useApiFetch'
 
 const baseClass = `w-full py-5 px-4 rounded-xl border border-bg bg-card-bg `
 const baseTextClass = `text-base text-placeholder font-medium`
@@ -17,15 +17,14 @@ export default function VisitCard({
 }) {
   const [isOpen, setIsOpen] = useState(false)
   const [detailData, setDetailData] = useState(null)
+  const apiFetch = useApiFetch()
 
   const handleOpen = async () => {
     setIsOpen(!isOpen)
 
     if (!isOpen && !detailData) {
-      const token = localStorage.getItem('token') || sessionStorage.getItem('token')
-      const response = await fetch(`https://strnd-be.onrender.com/api/visits/${visitId}`, {
-        headers: { Authorization: `Bearer ${token}` },
-      })
+      const response = await apiFetch(`https://strnd-be.onrender.com/api/visits/${visitId}`)
+      if (!response) return
       const data = await response.json()
       setDetailData(data)
     }

@@ -1,6 +1,7 @@
-import { useState } from 'react'
-import { useNavigate, useLocation } from 'react-router-dom'
+import { useState, useEffect } from 'react'
+import { useNavigate, useLocation, useParams } from 'react-router-dom'
 import useAuthGuard from '../../hooks/useAuthGuard'
+import useApiFetch from '../../hooks/useApiFetch'
 
 import PageFooter from '../../components/pagefooter'
 import PageHeader from '../../components/pageheader'
@@ -33,6 +34,12 @@ export default function TreatmentResult() {
   const [treatmentDetailError, setTreatmentDetailError] = useState('')
 
   const navigate = useNavigate()
+  const apiFetch = useApiFetch()
+  const { customerId } = useParams()
+
+  useEffect(() => {
+    apiFetch(`https://strnd-be.onrender.com/api/customers/${customerId}`)
+  }, [])
 
   const handleSaveTreatment = async () => {
     let valid = true
@@ -59,22 +66,21 @@ export default function TreatmentResult() {
     if (!valid) return
 
     try {
-      const token = localStorage.getItem('token') || sessionStorage.getItem('token')
-      await fetch(`https://strnd-be.onrender.com/api/visits/${visitId}/treatment`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${token}`,
+      const response = await apiFetch(
+        `https://strnd-be.onrender.com/api/visits/${visitId}/treatment`,
+        {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            serviceCode: dropdownValue,
+            treatmentMenu: [treatmentMenu],
+            treatmentProduct,
+            treatmentDetail,
+            treatmentNote,
+          }),
         },
-        body: JSON.stringify({
-          serviceCode: dropdownValue,
-          treatmentMenu: [treatmentMenu],
-          treatmentProduct: treatmentProduct,
-          treatmentDetail: treatmentDetail,
-          treatmentNote: treatmentNote,
-        }),
-      })
-
+      )
+      if (!response) return
       navigate(-1)
     } catch (error) {
       console.log('에러:', error)

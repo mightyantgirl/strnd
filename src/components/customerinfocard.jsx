@@ -12,6 +12,8 @@ export default function CustomerInfoCard({
   phone,
   gender,
   visitCount,
+  onDeleteClick,
+  onEditClick,
 }) {
   const [menuOpen, setMenuOpen] = useState(false)
 
@@ -42,8 +44,8 @@ export default function CustomerInfoCard({
             isOpen={menuOpen}
             onClose={() => setMenuOpen(false)}
             items={[
-              { label: '수정하기', icon: '/img/edit.svg', onClick: () => {} },
-              { label: '삭제하기', icon: '/img/trash.svg', onClick: () => {} },
+              { label: '수정하기', icon: '/img/edit.svg', onClick: () => { setMenuOpen(false); onEditClick?.() } },
+              { label: '삭제하기', icon: '/img/trash.svg', onClick: () => { setMenuOpen(false); onDeleteClick?.() } },
             ]}
           />
         )}

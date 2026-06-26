@@ -22,7 +22,7 @@ export default function Input({
   return (
     <div className="w-full relative">
       {label && (
-        <label className="flex gap-2">
+        <label className="flex gap-2 ml-1">
           <p className={labelClass}>{label}</p>
           {required && <span className={`${labelClass} text-brand`}>필수</span>}
           {!required && <span className={`${labelClass} text-placeholder`}>선택</span>}
@@ -42,9 +42,9 @@ export default function Input({
         onFocus={(e) => e.target.scrollIntoView({ behavior: 'smooth', block: 'center' })}
         className={`${baseClass} ${stateClass} ${error ? 'border-danger' : 'border-border'} ${className}`}></input>
       {subtext && !error && (
-        <p className="text-xs font-medium text-placeholder mt-2 pl-2">{subtext}</p>
+        <p className="text-xs font-medium text-placeholder mt-2 pl-1">{subtext}</p>
       )}
-      {error && <p className="text-xs font-medium text-danger mt-1 pl-2">{error}</p>}
+      {error && <p className="text-xs font-medium text-danger mt-1 pl-1">{error}</p>}
       {search && (
         <img src="./img/search.svg" alt="" className="absolute right-5 top-1/2 -translate-y-1/2 " />
       )}

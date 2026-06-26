@@ -5,6 +5,7 @@ import Login from './pages/designer/login'
 import Register from './pages/designer/register'
 import Home from './pages/designer/home'
 import NewCustomer from './pages/designer/newcustomers'
+import EditCustomer from './pages/designer/editcustomer'
 import CustomerDetail from './pages/designer/customerdetail'
 import RecordWithoutSurvey from './pages/designer/recordwithoutsurvey'
 import TreatmentResult from './pages/designer/treatmentresult'
@@ -26,6 +27,7 @@ export default function App() {
           <Route path="/home" element={<Home />} />
 
           <Route path="/customers/new" element={<NewCustomer />} />
+          <Route path="/customers/:customerId/edit" element={<EditCustomer />} />
           <Route path="/customers/:customerId" element={<CustomerDetail />} />
 
           <Route path="/customers/:customerId/record" element={<RecordWithoutSurvey />} />

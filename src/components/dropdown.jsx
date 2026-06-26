@@ -28,7 +28,7 @@ export default function Dropdown({
   return (
     <div className="dropdown relative w-full">
       {label && (
-        <label className="flex gap-2">
+        <label className="flex gap-2 ml-1">
           <p className={labelClass}>{label}</p>
           {required && <span className={`${labelClass} text-brand`}>필수</span>}
           {!required && <span className={`${labelClass} text-placeholder`}>선택</span>}

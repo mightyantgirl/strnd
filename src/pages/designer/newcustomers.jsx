@@ -6,6 +6,7 @@ import PageHeader from './../../components/pageheader'
 import Toast from './../../components/toast'
 import Input from './../../components/input'
 import useAuthGuard from '../../hooks/useAuthGuard'
+import useApiFetch from '../../hooks/useApiFetch'
 
 const baseTextClass = `text-xs text-primary font-medium`
 
@@ -23,6 +24,7 @@ export default function NewCustomer() {
   const [toastVisible, setToastVisible] = useState(false) // 보일지 말지
 
   const navigate = useNavigate()
+  const apiFetch = useApiFetch()
 
   const showToast = (message) => {
     setToastMessage(message) // 1. 메시지 넣기
@@ -54,21 +56,12 @@ export default function NewCustomer() {
 
     if (!valid) return
 
-    const token = localStorage.getItem('token') || sessionStorage.getItem('token')
-
-    const response = await fetch('https://strnd-be.onrender.com/api/customers', {
+    const response = await apiFetch('https://strnd-be.onrender.com/api/customers', {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${token}`,
-      },
-      body: JSON.stringify({
-        customerName: name,
-        phone: phone,
-        gender: null,
-        memo: memo,
-      }),
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ customerName: name, phone, gender: null, memo }),
     })
+    if (!response) return
     const data = await response.json()
     // console.log('응답:', data)
 

@@ -7,6 +7,7 @@ import PageFooter from './../../components/pagefooter'
 
 import { getElapsedTime, formatPhone } from '../../utils/dateUtils'
 import useAuthGuard from '../../hooks/useAuthGuard'
+import useApiFetch from '../../hooks/useApiFetch'
 
 const baseTextClass = `text-base text-primary font-medium`
 
@@ -21,6 +22,7 @@ export default function Home() {
   const [isLoading, setIsLoading] = useState(true)
   const navigate = useNavigate()
   const location = useLocation()
+  const apiFetch = useApiFetch()
 
   // 디자이너 이름 정보 변수
   const designerName =
@@ -33,23 +35,8 @@ export default function Home() {
   useEffect(() => {
     const fetchHome = async () => {
       try {
-        //로그인 단계에서 저장된 토큰 꺼내기
-        const token = localStorage.getItem('token') || sessionStorage.getItem('token')
-
-        const response = await fetch('https://strnd-be.onrender.com/api/home', {
-          method: 'GET',
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        })
-
-        //인증 만료 시 로그인 화면 이동
-        if (response.status === 401) {
-          localStorage.removeItem('token')
-          sessionStorage.removeItem('token')
-          navigate('/login')
-          return
-        }
+        const response = await apiFetch('https://strnd-be.onrender.com/api/home')
+        if (!response) return
 
         const data = await response.json()
 
@@ -70,13 +57,10 @@ export default function Home() {
 
     const fetchSearch = async () => {
       try {
-        const token = localStorage.getItem('token') || sessionStorage.getItem('token')
-        const response = await fetch(
+        const response = await apiFetch(
           `https://strnd-be.onrender.com/api/customers?keyword=${searchKeyword}`,
-          {
-            headers: { Authorization: `Bearer ${token}` },
-          },
         )
+        if (!response) return
         const data = await response.json()
         setSearchCards(data)
       } catch (error) {
@@ -88,8 +72,8 @@ export default function Home() {
 
   return (
     <div style={{ height: '100dvh' }} className="flex flex-col">
-      <div className="w-full bg-bg fixed pr-9 pb-6 z-10">
-        <div className="flex gap-5 mt-4 items-center justify-between">
+      <div className="w-full bg-bg fixed pr-9 pb-4 z-10">
+        <div className="flex gap-5 mt-4 items-center justify-between ml-1">
           <img src="/img/strnd.svg" className="w-22" alt="로고" />
 
           <button
@@ -139,11 +123,11 @@ export default function Home() {
             <div className={`${baseTextClass} pt-18 pb-8 mb-15`}>
               <div className="space-y-8">
                 <div>
-                  <h1 className="text-2xl font-bold text-primary mb-4">
+                  <h1 className="text-2xl font-bold text-primary mb-4 ml-1  ">
                     안녕하세요, <span className="text-brand">{designerName}</span> 님! <br />
                     <span>오늘도 좋은 하루 되세요.</span>
                   </h1>
-                  <p className="text-placeholder">이번 달 총 {monthlyCount}명 방문했어요</p>
+                  <p className="text-placeholder ml-1">이번 달 총 {monthlyCount}명 방문했어요</p>
                 </div>
                 {/*검색 인풋*/}
                 <Input
@@ -159,9 +143,19 @@ export default function Home() {
             {/* 컨텐츠 - 검색 내역 */}
             {/* 최근 방문 고객 최대 5명 */}
             {!searchKeyword ? (
-              <p className={`${baseTextClass} font-semibold mb-3`}>최근 방문 고객</p>
+              <div className="flex justify-between items-center">
+                <span className={`${baseTextClass} font-semibold mb-3 ml-2`}>최근 방문 고객</span>
+                <span className={`${baseTextClass} text-placeholder mr-2 text-xs font-medium mb-3`}>
+                  전체보기
+                </span>
+              </div>
             ) : (
-              <p className={`${baseTextClass} font-semibold mb-3`}>검색 결과</p>
+              <div className="flex justify-between items-center">
+                <span className={`${baseTextClass} font-semibold mb-3 ml-2`}>검색 결과</span>
+                <span className={`${baseTextClass} text-placeholder mr-2 text-xs font-medium mb-3`}>
+                  전체보기
+                </span>
+              </div>
             )}
             <div className="space-y-2">
               {!displayCards.length ? (

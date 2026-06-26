@@ -132,7 +132,7 @@ export default function SurveyMain() {
             ? '좋은 기억 만드실 수 있도록 최선을 다하겠습니다.'
             : lastVisitService
               ? `마지막으로 받은 시술은 ${formatList(lastTreatmentMenu)} 입니다.`
-              : '이전 시술 정보가 없어요.'}
+              : '좋은 기억 만드실 수 있도록 최선을 다하겠습니다.'}
         </p>
       </div>
 

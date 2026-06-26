@@ -17,6 +17,8 @@ import SurveyCard from './../../components/surveycard'
 import TextFiled from './../../components/textfiled'
 import Toast from './../../components/toast'
 import Filter from './../../components/filter'
+import QRBottomSheet from './../../components/QRBottomSheet'
+import useApiFetch from '../../hooks/useApiFetch'
 
 const baseTextClass = `text-xs text-primary font-medium`
 const activeTabClass = `bg-card-bg py-2 rounded-lg text-center text-secondary font-semibold transition-all duration-200`
@@ -28,6 +30,9 @@ export default function CustomerDetail() {
   const [activeTab, setActiveTab] = useState('history')
   const [isActive, setIsActive] = useState(true)
   const [openSheet, setOpenSheet] = useState(false)
+  const [showDeleteModal, setShowDeleteModal] = useState(false)
+  const [showQRSheet, setShowQRSheet] = useState(false)
+  const [surveyUrl, setSurveyUrl] = useState('')
 
   const { customerId } = useParams() // URL 정보 받아오는 훅
   const [name, setName] = useState('')
@@ -65,6 +70,7 @@ export default function CustomerDetail() {
     setFilterState(values)
   }
 
+  //히스토리 카드 필터 조건 함수
   const filteredVisits = useMemo(() => {
     let result = visits.filter((v) => v.status === 'COMPLETED')
 
@@ -98,6 +104,7 @@ export default function CustomerDetail() {
 
   const navigate = useNavigate()
   const location = useLocation()
+  const apiFetch = useApiFetch()
 
   const showToast = (message, type) => {
     setToastMessage(message) // 1. 메시지 넣기
@@ -119,10 +126,8 @@ export default function CustomerDetail() {
   useEffect(() => {
     const fetchCustomer = async () => {
       try {
-        const token = localStorage.getItem('token') || sessionStorage.getItem('token')
-        const response = await fetch(`https://strnd-be.onrender.com/api/customers/${customerId}`, {
-          headers: { Authorization: `Bearer ${token}` },
-        })
+        const response = await apiFetch(`https://strnd-be.onrender.com/api/customers/${customerId}`)
+        if (!response) return
         const data = await response.json()
         setName(data.customerName)
         setLastVisitAt(data.lastVisitDt)
@@ -144,19 +149,20 @@ export default function CustomerDetail() {
   useEffect(() => {
     const fetchHistory = async () => {
       try {
-        const token = localStorage.getItem('token') || sessionStorage.getItem('token')
-        const response = await fetch(
+        const response = await apiFetch(
           `https://strnd-be.onrender.com/api/customers/${customerId}/visits`,
-          { headers: { Authorization: `Bearer ${token}` } },
         )
+        if (!response) return
+
         const data = await response.json()
         setVisits(data)
+
         const submitted = data.find((v) => v.status === 'SUBMITTED')
         if (submitted) {
-          const detailRes = await fetch(
+          const detailRes = await apiFetch(
             `https://strnd-be.onrender.com/api/visits/${submitted.visitId}`,
-            { headers: { Authorization: `Bearer ${token}` } },
           )
+          if (!detailRes) return
           const detail = await detailRes.json()
           setSurveyData(detail)
         }
@@ -169,19 +175,12 @@ export default function CustomerDetail() {
 
   // 설문 없이 기록하기 함수
   const handleRecordWithoutSurvey = async () => {
-    const token = localStorage.getItem('token') || sessionStorage.getItem('token')
-
-    const response = await fetch('https://strnd-be.onrender.com/api/visits', {
+    const response = await apiFetch('https://strnd-be.onrender.com/api/visits', {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${token}`,
-      },
-      body: JSON.stringify({
-        customerId: customerId,
-        skipSurvey: true,
-      }),
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ customerId: customerId, skipSurvey: true }),
     })
+    if (!response) return
 
     const data = await response.json()
 
@@ -190,43 +189,28 @@ export default function CustomerDetail() {
 
   //설문 기록하기 함수
   const startSurvey = async () => {
-    const token = localStorage.getItem('token') || sessionStorage.getItem('token')
-
-    const response = await fetch('https://strnd-be.onrender.com/api/visits', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${token}`,
-      },
-      body: JSON.stringify({
-        customerId: customerId,
-      }),
-    })
-
-    const data = await response.json()
     if (hasSubmittedSurvey) {
       showToast('아직 진행중인 설문이 남았어요.', 'error')
-    } else {
-      navigate(`/survey/${data.visitId}?customerId=${customerId}&surveyToken=${data.surveyToken}`)
+      return
     }
+    const response = await apiFetch('https://strnd-be.onrender.com/api/visits', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ customerId: customerId }),
+    })
+    if (!response) return
+    const data = await response.json()
+    const url = `${window.location.origin}/survey/${data.visitId}?customerId=${customerId}&surveyToken=${data.surveyToken}`
+    setSurveyUrl(url)
+    setShowQRSheet(true)
   }
 
   // 메모 저장 함수
   const handleSaveMemo = async () => {
-    const token = localStorage.getItem('token') || sessionStorage.getItem('token')
-
-    await fetch(`https://strnd-be.onrender.com/api/customers/${customerId}`, {
+    await apiFetch(`https://strnd-be.onrender.com/api/customers/${customerId}`, {
       method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${token}`,
-      },
-      body: JSON.stringify({
-        customerName: name, // 기존 값 그대로
-        phone: phone, // 기존 값 그대로
-        gender: gender, // 기존 값 그대로
-        memo: memo, // 수정된 메모
-      }),
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ customerName: name, phone, gender, memo }),
     })
 
     setOriginalMemo(memo)
@@ -234,14 +218,13 @@ export default function CustomerDetail() {
 
   //고객 상세 status별 안내화면 분기처리 함수
 
-  //   const handleDelete = async () => {
-  //   const token = localStorage.getItem('token') || sessionStorage.getItem('token')
-  //   await fetch(`https://strnd-be.onrender.com/api/customers/${customerId}`, {
-  //     method: 'DELETE',
-  //     headers: { Authorization: `Bearer ${token}` }
-  //   })
-  //   navigate('/home')
-  // }
+  const handleDelete = async () => {
+    const response = await apiFetch(`https://strnd-be.onrender.com/api/customers/${customerId}`, {
+      method: 'DELETE',
+    })
+    if (!response) return
+    navigate('/home')
+  }
 
   return (
     <div style={{ height: '100dvh' }} className={`${baseTextClass} h-full flex flex-col`}>
@@ -288,6 +271,10 @@ export default function CustomerDetail() {
               lastVisitAt={lastVisitAt ? `마지막 방문 ${getElapsedTime(lastVisitAt)}` : '첫 방문'}
               phone={formatPhone(phone)}
               gender={formatGender(gender)}
+              onEditClick={() =>
+                navigate(`/customers/${customerId}/edit`, { state: { name, phone, gender, memo } })
+              }
+              onDeleteClick={() => setShowDeleteModal(true)}
             />
             <div className="mt-4">
               <Button value="설문 시작하기" height="lg" survey={true} onClick={startSurvey} />
@@ -442,6 +429,41 @@ export default function CustomerDetail() {
           onClose={() => setOpenSheet(false)}
           onApply={handleFilterApply}
           initialValues={filterState}
+        />
+      )}
+      {showDeleteModal && (
+        <div className="fixed inset-0 z-20 flex items-center justify-center bg-black/50">
+          <div className="bg-card-bg rounded-xl w-[330px] p-5 flex flex-col items-center gap-5">
+            <div className="flex flex-col items-center gap-4 pt-2">
+              <img src="/img/warning.svg" alt="" className="w-6 h-6" />
+              <div className="flex flex-col items-center gap-2 text-center">
+                <p className="text-base font-semibold text-primary">
+                  정말 <span className="text-brand">삭제</span>할까요?
+                </p>
+                <p className="text-xs font-medium text-placeholder">
+                  삭제한 고객 정보는 복구할 수 없어요
+                </p>
+              </div>
+            </div>
+            <div className="flex gap-3 w-full">
+              <button
+                className="flex-1 h-[45px] rounded-lg bg-disabled text-white text-sm font-semibold"
+                onClick={() => setShowDeleteModal(false)}>
+                취소
+              </button>
+              <button
+                className="flex-1 h-[45px] rounded-lg bg-brand text-white text-sm font-semibold"
+                onClick={handleDelete}>
+                확인
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+      {showQRSheet && (
+        <QRBottomSheet
+          surveyUrl={surveyUrl}
+          onClose={() => setShowQRSheet(false)}
         />
       )}
       <Toast message={toastMessage} visible={toastVisible} type={toastType} />
