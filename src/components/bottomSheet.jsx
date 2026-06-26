@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 
 import Button from '../components/button'
 import Toast from '../components/toast'
@@ -24,21 +24,37 @@ export default function BottomSheet({ onClose, onConfirm }) {
     }, 3000)
   }
 
+  const [mounted, setMounted] = useState(false)
   const [startY, setStartY] = useState(0)
+  const [dragY, setDragY] = useState(0)
+  const [isDragging, setIsDragging] = useState(false)
 
-  // 터치 시작 위치 저장
-  const handleTouchStart = (e) => {
-    setStartY(e.touches[0].clientY)
+  useEffect(() => {
+    const raf = requestAnimationFrame(() => setMounted(true))
+    return () => cancelAnimationFrame(raf)
+  }, [])
+
+  const handleClose = () => {
+    setMounted(false)
+    setTimeout(onClose, 300)
   }
 
-  // 터치 끝났을 때 얼마나 내렸는지 계산
-  const handleTouchEnd = (e) => {
-    const endY = e.changedTouches[0].clientY
-    const diff = endY - startY // 양수면 아래로 드래그
+  const handleTouchStart = (e) => {
+    setStartY(e.touches[0].clientY)
+    setIsDragging(true)
+  }
 
-    if (diff > 80) {
-      // 80px 이상 내리면 닫힘
-      onClose()
+  const handleTouchMove = (e) => {
+    const diff = e.touches[0].clientY - startY
+    if (diff > 0) setDragY(diff)
+  }
+
+  const handleTouchEnd = () => {
+    setIsDragging(false)
+    if (dragY > 80) {
+      handleClose()
+    } else {
+      setDragY(0)
     }
   }
 
@@ -62,14 +78,30 @@ export default function BottomSheet({ onClose, onConfirm }) {
     setCheckActive(updated)
   }
 
+  const overlayOpacity = mounted ? Math.max(0, 1 - dragY / 300) : 0
+
   return (
     <div className="relative">
-      <div className="fixed inset-0 bg-black/10 z-5" onClick={onClose} />
+      <div
+        className="fixed inset-0 bg-black/50 z-5"
+        style={{
+          opacity: overlayOpacity,
+          transition: isDragging ? 'none' : 'opacity 0.3s ease',
+        }}
+        onClick={handleClose}
+      />
 
-      <div className="flex-col fixed bg-card-bg bottom-0 left-0 w-full px-5 py-4 rounded-tl-xl rounded-tr-xl  z-10">
+      <div
+        className="flex-col fixed bg-card-bg bottom-0 left-0 w-full px-5 py-4 rounded-tl-xl rounded-tr-xl z-10"
+        style={{
+          transform: mounted ? `translateY(${dragY}px)` : 'translateY(100%)',
+          transition: isDragging ? 'none' : 'transform 0.35s cubic-bezier(0.32, 0.72, 0, 1)',
+        }}>
         <div
           className="flex justify-center"
+          style={{ touchAction: 'none' }}
           onTouchStart={handleTouchStart}
+          onTouchMove={handleTouchMove}
           onTouchEnd={handleTouchEnd}>
           <div className="bg-border rounded-full w-13" style={{ height: '6px' }}></div>
         </div>

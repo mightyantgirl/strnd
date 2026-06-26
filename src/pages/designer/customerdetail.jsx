@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useMemo } from 'react'
 import { useNavigate, useParams, useLocation } from 'react-router-dom'
 import useAuthGuard from '../../hooks/useAuthGuard'
 import {
@@ -50,6 +50,51 @@ export default function CustomerDetail() {
   const isChanged = memo !== originalMemo
   const visitCount = visits.filter((visit) => visit.status === 'COMPLETED').length
   const hasSubmittedSurvey = visits.some((v) => v.status === 'SUBMITTED')
+
+  const [filterState, setFilterState] = useState({
+    sort: 'latest',
+    categories: [],
+    period: 'all',
+    startDate: '',
+    endDate: '',
+  })
+
+  const SERVICE_CODE_MAP = { 컷: 'CUT', 펌: 'PERM', 컬러: 'COLOR', 클리닉: 'CLINIC' }
+
+  const handleFilterApply = (values) => {
+    setFilterState(values)
+  }
+
+  const filteredVisits = useMemo(() => {
+    let result = visits.filter((v) => v.status === 'COMPLETED')
+
+    if (filterState.categories.length > 0) {
+      const codes = filterState.categories.map((c) => SERVICE_CODE_MAP[c])
+      result = result.filter((v) => codes.includes(v.services))
+    }
+
+    if (filterState.startDate || filterState.endDate) {
+      const from = filterState.startDate ? new Date(filterState.startDate) : null
+      const to = filterState.endDate ? new Date(filterState.endDate) : null
+      result = result.filter((v) => {
+        const d = new Date(v.visitDt)
+        if (from && to) return d >= from && d <= to
+        if (from) return d >= from
+        if (to) return d <= to
+        return true
+      })
+    } else if (filterState.period !== 'all') {
+      const months = filterState.period === '1m' ? 1 : filterState.period === '3m' ? 3 : 6
+      const now = new Date()
+      const from = new Date(now.getFullYear(), now.getMonth() - months, now.getDate())
+      result = result.filter((v) => new Date(v.visitDt) >= from)
+    }
+
+    return [...result].sort((a, b) => {
+      const diff = new Date(b.visitDt) - new Date(a.visitDt)
+      return filterState.sort === 'latest' ? diff : -diff
+    })
+  }, [visits, filterState])
 
   const navigate = useNavigate()
   const location = useLocation()
@@ -283,32 +328,56 @@ export default function CustomerDetail() {
                   </li>
                 </ol>
               </div>
-              <div className="flex items-center justify-between mb-2">
-                <div className="flex justify-start">
-                  <button
-                    onClick={() => setOpenSheet(true)}
-                    className="flex items-center gap-1 text-xs text-placeholder font-medium py-1">
-                    <span className="bg-border py-1 px-3 rounded-full">상세 필터</span>
-                  </button>
-                </div>
-                <img src="/img/retrun.svg" alt="" className="w-3 h-3 mr-2" />
-              </div>
-              {openSheet && <Filter onClose={() => setOpenSheet(false)} onApply={() => {}} />}
 
               {/* 히스토리 */}
               {activeTab === 'history' && (
-                <div className="space-y-3">
-                  {visits.filter((visit) => visit.status === 'COMPLETED').length === 0 ? (
-                    <div className="flex flex-col items-center mt-8">
-                      <img src="../img/none.svg" alt="" />
-                      <span className="text-base text-disabled font-semibold mt-3">
-                        방문 기록이 아직 없어요.
-                      </span>
+                <>
+                  <div className="flex items-center justify-between mb-1 mr-1">
+                    <div className="flex justify-start space-x-2">
+                      <button
+                        onClick={() => setOpenSheet(true)}
+                        className="flex items-center gap-1 text-xs text-placeholder font-medium py-1">
+                        <span className="bg-border py-1 px-3 rounded-full">상세 필터</span>
+                      </button>
+                      <div className="flex space-x-1">
+                        {['컷', '펌', '컬러', '클리닉']
+                          .filter((c) => filterState.categories.includes(c))
+                          .map((c) => (
+                            <button
+                              key={c}
+                              className="flex items-center gap-1 text-xs font-medium py-1">
+                              <span className="bg-tint border border-brand text-brand font-bold py-1 px-3 rounded-full">
+                                {c}
+                              </span>
+                            </button>
+                          ))}
+                      </div>
                     </div>
-                  ) : (
-                    visits
-                      .filter((visit) => visit.status === 'COMPLETED')
-                      .map((visit) => (
+                    <img
+                      src="/img/retrun.svg"
+                      alt="필터 초기화"
+                      className="w-3 h-3 mr-2 cursor-pointer"
+                      onClick={() =>
+                        setFilterState({
+                          sort: 'latest',
+                          categories: [],
+                          period: 'all',
+                          startDate: '',
+                          endDate: '',
+                        })
+                      }
+                    />
+                  </div>
+                  <div className="space-y-3">
+                    {filteredVisits.length === 0 ? (
+                      <div className="flex flex-col items-center mt-8">
+                        <img src="../img/none.svg" alt="" />
+                        <span className="text-base text-disabled font-semibold mt-3">
+                          방문 기록이 없어요.
+                        </span>
+                      </div>
+                    ) : (
+                      filteredVisits.map((visit) => (
                         <VisitCard
                           service={visit.services}
                           key={visit.visitId}
@@ -321,8 +390,9 @@ export default function CustomerDetail() {
                           treatmentNote={visit.treatmentNote}
                         />
                       ))
-                  )}
-                </div>
+                    )}
+                  </div>
+                </>
               )}
 
               {/*오늘 설문 */}
@@ -367,6 +437,13 @@ export default function CustomerDetail() {
           </div>
         )}
       </div>
+      {openSheet && (
+        <Filter
+          onClose={() => setOpenSheet(false)}
+          onApply={handleFilterApply}
+          initialValues={filterState}
+        />
+      )}
       <Toast message={toastMessage} visible={toastVisible} type={toastType} />
     </div>
   )
