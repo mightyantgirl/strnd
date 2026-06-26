@@ -155,6 +155,7 @@ export default function CustomerDetail() {
         if (!response) return
 
         const data = await response.json()
+        console.log('visits services:', data.map((v) => ({ id: v.visitId, services: v.services })))
         setVisits(data)
 
         const submitted = data.find((v) => v.status === 'SUBMITTED')

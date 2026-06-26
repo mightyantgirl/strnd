@@ -1,5 +1,5 @@
 import { useNavigate, useLocation } from 'react-router-dom'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 
 import Input from './../../components/input'
 import CustomerCard from './../../components/customercard'
@@ -9,38 +9,43 @@ import { getElapsedTime, formatPhone } from '../../utils/dateUtils'
 import useAuthGuard from '../../hooks/useAuthGuard'
 import useApiFetch from '../../hooks/useApiFetch'
 
-const baseTextClass = `text-base text-primary font-medium`
+const baseTextClass = `text-base text-placeholder font-medium`
+const PAGE_SIZE = 20
 
 export default function Home() {
   useAuthGuard()
 
-  const [recentCards, setRecentCards] = useState([]) // 홈 API 데이터
-  const [searchCards, setSearchCards] = useState([]) // 검색 API 데이터
+  const [recentCards, setRecentCards] = useState([])
+  const [searchCards, setSearchCards] = useState([])
+  const [allCustomers, setAllCustomers] = useState([])
+  const [displayedCount, setDisplayedCount] = useState(PAGE_SIZE)
+  const [isViewAll, setIsViewAll] = useState(false)
+  const [isLoadingAll, setIsLoadingAll] = useState(false)
 
-  const [monthlyCount, setMonthlyCount] = useState(0) // 이번 달 방문자 수
-  const [searchKeyword, setSearchKeyword] = useState('') // 검색어
+  const [monthlyCount, setMonthlyCount] = useState(0)
+  const [searchKeyword, setSearchKeyword] = useState('')
   const [isLoading, setIsLoading] = useState(true)
   const navigate = useNavigate()
   const location = useLocation()
   const apiFetch = useApiFetch()
 
-  // 디자이너 이름 정보 변수
+  const loaderRef = useRef(null)
+
   const designerName =
     localStorage.getItem('designerName') || sessionStorage.getItem('designerName')
 
-  // 실시간 검색 필터링
-  const displayCards = searchKeyword ? searchCards : recentCards
-
-  //고객 카드 데이터 함수 페이지 열릴 때 API 호출
   useEffect(() => {
+    setIsViewAll(false)
+
+    //최근 5명 불러오기
     const fetchHome = async () => {
       try {
-        const response = await apiFetch('https://strnd-be.onrender.com/api/home')
+        const response = await apiFetch('https://strnd-be.onrender.com/api/home?limit=5')
         if (!response) return
 
         const data = await response.json()
 
-        setRecentCards(data.recentCustomers)
+        setRecentCards(data.customers ?? [])
         setMonthlyCount(data.monthlyVisitCount)
       } catch (error) {
         console.error('홈 데이터 로딩 실패:', error)
@@ -49,9 +54,8 @@ export default function Home() {
       }
     }
     fetchHome()
-  }, [location]) // location 바뀔때마다 다시 호출
+  }, [location])
 
-  // 검색 될 때 마다 검색 api 호출
   useEffect(() => {
     if (!searchKeyword) return
 
@@ -68,7 +72,46 @@ export default function Home() {
       }
     }
     fetchSearch()
-  }, [searchKeyword]) // 검색어 바뀔때마다
+  }, [searchKeyword])
+
+  // 전체 고객 불러오기
+  const handleViewAll = async () => {
+    setIsLoadingAll(true)
+    try {
+      const response = await apiFetch('https://strnd-be.onrender.com/api/home')
+      if (!response) return
+
+      const data = await response.json()
+
+      setAllCustomers(data.customers ?? [])
+      setDisplayedCount(PAGE_SIZE)
+      setIsViewAll(true)
+    } catch (error) {
+      console.error('전체 고객 로딩 실패:', error)
+    } finally {
+      setIsLoadingAll(false)
+    }
+  }
+
+  //20명씩로드 무한스크롤
+  useEffect(() => {
+    if (!isViewAll) return
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting && displayedCount < allCustomers.length) {
+          setDisplayedCount((prev) => prev + PAGE_SIZE)
+        }
+      },
+      { threshold: 0.1 },
+    )
+
+    if (loaderRef.current) observer.observe(loaderRef.current)
+    return () => observer.disconnect()
+  }, [isViewAll, displayedCount, allCustomers.length])
+
+  const displayedCustomers = allCustomers.slice(0, displayedCount)
+  const hasMore = displayedCount < allCustomers.length
 
   return (
     <div style={{ height: '100dvh' }} className="flex flex-col">
@@ -90,11 +133,9 @@ export default function Home() {
         </div>
       </div>
 
-      {/* 컨텐츠 */}
       <div className="flex-1 overflow-y-auto" style={{ touchAction: 'pan-y' }}>
         {isLoading ? (
           <div className="animate-pulse">
-            {/* 타이틀 스켈레톤 */}
             <div className="pt-20 pb-6 mb-15 space-y-8">
               <div className="space-y-4">
                 <div className="h-7 bg-border rounded-lg w-48" />
@@ -103,7 +144,6 @@ export default function Home() {
               </div>
               <div className="h-11 bg-border rounded-xl w-full" />
             </div>
-            {/* 카드 스켈레톤 */}
             <div className="h-4 bg-border rounded-md w-16 mb-3" />
             <div className="space-y-2">
               {[0, 1, 2].map((i) => (
@@ -119,7 +159,6 @@ export default function Home() {
           </div>
         ) : (
           <div className="fade-in">
-            {/* 컨텐츠 - 메인타이틀 */}
             <div className={`${baseTextClass} pt-18 pb-8 mb-15`}>
               <div className="space-y-8">
                 <div>
@@ -129,7 +168,6 @@ export default function Home() {
                   </h1>
                   <p className="text-placeholder ml-1">이번 달 총 {monthlyCount}명 방문했어요</p>
                 </div>
-                {/*검색 인풋*/}
                 <Input
                   search={true}
                   value={searchKeyword}
@@ -140,46 +178,90 @@ export default function Home() {
               </div>
             </div>
 
-            {/* 컨텐츠 - 검색 내역 */}
-            {/* 최근 방문 고객 최대 5명 */}
-            {!searchKeyword ? (
-              <div className="flex justify-between items-center">
-                <span className={`${baseTextClass} font-semibold mb-3 ml-2`}>최근 방문 고객</span>
-                <span className={`${baseTextClass} text-placeholder mr-2 text-xs font-medium mb-3`}>
-                  전체보기
-                </span>
-              </div>
-            ) : (
-              <div className="flex justify-between items-center">
-                <span className={`${baseTextClass} font-semibold mb-3 ml-2`}>검색 결과</span>
-                <span className={`${baseTextClass} text-placeholder mr-2 text-xs font-medium mb-3`}>
-                  전체보기
-                </span>
-              </div>
-            )}
+            {/* 섹션 헤더 */}
+            <div className="flex justify-between items-center text-placeholder">
+              <span className={`${baseTextClass} font-semibold mb-3 ml-2`}>
+                {searchKeyword ? '검색 결과' : isViewAll ? '전체 고객' : '최근 방문 고객'}
+              </span>
+              {!isViewAll && !searchKeyword && (
+                <button
+                  type="button"
+                  onClick={handleViewAll}
+                  disabled={isLoadingAll}
+                  className={` mb-3 ${baseTextClass} mr-2 text-xs font-medium`}>
+                  {isLoadingAll ? '불러오는 중...' : '전체보기'}
+                </button>
+              )}
+            </div>
+
+            {/* 카드 리스트 */}
             <div className="space-y-2">
-              {!displayCards.length ? (
-                <p className="text-placeholder text-base text-center py-10">
-                  {searchKeyword ? '검색 결과가 없습니다.' : '방문 고객이 없습니다.'}
-                </p>
+              {searchKeyword ? (
+                <>
+                  {!searchCards.length ? (
+                    <p className="text-placeholder text-base text-center py-10">
+                      검색 결과가 없습니다.
+                    </p>
+                  ) : (
+                    searchCards.map((card) => (
+                      <CustomerCard
+                        key={card.customerId}
+                        isActive={card.isActive}
+                        customerId={card.customerId}
+                        customerName={card.customerName}
+                        Phone={formatPhone(card.phone)}
+                        elapsedDays={getElapsedTime(card.lastVisitDt)}
+                        onClick={() => navigate(`/customers/${card.customerId}`)}
+                      />
+                    ))
+                  )}
+                </>
+              ) : isViewAll ? (
+                <>
+                  {!displayedCustomers.length ? (
+                    <p className="text-placeholder text-base text-center py-10">고객이 없습니다.</p>
+                  ) : (
+                    displayedCustomers.map((card) => (
+                      <CustomerCard
+                        key={card.customerId}
+                        isActive={card.isActive}
+                        customerId={card.customerId}
+                        customerName={card.customerName}
+                        Phone={formatPhone(card.phone)}
+                        elapsedDays={getElapsedTime(card.lastVisitDt)}
+                        onClick={() => navigate(`/customers/${card.customerId}`)}
+                      />
+                    ))
+                  )}
+                  <div ref={loaderRef} className="py-4 text-center">
+                    {hasMore && <span className="text-placeholder text-xs">불러오는 중...</span>}
+                  </div>
+                </>
               ) : (
-                displayCards.map((card) => (
-                  <CustomerCard
-                    key={card.customerId}
-                    isActive={card.isActive}
-                    customerId={card.customerId}
-                    customerName={card.customerName}
-                    Phone={formatPhone(card.phone)}
-                    elapsedDays={getElapsedTime(card.lastVisitDt)}
-                    onClick={() => navigate(`/customers/${card.customerId}`)}
-                  />
-                ))
+                <>
+                  {!recentCards.length ? (
+                    <p className="text-placeholder text-base text-center py-10">
+                      방문 고객이 없습니다.
+                    </p>
+                  ) : (
+                    recentCards.map((card) => (
+                      <CustomerCard
+                        key={card.customerId}
+                        isActive={card.isActive}
+                        customerId={card.customerId}
+                        customerName={card.customerName}
+                        Phone={formatPhone(card.phone)}
+                        elapsedDays={getElapsedTime(card.lastVisitDt)}
+                        onClick={() => navigate(`/customers/${card.customerId}`)}
+                      />
+                    ))
+                  )}
+                </>
               )}
             </div>
           </div>
         )}
       </div>
-      {/* 푸터 */}
       <PageFooter onNext={() => navigate('/customers/new')} value="+ 신규 고객 등록" />
     </div>
   )

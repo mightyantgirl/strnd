@@ -20,6 +20,8 @@ export default function SurveyDone() {
 
   useSurveyDoneGuard(() => showToast('이미 제출된 설문이에요.'))
 
+  const isDesigner = !!(localStorage.getItem('token') || sessionStorage.getItem('token'))
+
   return (
     <div className="h-full flex flex-col">
       {/* 헤더 */}
@@ -39,7 +41,9 @@ export default function SurveyDone() {
       </div>
 
       {/* 푸터 */}
-      <SurveyFooter value="메인으로 돌아가기" onNext={() => navigate('/home')} />
+      {isDesigner && (
+        <SurveyFooter value="메인으로 돌아가기" onNext={() => navigate('/home')} />
+      )}
       <Toast message={toastMessage} visible={toastVisible} type="base" />
     </div>
   )
