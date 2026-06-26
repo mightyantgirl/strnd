@@ -183,13 +183,13 @@ export default function Home() {
               <span className={`${baseTextClass} font-semibold mb-3 ml-2`}>
                 {searchKeyword ? '검색 결과' : isViewAll ? '전체 고객' : '최근 방문 고객'}
               </span>
-              {!isViewAll && !searchKeyword && (
+              {!searchKeyword && (
                 <button
                   type="button"
-                  onClick={handleViewAll}
+                  onClick={isViewAll ? () => setIsViewAll(false) : handleViewAll}
                   disabled={isLoadingAll}
                   className={` mb-3 ${baseTextClass} mr-2 text-xs font-medium`}>
-                  {isLoadingAll ? '불러오는 중...' : '전체보기'}
+                  {isLoadingAll ? '불러오는 중...' : isViewAll ? '최근 방문순' : '전체보기'}
                 </button>
               )}
             </div>
