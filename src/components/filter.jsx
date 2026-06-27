@@ -19,7 +19,7 @@ const activeChip = 'bg-tint border border-brand text-brand font-bold'
 const inactiveChip = 'bg-bg border border-transparent text-disabled font-medium'
 const baseChip = 'px-3 py-2 rounded-sm text-xs cursor-pointer transition-all shrink-0'
 
-export default function Filter({ onClose, onApply, initialValues }) {
+export default function Filter({ onClose, onApply, initialValues, hideCategory, title }) {
   const [sort, setSort] = useState(initialValues?.sort ?? 'latest')
   const [categories, setCategories] = useState(initialValues?.categories ?? [])
   const [period, setPeriod] = useState(initialValues?.period ?? 'all')
@@ -64,6 +64,16 @@ export default function Filter({ onClose, onApply, initialValues }) {
     setCategories((prev) => (prev.includes(cat) ? prev.filter((c) => c !== cat) : [...prev, cat]))
   }
 
+  const handleReset = () => {
+    setSort('latest')
+    setCategories([])
+    setPeriod('all')
+    setStartDate('')
+    setEndDate('')
+    onApply?.({ sort: 'latest', categories: [], period: 'all', startDate: '', endDate: '' })
+    handleClose()
+  }
+
   const overlayOpacity = mounted ? Math.max(0, 1 - dragY / 300) : 0
 
   return (
@@ -95,12 +105,20 @@ export default function Filter({ onClose, onApply, initialValues }) {
 
         {/* 타이틀 */}
         <div className="py-5 mb-2 flex items-center justify-between">
-          <p className="text-base font-semibold text-primary">히스토리 정렬 필터</p>
+          <span className="text-base font-semibold text-primary">{title}</span>
+          <span className="text-base font-semibold text-placeholder"></span>
+
+          <button onClick={handleReset}>
+            <div className="flex items-center justify-between">
+              <img src="/img/retrun.svg" alt="필터 초기화" className="w-3 h-3 mr-2" />
+              <span className="text-base font-semibold text-placeholder mr-1">초기화</span>
+            </div>
+          </button>
         </div>
 
-        <div className="flex flex-col space-y-8">
+        <div className="flex flex-col space-y-6">
           {/* 기본 정렬 */}
-          <div className="flex flex-col gap-[16px]">
+          <div className="flex flex-col gap-3">
             <p className="text-xs font-semibold text-primary">기본 정렬</p>
             <div className="flex gap-2">
               {SORT_OPTIONS.map(({ label, value }) => (
@@ -114,23 +132,25 @@ export default function Filter({ onClose, onApply, initialValues }) {
             </div>
           </div>
 
-          {/* 서비스 카테고리 */}
-          <div className="flex flex-col gap-[16px]">
-            <p className="text-xs font-semibold text-primary">서비스 카테고리</p>
-            <div className="flex gap-2 flex-wrap">
-              {CATEGORY_OPTIONS.map((cat) => (
-                <button
-                  key={cat}
-                  className={`${baseChip} ${categories.includes(cat) ? activeChip : inactiveChip}`}
-                  onClick={() => toggleCategory(cat)}>
-                  {cat}
-                </button>
-              ))}
+          {/* 서비스 카테고리
+          {!hideCategory && (
+            <div className="flex flex-col gap-3">
+              <p className="text-xs font-semibold text-primary">서비스 카테고리</p>
+              <div className="flex gap-2 flex-wrap">
+                {CATEGORY_OPTIONS.map((cat) => (
+                  <button
+                    key={cat}
+                    className={`${baseChip} ${categories.includes(cat) ? activeChip : inactiveChip}`}
+                    onClick={() => toggleCategory(cat)}>
+                    {cat}
+                  </button>
+                ))}
+              </div>
             </div>
-          </div>
+          )} */}
 
           {/* 조회 기간 */}
-          <div className="flex flex-col gap-[16px]">
+          <div className="flex flex-col gap-3">
             <p className="text-xs font-semibold text-primary">조회 기간</p>
             <div className="flex gap-2">
               {PERIOD_OPTIONS.map(({ label, value }) => (

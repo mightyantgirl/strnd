@@ -1,9 +1,10 @@
 import { useNavigate, useLocation } from 'react-router-dom'
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect, useRef, useMemo } from 'react'
 
 import Input from './../../components/input'
 import CustomerCard from './../../components/customercard'
 import PageFooter from './../../components/pagefooter'
+import Filter from './../../components/filter'
 
 import { getElapsedTime, formatPhone } from '../../utils/dateUtils'
 import useAuthGuard from '../../hooks/useAuthGuard'
@@ -21,6 +22,13 @@ export default function Home() {
   const [displayedCount, setDisplayedCount] = useState(PAGE_SIZE)
   const [isViewAll, setIsViewAll] = useState(false)
   const [isLoadingAll, setIsLoadingAll] = useState(false)
+  const [openHomeFilter, setOpenHomeFilter] = useState(false)
+  const [homeFilter, setHomeFilter] = useState({
+    sort: 'latest',
+    period: 'all',
+    startDate: '',
+    endDate: '',
+  })
 
   const [monthlyCount, setMonthlyCount] = useState(0)
   const [searchKeyword, setSearchKeyword] = useState('')
@@ -110,8 +118,34 @@ export default function Home() {
     return () => observer.disconnect()
   }, [isViewAll, displayedCount, allCustomers.length])
 
-  const displayedCustomers = allCustomers.slice(0, displayedCount)
-  const hasMore = displayedCount < allCustomers.length
+  const filteredAllCustomers = useMemo(() => {
+    let result = [...allCustomers]
+
+    if (homeFilter.startDate || homeFilter.endDate) {
+      const from = homeFilter.startDate ? new Date(homeFilter.startDate) : null
+      const to = homeFilter.endDate ? new Date(homeFilter.endDate) : null
+      result = result.filter((c) => {
+        const d = new Date(c.lastVisitDt)
+        if (from && to) return d >= from && d <= to
+        if (from) return d >= from
+        if (to) return d <= to
+        return true
+      })
+    } else if (homeFilter.period !== 'all') {
+      const months = homeFilter.period === '1m' ? 1 : homeFilter.period === '3m' ? 3 : 6
+      const now = new Date()
+      const from = new Date(now.getFullYear(), now.getMonth() - months, now.getDate())
+      result = result.filter((c) => new Date(c.lastVisitDt) >= from)
+    }
+
+    return result.sort((a, b) => {
+      const diff = new Date(b.lastVisitDt) - new Date(a.lastVisitDt)
+      return homeFilter.sort === 'latest' ? diff : -diff
+    })
+  }, [allCustomers, homeFilter])
+
+  const displayedCustomers = filteredAllCustomers.slice(0, displayedCount)
+  const hasMore = displayedCount < filteredAllCustomers.length
 
   return (
     <div style={{ height: '100dvh' }} className="flex flex-col">
@@ -173,6 +207,8 @@ export default function Home() {
                   value={searchKeyword}
                   className="border border-brand"
                   placeholder="고객 이름 검색"
+                  filter={true}
+                  onFilterClick={() => setOpenHomeFilter(true)}
                   onChange={(e) => setSearchKeyword(e.target.value)}
                 />
               </div>
@@ -188,7 +224,7 @@ export default function Home() {
                   type="button"
                   onClick={isViewAll ? () => setIsViewAll(false) : handleViewAll}
                   disabled={isLoadingAll}
-                  className={` mb-3 ${baseTextClass} mr-2 text-xs font-medium`}>
+                  className={`${baseTextClass} mb-3 mr-2 text-xs font-medium`}>
                   {isLoadingAll ? '불러오는 중...' : isViewAll ? '최근 방문순' : '전체보기'}
                 </button>
               )}
@@ -263,6 +299,24 @@ export default function Home() {
         )}
       </div>
       <PageFooter onNext={() => navigate('/customers/new')} value="+ 신규 고객 등록" />
+      {openHomeFilter && (
+        <Filter
+          title="고객 정렬 필터"
+          onClose={() => setOpenHomeFilter(false)}
+          onApply={(values) => {
+            setHomeFilter({
+              sort: values.sort,
+              period: values.period,
+              startDate: values.startDate,
+              endDate: values.endDate,
+            })
+            setDisplayedCount(PAGE_SIZE)
+          }}
+          initialValues={{ ...homeFilter, categories: [] }}
+          hideCategory={true}
+          title="고객 필터"
+        />
+      )}
     </div>
   )
 }

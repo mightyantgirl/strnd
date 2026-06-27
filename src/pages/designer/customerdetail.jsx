@@ -70,6 +70,15 @@ export default function CustomerDetail() {
     setFilterState(values)
   }
 
+  const toggleCategory = (cat) => {
+    setFilterState((prev) => ({
+      ...prev,
+      categories: prev.categories.includes(cat)
+        ? prev.categories.filter((c) => c !== cat)
+        : [...prev.categories, cat],
+    }))
+  }
+
   //히스토리 카드 필터 조건 함수
   const filteredVisits = useMemo(() => {
     let result = visits.filter((v) => v.status === 'COMPLETED')
@@ -155,7 +164,10 @@ export default function CustomerDetail() {
         if (!response) return
 
         const data = await response.json()
-        console.log('visits services:', data.map((v) => ({ id: v.visitId, services: v.services })))
+        console.log(
+          'visits services:',
+          data.map((v) => ({ id: v.visitId, services: v.services })),
+        )
         setVisits(data)
 
         const submitted = data.find((v) => v.status === 'SUBMITTED')
@@ -264,7 +276,7 @@ export default function CustomerDetail() {
             <div className="h-10 bg-border rounded-lg w-full mt-4" />
           </div>
         ) : (
-          <div className=" top-0  fade-in pt-12 pb-6">
+          <div className=" top-0  fade-in pt-12 pb-5">
             <CustomerInfoCard
               name={name}
               isActive={isActive}
@@ -277,19 +289,22 @@ export default function CustomerDetail() {
               }
               onDeleteClick={() => setShowDeleteModal(true)}
             />
-            <div className="mt-4">
+            <div className="mt-3">
               <Button value="설문 시작하기" height="lg" survey={true} onClick={startSurvey} />
-              <p
-                className="underline font-semibold text-placeholder py-5 px-4 text-center"
-                onClick={handleRecordWithoutSurvey}>
-                설문 없이 바로 기록하기
-              </p>
+              <div className="flex justify-center items-center py-4 px-3">
+                <span
+                  className="font-semibold text-placeholder text-center mr-2"
+                  onClick={handleRecordWithoutSurvey}>
+                  설문 없이 바로 기록하기
+                </span>
+                <img src="../img/right.svg" alt="" className="w-[5px]" />
+              </div>
             </div>
 
             <>
               {/* 탭 */}
-              <div className="bg-border w-full rounded-lg mb-2">
-                <ol className="flex gap-2 p-1 ">
+              <div className="bg-border w-full rounded-lg mb-[3px]">
+                <ol className="flex gap-2 p-1">
                   <li
                     onClick={() => {
                       setActiveTab('history')
@@ -320,43 +335,35 @@ export default function CustomerDetail() {
               {/* 히스토리 */}
               {activeTab === 'history' && (
                 <>
-                  <div className="flex items-center justify-between mb-1 mr-1">
-                    <div className="flex justify-start space-x-2">
+                  <div className="flex items-center mb-[6px] mr-1 space-x-1 justify-between">
+                    <div className="flex space-x-1 ">
+                      {['컷', '펌', '컬러', '클리닉'].map((c) => (
+                        <button
+                          key={c}
+                          onClick={() => toggleCategory(c)}
+                          className="flex items-center gap-1 text-xs py-1">
+                          <span
+                            className={`px-3 py-1 rounded-md font-semibold transition-all ${
+                              filterState.categories.includes(c)
+                                ? 'bg-tint border border-brand text-brand'
+                                : 'bg-border border border-border text-placeholder'
+                            }`}>
+                            {c}
+                          </span>
+                        </button>
+                      ))}
+                    </div>
+                    <div>
                       <button
                         onClick={() => setOpenSheet(true)}
                         className="flex items-center gap-1 text-xs text-placeholder font-medium py-1">
-                        <span className="bg-border py-1 px-3 rounded-full">상세 필터</span>
+                        <div className="flex items-center mr-2 mb-[2px]">
+                          <img src="../img/filter.svg" alt="" className="w-4" />
+                        </div>
                       </button>
-                      <div className="flex space-x-1">
-                        {['컷', '펌', '컬러', '클리닉']
-                          .filter((c) => filterState.categories.includes(c))
-                          .map((c) => (
-                            <button
-                              key={c}
-                              className="flex items-center gap-1 text-xs font-medium py-1">
-                              <span className="bg-tint border border-brand text-brand font-bold py-1 px-3 rounded-full">
-                                {c}
-                              </span>
-                            </button>
-                          ))}
-                      </div>
                     </div>
-                    <img
-                      src="/img/retrun.svg"
-                      alt="필터 초기화"
-                      className="w-3 h-3 mr-2 cursor-pointer"
-                      onClick={() =>
-                        setFilterState({
-                          sort: 'latest',
-                          categories: [],
-                          period: 'all',
-                          startDate: '',
-                          endDate: '',
-                        })
-                      }
-                    />
                   </div>
-                  <div className="space-y-3">
+                  <div className="space-y-2 -mt-[2px]">
                     {filteredVisits.length === 0 ? (
                       <div className="flex flex-col items-center mt-8">
                         <img src="../img/none.svg" alt="" />
@@ -385,7 +392,7 @@ export default function CustomerDetail() {
 
               {/*오늘 설문 */}
               {activeTab === 'todaySurvey' && (
-                <>
+                <div className="mt-2">
                   {visits.some((visit) => visit.status === 'SUBMITTED') ? (
                     <SurveyCard
                       data={surveyData}
@@ -405,13 +412,13 @@ export default function CustomerDetail() {
                       </span>
                     </div>
                   )}
-                </>
+                </div>
               )}
 
               {/* 메모 */}
 
               {activeTab === 'memo' && (
-                <>
+                <div className="mt-2">
                   <TextFiled
                     value={memo}
                     onChange={(e) => setMemo(e.target.value)}
@@ -419,7 +426,7 @@ export default function CustomerDetail() {
                     disabled={!isChanged}
                     save={true}
                   />
-                </>
+                </div>
               )}
             </>
           </div>
@@ -427,8 +434,10 @@ export default function CustomerDetail() {
       </div>
       {openSheet && (
         <Filter
+          title="히스토리 정렬 필터"
           onClose={() => setOpenSheet(false)}
           onApply={handleFilterApply}
+          hideCategory={true}
           initialValues={filterState}
         />
       )}
@@ -461,12 +470,7 @@ export default function CustomerDetail() {
           </div>
         </div>
       )}
-      {showQRSheet && (
-        <QRBottomSheet
-          surveyUrl={surveyUrl}
-          onClose={() => setShowQRSheet(false)}
-        />
-      )}
+      {showQRSheet && <QRBottomSheet surveyUrl={surveyUrl} onClose={() => setShowQRSheet(false)} />}
       <Toast message={toastMessage} visible={toastVisible} type={toastType} />
     </div>
   )
