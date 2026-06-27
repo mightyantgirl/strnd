@@ -19,12 +19,13 @@ const activeChip = 'bg-tint border border-brand text-brand font-bold'
 const inactiveChip = 'bg-bg border border-transparent text-disabled font-medium'
 const baseChip = 'px-3 py-2 rounded-sm text-xs cursor-pointer transition-all shrink-0'
 
-export default function Filter({ onClose, onApply, initialValues, hideCategory, title }) {
+export default function Filter({ onClose, onApply, initialValues, hideCategory, title, showViewToggle }) {
   const [sort, setSort] = useState(initialValues?.sort ?? 'latest')
   const [categories, setCategories] = useState(initialValues?.categories ?? [])
   const [period, setPeriod] = useState(initialValues?.period ?? 'all')
   const [startDate, setStartDate] = useState(initialValues?.startDate ?? '')
   const [endDate, setEndDate] = useState(initialValues?.endDate ?? '')
+  const [viewAll, setViewAll] = useState(initialValues?.viewAll ?? false)
 
   const [mounted, setMounted] = useState(false)
   const [startY, setStartY] = useState(0)
@@ -70,7 +71,8 @@ export default function Filter({ onClose, onApply, initialValues, hideCategory, 
     setPeriod('all')
     setStartDate('')
     setEndDate('')
-    onApply?.({ sort: 'latest', categories: [], period: 'all', startDate: '', endDate: '' })
+    setViewAll(false)
+    onApply?.({ sort: 'latest', categories: [], period: 'all', startDate: '', endDate: '', viewAll: false })
     handleClose()
   }
 
@@ -117,6 +119,25 @@ export default function Filter({ onClose, onApply, initialValues, hideCategory, 
         </div>
 
         <div className="flex flex-col space-y-6">
+          {/* 보기 방식 */}
+          {showViewToggle && (
+            <div className="flex flex-col gap-3">
+              <p className="text-xs font-semibold text-primary">보기 방식</p>
+              <div className="flex gap-2">
+                <button
+                  className={`${baseChip} ${!viewAll ? activeChip : inactiveChip}`}
+                  onClick={() => setViewAll(false)}>
+                  최근 방문순
+                </button>
+                <button
+                  className={`${baseChip} ${viewAll ? activeChip : inactiveChip}`}
+                  onClick={() => setViewAll(true)}>
+                  전체보기
+                </button>
+              </div>
+            </div>
+          )}
+
           {/* 기본 정렬 */}
           <div className="flex flex-col gap-3">
             <p className="text-xs font-semibold text-primary">기본 정렬</p>
@@ -187,7 +208,7 @@ export default function Filter({ onClose, onApply, initialValues, hideCategory, 
           <Button
             value="적용"
             onClick={() => {
-              onApply?.({ sort, categories, period, startDate, endDate })
+              onApply?.({ sort, categories, period, startDate, endDate, viewAll })
               handleClose()
             }}
           />

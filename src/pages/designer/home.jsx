@@ -219,15 +219,6 @@ export default function Home() {
               <span className={`${baseTextClass} font-semibold mb-3 ml-2`}>
                 {searchKeyword ? '검색 결과' : isViewAll ? '전체 고객' : '최근 방문 고객'}
               </span>
-              {!searchKeyword && (
-                <button
-                  type="button"
-                  onClick={isViewAll ? () => setIsViewAll(false) : handleViewAll}
-                  disabled={isLoadingAll}
-                  className={`${baseTextClass} mb-3 mr-2 text-xs font-medium`}>
-                  {isLoadingAll ? '불러오는 중...' : isViewAll ? '최근 방문순' : '전체보기'}
-                </button>
-              )}
             </div>
 
             {/* 카드 리스트 */}
@@ -301,7 +292,7 @@ export default function Home() {
       <PageFooter onNext={() => navigate('/customers/new')} value="+ 신규 고객 등록" />
       {openHomeFilter && (
         <Filter
-          title="고객 정렬 필터"
+          title="고객 필터"
           onClose={() => setOpenHomeFilter(false)}
           onApply={(values) => {
             setHomeFilter({
@@ -311,10 +302,15 @@ export default function Home() {
               endDate: values.endDate,
             })
             setDisplayedCount(PAGE_SIZE)
+            if (values.viewAll && !isViewAll) {
+              handleViewAll()
+            } else if (!values.viewAll && isViewAll) {
+              setIsViewAll(false)
+            }
           }}
-          initialValues={{ ...homeFilter, categories: [] }}
+          initialValues={{ ...homeFilter, categories: [], viewAll: isViewAll }}
           hideCategory={true}
-          title="고객 필터"
+          showViewToggle={true}
         />
       )}
     </div>
