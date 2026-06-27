@@ -5,11 +5,31 @@ const baseClass = `w-full py-5 px-4 rounded-xl border border-bg bg-card-bg `
 const baseTextClass = `text-base text-placeholder font-medium text-xs`
 const baseListClass = `py-3 text-xs`
 
+const STYLE_IMAGE_MAP = {
+  1: '/img/hair_01.png',
+  2: '/img/hair_02.png',
+  3: '/img/hair_03.png',
+  4: '/img/hair_04.png',
+  5: '/img/hair_05.png',
+  6: '/img/hair_06.png',
+}
+
 export default function SurveyCard({ onClick, data }) {
   if (!data) return null
 
-  const { visitDt, status, visitRoute, refDesigner, services, moods, hairConcerns, requestMemo } =
-    data
+  const {
+    visitDt,
+    status,
+    visitRoute,
+    refDesigner,
+    services,
+    moods,
+    hairConcerns,
+    requestMemo,
+    styleImageIds,
+  } = data
+
+  console.log('data:', data)
 
   return (
     <div className={baseClass}>
@@ -60,6 +80,19 @@ export default function SurveyCard({ onClick, data }) {
             <div className={baseListClass}>
               <p className="font-bold text-disabled  mb-1">요청사항</p>
               <p className="text-secondary">{requestMemo}</p>
+            </div>
+          </li>
+          <li>
+            <div className={baseListClass}>
+              <div className="flex gap-2 flex-wrap mt-1">
+                {styleImageIds?.map((id) => (
+                  <img
+                    key={id}
+                    src={STYLE_IMAGE_MAP[id]}
+                    className="w-20 h-20 rounded-lg object-cover"
+                  />
+                ))}
+              </div>
             </div>
           </li>
         </ul>

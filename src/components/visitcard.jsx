@@ -5,6 +5,15 @@ import useApiFetch from '../hooks/useApiFetch'
 const baseClass = `w-full py-5 px-4 rounded-xl border border-bg bg-card-bg `
 const baseTextClass = `text-base text-placeholder font-medium`
 
+const STYLE_IMAGE_MAP = {
+  1: '/img/hair_01.png',
+  2: '/img/hair_02.png',
+  3: '/img/hair_03.png',
+  4: '/img/hair_04.png',
+  5: '/img/hair_05.png',
+  6: '/img/hair_06.png',
+}
+
 export default function VisitCard({
   date,
   elapsedDays,
@@ -14,6 +23,7 @@ export default function VisitCard({
   treatmentNote,
   visitId,
   service,
+  styleImageIds,
 }) {
   const [isOpen, setIsOpen] = useState(false)
   const [detailData, setDetailData] = useState(null)
@@ -116,6 +126,21 @@ export default function VisitCard({
                   <div className="flex-col">
                     <p className="font-semibold text-xs mb-1">요청 사항</p>
                     <p className="text-secondary  text-xs"> {detailData.requestMemo}</p>
+                  </div>
+                )}
+              </li>
+              <li>
+                {detailData.styleImageIds && (
+                  <div className="flex-col">
+                    <div className="flex gap-2 flex-wrap mt-1">
+                      {detailData.styleImageIds?.map((id) => (
+                        <img
+                          key={id}
+                          src={STYLE_IMAGE_MAP[id]}
+                          className="w-20 h-20 rounded-lg object-cover"
+                        />
+                      ))}
+                    </div>
                   </div>
                 )}
               </li>

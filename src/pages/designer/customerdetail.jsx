@@ -41,8 +41,6 @@ export default function CustomerDetail() {
   const [gender, setGender] = useState('')
   const [isLoading, setIsLoading] = useState(true)
 
-  // const [visitCount, setVisitCount] = useState('')
-
   const [visits, setVisits] = useState([])
   const [surveyData, setSurveyData] = useState(null)
   const [memo, setMemo] = useState('')
@@ -50,11 +48,13 @@ export default function CustomerDetail() {
 
   const [toastMessage, setToastMessage] = useState('') // 토스트에 표시할 글자
   const [toastVisible, setToastVisible] = useState(false) // 보일지 말지
-  const [toastType, setToastType] = useState(false) // 보일지 말지
+  const [toastType, setToastType] = useState(false)
 
   const isChanged = memo !== originalMemo
   const visitCount = visits.filter((visit) => visit.status === 'COMPLETED').length
   const hasSubmittedSurvey = visits.some((v) => v.status === 'SUBMITTED')
+
+  console.log('surveyData:', surveyData)
 
   const [filterState, setFilterState] = useState({
     sort: 'latest',
@@ -138,6 +138,7 @@ export default function CustomerDetail() {
         const response = await apiFetch(`https://strnd-be.onrender.com/api/customers/${customerId}`)
         if (!response) return
         const data = await response.json()
+
         setName(data.customerName)
         setLastVisitAt(data.lastVisitDt)
         setPhone(data.phone)
@@ -164,10 +165,7 @@ export default function CustomerDetail() {
         if (!response) return
 
         const data = await response.json()
-        console.log(
-          'visits services:',
-          data.map((v) => ({ id: v.visitId, services: v.services })),
-        )
+
         setVisits(data)
 
         const submitted = data.find((v) => v.status === 'SUBMITTED')
