@@ -42,7 +42,7 @@ export default function Input({
         maxLength={maxLength}
         onChange={onChange}
         onFocus={(e) => e.target.scrollIntoView({ behavior: 'smooth', block: 'center' })}
-        className={`${baseClass} ${stateClass} ${error ? 'border-danger' : 'border-border'} ${className} pl-12`}></input>
+        className={`${baseClass} ${stateClass} ${error ? 'border-danger' : 'border-border'} ${className} ${search ? 'pl-12' : ''}`}></input>
       {subtext && !error && (
         <p className="text-xs font-medium text-placeholder mt-2 pl-1">{subtext}</p>
       )}

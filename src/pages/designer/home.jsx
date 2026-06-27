@@ -118,6 +118,14 @@ export default function Home() {
     return () => observer.disconnect()
   }, [isViewAll, displayedCount, allCustomers.length])
 
+  const sortedRecentCards = useMemo(() => {
+    return [...recentCards].sort((a, b) => {
+      const diff = new Date(b.lastVisitDt) - new Date(a.lastVisitDt)
+      return homeFilter.sort === 'latest' ? diff : -diff
+    })
+  }, [recentCards, homeFilter.sort])
+
+  //전체보기 필터 함수
   const filteredAllCustomers = useMemo(() => {
     let result = [...allCustomers]
 
@@ -266,12 +274,12 @@ export default function Home() {
                 </>
               ) : (
                 <>
-                  {!recentCards.length ? (
+                  {!sortedRecentCards.length ? (
                     <p className="text-placeholder text-base text-center py-10">
                       방문 고객이 없습니다.
                     </p>
                   ) : (
-                    recentCards.map((card) => (
+                    sortedRecentCards.map((card) => (
                       <CustomerCard
                         key={card.customerId}
                         isActive={card.isActive}
@@ -292,7 +300,7 @@ export default function Home() {
       <PageFooter onNext={() => navigate('/customers/new')} value="+ 신규 고객 등록" />
       {openHomeFilter && (
         <Filter
-          title="고객 필터"
+          title="고객 검색 필터"
           onClose={() => setOpenHomeFilter(false)}
           onApply={(values) => {
             setHomeFilter({
