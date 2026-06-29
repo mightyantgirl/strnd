@@ -5,6 +5,7 @@ import Input from './../../components/input'
 import CustomerCard from './../../components/customercard'
 import PageFooter from './../../components/pagefooter'
 import Filter from './../../components/filter'
+import Toast from './../../components/toast'
 
 import { getElapsedTime, formatPhone } from '../../utils/dateUtils'
 import useAuthGuard from '../../hooks/useAuthGuard'
@@ -33,6 +34,14 @@ export default function Home() {
   const [monthlyCount, setMonthlyCount] = useState(0)
   const [searchKeyword, setSearchKeyword] = useState('')
   const [isLoading, setIsLoading] = useState(true)
+  const [toastMessage, setToastMessage] = useState('')
+  const [toastVisible, setToastVisible] = useState(false)
+
+  const showToast = (message) => {
+    setToastMessage(message)
+    setToastVisible(true)
+    setTimeout(() => setToastVisible(false), 3000)
+  }
   const navigate = useNavigate()
   const location = useLocation()
   const apiFetch = useApiFetch()
@@ -41,6 +50,12 @@ export default function Home() {
 
   const designerName =
     localStorage.getItem('designerName') || sessionStorage.getItem('designerName')
+
+  useEffect(() => {
+    if (location.state?.toast) {
+      showToast(location.state.toast)
+    }
+  }, [])
 
   useEffect(() => {
     setIsViewAll(false)
@@ -298,6 +313,7 @@ export default function Home() {
         )}
       </div>
       <PageFooter onNext={() => navigate('/customers/new')} value="+ 신규 고객 등록" />
+      <Toast message={toastMessage} visible={toastVisible} type="base" />
       {openHomeFilter && (
         <Filter
           title="고객 검색 필터"

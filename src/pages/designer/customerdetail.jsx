@@ -127,7 +127,7 @@ export default function CustomerDetail() {
 
   useEffect(() => {
     if (location.state?.toast) {
-      showToast(location.state.toast)
+      showToast(location.state.toast, 'check')
     }
   }, [])
 
@@ -234,7 +234,7 @@ export default function CustomerDetail() {
       method: 'DELETE',
     })
     if (!response) return
-    navigate('/home')
+    navigate('/home', { state: { toast: '고객이 삭제되었어요.' } })
   }
 
   return (

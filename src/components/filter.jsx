@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import Button from '../components/button'
+import Toast from '../components/toast'
 
 const SORT_OPTIONS = [
   { label: '최신 순', value: 'latest' },
@@ -26,6 +27,15 @@ export default function Filter({ onClose, onApply, initialValues, hideCategory, 
   const [startDate, setStartDate] = useState(initialValues?.startDate ?? '')
   const [endDate, setEndDate] = useState(initialValues?.endDate ?? '')
   const [viewAll, setViewAll] = useState(initialValues?.viewAll ?? false)
+
+  const [toastMessage, setToastMessage] = useState('')
+  const [toastVisible, setToastVisible] = useState(false)
+
+  const showToast = (message) => {
+    setToastMessage(message)
+    setToastVisible(true)
+    setTimeout(() => setToastVisible(false), 3000)
+  }
 
   const [mounted, setMounted] = useState(false)
   const [startY, setStartY] = useState(0)
@@ -208,12 +218,17 @@ export default function Filter({ onClose, onApply, initialValues, hideCategory, 
           <Button
             value="적용"
             onClick={() => {
+              if (startDate && endDate && startDate > endDate) {
+                showToast('시작일이 종료일보다 늦을 수 없어요.')
+                return
+              }
               onApply?.({ sort, categories, period, startDate, endDate, viewAll })
               handleClose()
             }}
           />
         </div>
       </div>
+      <Toast message={toastMessage} visible={toastVisible} type="error" />
     </div>
   )
 }

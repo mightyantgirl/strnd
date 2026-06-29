@@ -96,7 +96,7 @@ export default function EditCustomer() {
     })
 
     if (response.ok) {
-      navigate(-1, { state: { toast: '고객 정보가 수정되었어요.' } })
+      navigate(`/customers/${customerId}`, { state: { toast: '고객 정보가 수정되었어요.' } })
     } else {
       const data = await response.json()
       if (response.status === 409) {
