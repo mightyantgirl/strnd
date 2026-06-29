@@ -18,11 +18,7 @@ export default function Login() {
   //로그인 토큰 정보 확인
   useEffect(() => {
     const token = localStorage.getItem('token') || sessionStorage.getItem('token')
-    if (token) {
-      navigate('/home')
-    } else {
-      navigate('/login')
-    }
+    if (token) navigate('/home')
   }, [])
 
   //  실시간 연락처 검증
