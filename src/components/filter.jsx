@@ -139,7 +139,7 @@ export default function Filter({ onClose, onApply, initialValues, hideCategory, 
           )}
 
           {/* 기본 정렬 */}
-          <div className="flex flex-col gap-3">
+          <div className={`flex flex-col gap-3 ${showViewToggle && !viewAll ? 'opacity-40 pointer-events-none' : ''}`}>
             <p className="text-xs font-semibold text-primary">기본 정렬</p>
             <div className="flex gap-2">
               {SORT_OPTIONS.map(({ label, value }) => (
@@ -171,7 +171,7 @@ export default function Filter({ onClose, onApply, initialValues, hideCategory, 
           )} */}
 
           {/* 조회 기간 */}
-          <div className="flex flex-col gap-3">
+          <div className={`flex flex-col gap-3 ${showViewToggle && !viewAll ? 'opacity-40 pointer-events-none' : ''}`}>
             <p className="text-xs font-semibold text-primary">조회 기간</p>
             <div className="flex gap-2">
               {PERIOD_OPTIONS.map(({ label, value }) => (
