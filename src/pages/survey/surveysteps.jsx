@@ -1,6 +1,5 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useNavigate, useLocation, useParams, useSearchParams } from 'react-router-dom'
-
 
 import SurveyFooter from '../../components/surveyfooter'
 import SurveyHeader from '../../components/surveyheader'
@@ -36,6 +35,27 @@ export default function SurveySteps() {
 
   const surveyToken = searchParams.get('surveyToken')
   const isFirstVisit = location.state?.isFirstVisit ?? true
+
+  const [isValidating, setIsValidating] = useState(true)
+
+  useEffect(() => {
+    const checkStatus = async () => {
+      try {
+        const response = await fetch(`https://strnd-be.onrender.com/api/survey/${surveyToken}`)
+        const data = await response.json()
+
+        if (data.status !== 'PENDING') {
+          navigate(`/survey/${visitId}/done`, { replace: true })
+          return
+        }
+      } catch (error) {
+        console.error('설문 상태 확인 실패:', error)
+      } finally {
+        setIsValidating(false)
+      }
+    }
+    checkStatus()
+  }, [])
 
   const [surveyData, setSurveyData] = useState({
     // 동의 (SurveyMain에서 받음)
@@ -110,6 +130,8 @@ export default function SurveySteps() {
     5: { value: '제출하기', children: '' },
   }
 
+  if (isValidating) return null
+
   return (
     <div style={{ height: '100dvh' }} className="flex flex-col">
       <SurveyHeader
@@ -123,7 +145,9 @@ export default function SurveySteps() {
         }}
       />
       <div className="flex-1 min-h-0 overflow-y-auto" style={{ touchAction: 'pan-y' }}>
-        {currentStep === 0 && <Step0 surveyData={surveyData} onUpdate={updateSurveyData} isFirstVisit={isFirstVisit} />}
+        {currentStep === 0 && (
+          <Step0 surveyData={surveyData} onUpdate={updateSurveyData} isFirstVisit={isFirstVisit} />
+        )}
         {currentStep === 1 && <Step1 surveyData={surveyData} onUpdate={updateSurveyData} />}
         {currentStep === 2 && <Step2 surveyData={surveyData} onUpdate={updateSurveyData} />}
         {currentStep === 3 && <Step3 surveyData={surveyData} onUpdate={updateSurveyData} />}

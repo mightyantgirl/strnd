@@ -211,7 +211,8 @@ export default function CustomerDetail() {
     })
     if (!response) return
     const data = await response.json()
-    const url = `${window.location.origin}/survey/${data.visitId}?customerId=${customerId}&surveyToken=${data.surveyToken}`
+    const isFirstVisit = visitCount === 0
+    const url = `${window.location.origin}/survey/${data.visitId}?customerId=${customerId}&surveyToken=${data.surveyToken}&lastVisitDt=${encodeURIComponent(lastVisitAt ?? '')}&isFirstVisit=${isFirstVisit}`
     setSurveyUrl(url)
     setShowQRSheet(true)
   }
