@@ -10,59 +10,33 @@ const baseTextClass = `text-xs text-placeholder font-medium`
 export default function SurveyMain() {
   const { visitId } = useParams()
   const [searchParams] = useSearchParams()
-  const customerId = searchParams.get('customerId')
 
   const [checkActive, setCheckActive] = useState(false)
   const [openSheet, setOpenSheet] = useState(false)
 
-  const [lastVisitAt, setLastVisitAt] = useState('')
-  const [lastVisitService, setLastVisitService] = useState('')
-  const [isFirstVisit, setIsFirstVisit] = useState(true)
-
-  const [customerName, setCustomerName] = useState(true)
-  const [lastTreatmentMenu, setLastTreatmentMenu] = useState(true)
+  const [customerName, setCustomerName] = useState('')
+  const [lastTreatmentMenu, setLastTreatmentMenu] = useState(null)
 
   const navigate = useNavigate()
   const surveyToken = searchParams.get('surveyToken')
+  const lastVisitAt = searchParams.get('lastVisitDt') ?? ''
+  const isFirstVisit = searchParams.get('isFirstVisit') === 'true'
 
   const isToday = lastVisitAt?.startsWith(new Date().toISOString().slice(0, 10))
 
-  //고객 상세 카드 api 요청 함수
+  //surveyToken
   useEffect(() => {
-    const fetchCustomer = async () => {
-      try {
-        const token = localStorage.getItem('token') || sessionStorage.getItem('token')
-
-        const response = await fetch(`https://strnd-be.onrender.com/api/customers/${customerId}`, {
-          method: 'GET',
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        })
-
-        const data = await response.json()
-
-        setLastVisitAt(data.lastVisitDt)
-      } catch (error) {
-        console.error('데이터 로딩 실패:', error)
-      }
+    if (!surveyToken) {
+      navigate(`/survey/${visitId}/done`, { replace: true })
     }
-    fetchCustomer()
-  }, [])
+  }, [surveyToken])
 
   //설문 페이지 정보 조회 api 요청 함수
   useEffect(() => {
-    const fetchCustomer = async () => {
+    if (!surveyToken) return
+    const fetchSurvey = async () => {
       try {
-        const token = localStorage.getItem('token') || sessionStorage.getItem('token')
-
-        const response = await fetch(`https://strnd-be.onrender.com/api/survey/${surveyToken}`, {
-          method: 'GET',
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        })
-
+        const response = await fetch(`https://strnd-be.onrender.com/api/survey/${surveyToken}`)
         const data = await response.json()
 
         setLastTreatmentMenu(data.lastTreatmentMenu)
@@ -71,36 +45,7 @@ export default function SurveyMain() {
         console.error('데이터 로딩 실패:', error)
       }
     }
-    fetchCustomer()
-  }, [])
-
-  //고객 히스토리 카드 api 요청 함수
-  useEffect(() => {
-    const fetchHistory = async () => {
-      try {
-        const token = localStorage.getItem('token') || sessionStorage.getItem('token')
-
-        const response = await fetch(
-          `https://strnd-be.onrender.com/api/customers/${customerId}/visits`,
-          {
-            method: 'GET',
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          },
-        )
-
-        const data = await response.json()
-
-        const completedVisits = data.filter((v) => v.status === 'COMPLETED')
-
-        setIsFirstVisit(completedVisits.length === 0) // 완료된 방문 없으면 첫방문
-        setLastVisitService(completedVisits[0]?.treatmentMenu ?? null)
-      } catch (error) {
-        console.error('히스토리 로딩 실패:', error)
-      }
-    }
-    fetchHistory()
+    fetchSurvey()
   }, [])
 
   return (
@@ -130,7 +75,7 @@ export default function SurveyMain() {
         <p>
           {isFirstVisit
             ? '좋은 기억 만드실 수 있도록 최선을 다하겠습니다.'
-            : lastVisitService
+            : lastTreatmentMenu
               ? `마지막으로 받은 시술은 ${formatList(lastTreatmentMenu)} 입니다.`
               : '좋은 기억 만드실 수 있도록 최선을 다하겠습니다.'}
         </p>

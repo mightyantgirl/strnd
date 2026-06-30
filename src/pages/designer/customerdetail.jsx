@@ -229,7 +229,6 @@ export default function CustomerDetail() {
   }
 
   //고객 상세 status별 안내화면 분기처리 함수
-
   const handleDelete = async () => {
     const response = await apiFetch(`https://strnd-be.onrender.com/api/customers/${customerId}`, {
       method: 'DELETE',

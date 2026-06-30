@@ -40,6 +40,10 @@ export default function SurveySteps() {
 
   useEffect(() => {
     const checkStatus = async () => {
+      if (!surveyToken) {
+        navigate(`/survey/${visitId}/done`, { replace: true })
+        return
+      }
       try {
         const response = await fetch(`https://strnd-be.onrender.com/api/survey/${surveyToken}`)
         const data = await response.json()
