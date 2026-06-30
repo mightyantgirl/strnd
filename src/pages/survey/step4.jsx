@@ -1,25 +1,28 @@
-import { useNavigate } from 'react-router-dom'
+import { useState, useEffect } from 'react'
 
-import SurveyHeader from '../../components/surveyheader'
 import StyleCard from '../../components/stylecard'
 
 const baseTextClass = `text-xs text-primary font-bold`
 
 export default function SurveyStep4({ surveyData, onUpdate }) {
-  const navigate = useNavigate()
+  const [styleCards, setStyleCards] = useState([])
 
-  const STYLECARDS = [
-    { id: 1, imageUrl: './img/hair_01.png', label: 'C컬 레이어드' },
-    { id: 2, imageUrl: './img/hair_02.png', label: 'S컬 레이어드' },
-    { id: 3, imageUrl: './img/hair_03.png', label: '히피펌' },
-    { id: 4, imageUrl: './img/hair_04.png', label: '숏컷' },
-    { id: 5, imageUrl: './img/hair_05.png', label: '원랭스 컷' },
-    { id: 6, imageUrl: './img/hair_06.png', label: '어쩌구펌' },
-    { id: 7, imageUrl: './img/hair_07.png', label: '어쩌구펌' },
-    { id: 8, imageUrl: './img/hair_08.png', label: '어쩌구펌' },
-    { id: 9, imageUrl: './img/hair_09.png', label: '어쩌구펌' },
-    { id: 10, imageUrl: './img/hair_10.png', label: '어쩌구펌' },
-  ]
+  useEffect(() => {
+    const fetchStyleImages = async () => {
+      try {
+        const response = await fetch('https://strnd-be.onrender.com/api/style-images')
+        const data = await response.json()
+
+        const filtered = data.filter(
+          (item) => item.gender === surveyData.gender && item.serviceId === surveyData.serviceId,
+        )
+        setStyleCards(filtered)
+      } catch (error) {
+        console.error('스타일 이미지 로딩 실패:', error)
+      }
+    }
+    fetchStyleImages()
+  }, [])
 
   const toggle = (id) => {
     const next = surveyData.styleImageIds.includes(id)
@@ -43,17 +46,23 @@ export default function SurveyStep4({ surveyData, onUpdate }) {
 
         {/* 컨텐츠 - 설문 영역 */}
         <div className="space-y-8">
-          <div className="grid grid-cols-2 gap-3">
-            {STYLECARDS.map((card) => (
-              <StyleCard
-                key={card.id}
-                imageUrl={card.imageUrl}
-                label={card.label}
-                selected={surveyData.styleImageIds.includes(card.id)}
-                onClick={() => toggle(card.id)}
-              />
-            ))}
-          </div>
+          {styleCards.length === 0 ? (
+            <p className="text-placeholder text-base text-center py-10">
+              참고할 스타일 이미지가 없습니다.
+            </p>
+          ) : (
+            <div className="grid grid-cols-2 gap-3">
+              {styleCards.map((card) => (
+                <StyleCard
+                  key={card.imageId}
+                  imageUrl={card.imageUrl}
+                  label={card.imageAlt}
+                  selected={surveyData.styleImageIds.includes(card.imageId)}
+                  onClick={() => toggle(card.imageId)}
+                />
+              ))}
+            </div>
+          )}
         </div>
       </div>
     </div>

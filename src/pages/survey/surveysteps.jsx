@@ -114,6 +114,18 @@ export default function SurveySteps() {
     setSurveyData((prev) => ({ ...prev, [key]: value }))
   }
 
+  const hasStep4 = [1, 2].includes(surveyData.serviceId)
+
+  const getNextStep = (step) => {
+    if (step === 3 && !hasStep4) return 5
+    return step + 1
+  }
+
+  const getPrevStep = (step) => {
+    if (step === 5 && !hasStep4) return 3
+    return step - 1
+  }
+
   const isStepValid = () => {
     if (currentStep === 0) return surveyData.gender !== '' && surveyData.visitRoute !== ''
     if (currentStep === 1) return surveyData.serviceId !== null
@@ -144,7 +156,7 @@ export default function SurveySteps() {
           if (currentStep === 0) {
             navigate(-1)
           } else {
-            setCurrentStep(currentStep - 1)
+            setCurrentStep(getPrevStep(currentStep))
           }
         }}
       />
@@ -169,7 +181,7 @@ export default function SurveySteps() {
               showToast(ERROR_MESSAGES[currentStep] ?? '', 'base')
               return
             }
-            setCurrentStep(currentStep + 1)
+            setCurrentStep(getNextStep(currentStep))
           }
         }}
       />
